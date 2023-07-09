@@ -11,7 +11,5 @@ public partial class MemberCredential
 
     public string MemberPassword { get; set; } = null!;
 
-    public bool Available { get; set; }
-
     public virtual Member Member { get; set; } = null!;
 }

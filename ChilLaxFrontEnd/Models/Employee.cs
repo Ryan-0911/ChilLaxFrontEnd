@@ -15,5 +15,5 @@ public partial class Employee
 
     public string EmpPassword { get; set; } = null!;
 
-    public bool? Available { get; set; }
+    public bool Available { get; set; }
 }
