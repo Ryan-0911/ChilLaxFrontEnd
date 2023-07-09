@@ -32,7 +32,7 @@ namespace ChilLaxFrontEnd.Controllers
                 t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
             Member member = (new ChilLaxContext()).Members.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
-            var user = new LoginViewModel
+            LoginViewModel user = new LoginViewModel
             {
                 txtAccount = membercredential.MemberAccount,
                 txtPassword = membercredential.MemberPassword
