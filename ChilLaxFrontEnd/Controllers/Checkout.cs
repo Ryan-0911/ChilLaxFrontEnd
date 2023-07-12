@@ -2,7 +2,10 @@
 using System.Text;
 using System.Web;
 using System.Security.Cryptography;
-
+using Microsoft.EntityFrameworkCore;
+using ChilLaxFrontEnd.Models;
+using ChilLaxFrontEnd.Controllers.DTO;
+using System.Linq;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -10,27 +13,59 @@ namespace ChilLaxFrontEnd.Controllers
     {
         public ActionResult Index()
         {
-            var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
+            ChilLaxContext db = new ChilLaxContext();
+
+            var guid_num = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 13);
+            int maxOrderId = db.ProductOrders.Max(p => p.OrderId);
+            ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
+            List<OrderDetail> this_order_detail = db.OrderDetails.Where(o => o.OrderId == maxOrderId).ToList();
+
+            List<ProductOrderDetail> productOrderDetails = db
+                .OrderDetails 
+                .Join(db.Products,
+                           od => od.ProductId,
+                           p => p.ProductId,
+                           (od, p) => new ProductOrderDetail
+                           {
+                               Product = p,
+                               OrderDetail = od
+                           }).ToList();
+
+
+            string 商品 = string.Empty;
+           
+        
+            foreach (var productOrderDetail in productOrderDetails)
+            {
+                商品 += productOrderDetail.Product.ProductName + "/";
+            }
+
+
+
+
+
+            string orderId = "ChilLax" + $"{guid_num}";
             //需填入你的網址
-            var website = $"https://localhost:44385/";
+            string website = $"https://localhost:7189";
             var order = new Dictionary<string, string>
             {
                 //綠界需要的參數
 
-                //訂單編號
+                //訂單編號，測試階段為避免重複以亂數產稱
                 { "MerchantTradeNo",  orderId},
                 //交易時間
                 { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
                 //交易金額
-                { "TotalAmount",  "100"},
+                { "TotalAmount",  $"{this_order.OrderTotalPrice}"},
                 //交易描述
-                { "TradeDesc",  "無"},
+                { "TradeDesc",  $"{this_order.OrderNote}"},
                 //商品名稱
-                { "ItemName",  "測試商品"},
+                { "ItemName",  $"{商品}"},
                 //付款完成通知回傳網址
                 { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
                 //Client端回傳付款結果網址
-                { "OrderResultURL", $"{website}/Home/PayInfo/{orderId}"},
+                //{ "OrderResultURL", $"{website}/Home/PayInfo/{orderId}"},
+                { "OrderResultURL", $"{website}/Home/Inidx"},
                 //Client端返回特店的按鈕連結
                 { "ClientRedirectURL",  $"{website}/Home/Index"},
                 //特店編號
