@@ -4,14 +4,14 @@ using System.Web;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using ChilLaxFrontEnd.Models;
-using ChilLaxFrontEnd.Controllers.DTO;
 using System.Linq;
+using ChilLaxFrontEnd.Models.DTO;
 
 namespace ChilLaxFrontEnd.Controllers
 {
     public class Checkout : Controller
     {
-        public ActionResult Index()
+        public async Task<ActionResult<string>> Index()
         {
             ChilLaxContext db = new ChilLaxContext();
 
@@ -24,17 +24,17 @@ namespace ChilLaxFrontEnd.Controllers
             string website = $"https://localhost:7189";
 
             //取得最新一筆訂單
-            int maxOrderId = db.ProductOrders.Max(p => p.OrderId);
+            int maxOrderId = await db.ProductOrders.MaxAsync(p => p.OrderId);
             //ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
-            List<ProductOrderDetailDTO> productOrderDetails = db.ProductOrders
+            List<ProductOrderDetailDTO> productOrderDetails = await db.ProductOrders
                .Where(o => o.OrderId == maxOrderId)
                .Join(db.OrderDetails, po => po.OrderId, od => od.OrderId, (po, od) => new { ProductOrder = po, OrderDetail = od })
                .Join(db.Products, od => od.OrderDetail.ProductId, p => p.ProductId, (od, p) => new ProductOrderDetailDTO
                {
-                  ProductOrder = od.ProductOrder,
-                  OrderDetail = od.OrderDetail,
-                  Product = p
-               }).ToList();
+                   ProductOrder = od.ProductOrder,
+                   OrderDetail = od.OrderDetail,
+                   Product = p
+               }).ToListAsync();
 
             foreach (var productOrderDetail in productOrderDetails)
             {
@@ -42,43 +42,45 @@ namespace ChilLaxFrontEnd.Controllers
             }
 
             var order = new Dictionary<string, string>
-            {
-                //綠界需要的參數
+    {
+        //綠界需要的參數
 
-                //訂單編號，測試階段為避免重複以亂數產稱
-                { "MerchantTradeNo",  orderId},
-                //交易時間
-                { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
-                //交易金額
-                { "TotalAmount",  $"{productOrderDetails.FirstOrDefault().ProductOrder.OrderTotalPrice}"},
-                //交易描述
-                { "TradeDesc",  $"{productOrderDetails.FirstOrDefault().ProductOrder.OrderNote}"},
-                //商品名稱
-                { "ItemName",  $"{this_products}"},
-                //付款完成通知回傳網址
-                { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
-                //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                //{ "OrderResultURL", $"{website}/Home/PayInfo/{orderId}"},
-                { "OrderResultURL", $"{website}/Home/Inidx"},
-                //Client端返回特店的按鈕連結
-                { "ClientRedirectURL",  $"{website}/Home/Index"},
-                //特店編號(綠界提供測試商店編號)
-                { "MerchantID",  "2000132"},
-                //付款方式
-                { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},
-                //交易類型(固定填aio)
-                { "PaymentType",  "aio"},
-                //預設付款方式
-                { "ChoosePayment",  "ALL"},
-                //CheckMacValue加密類型(固定填1)
-                { "EncryptType",  "1"},
-                //是否需要額外的付款資訊(Y/N)
-                { "NeedExtraPaidInfo", "Y"}
-            };
-                              //檢查碼
+        //訂單編號，測試階段為避免重複以亂數產稱
+        { "MerchantTradeNo",  orderId},
+        //交易時間
+        { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
+        //交易金額
+        { "TotalAmount",  $"{productOrderDetails.FirstOrDefault().ProductOrder.OrderTotalPrice}"},
+        //交易描述
+        { "TradeDesc",  $"{productOrderDetails.FirstOrDefault().ProductOrder.OrderNote}"},
+        //商品名稱
+        { "ItemName",  $"{this_products}"},
+        //付款完成通知回傳網址
+        { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
+        //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
+        //{ "OrderResultURL", $"{website}/Home/PayInfo/{orderId}"},
+        { "OrderResultURL", $"{website}/Home/Inidx"},
+        //Client端返回特店的按鈕連結
+        { "ClientRedirectURL",  $"{website}/Home/Index"},
+        //特店編號(綠界提供測試商店編號)
+        { "MerchantID",  "2000132"},
+        //付款方式
+        { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},
+        //交易類型(固定填aio)
+        { "PaymentType",  "aio"},
+        //預設付款方式
+        { "ChoosePayment",  "ALL"},
+        //CheckMacValue加密類型(固定填1)
+        { "EncryptType",  "1"},
+        //是否需要額外的付款資訊(Y/N)
+        { "NeedExtraPaidInfo", "Y"}
+    };
+
+            //檢查碼
             order["CheckMacValue"] = GetCheckMacValue(order);
             return View(order);
         }
+
         private string GetCheckMacValue(Dictionary<string, string> order)
         {
             var param = order.Keys.OrderBy(x => x).Select(key => key + "=" + order[key]).ToList();

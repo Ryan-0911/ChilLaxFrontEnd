@@ -1,7 +1,7 @@
 ﻿using ChilLaxFrontEnd.Models;
 using System.ComponentModel;
 
-namespace ChilLaxFrontEnd.Controllers.DTO
+namespace ChilLaxFrontEnd.Models.DTO
 {
     public class ProductOrderDetailDTO
     {
@@ -11,6 +11,6 @@ namespace ChilLaxFrontEnd.Controllers.DTO
         public OrderDetail? OrderDetail { get; set; }
         public Product? Product { get; set; }
 
-    
+
     }
 }
