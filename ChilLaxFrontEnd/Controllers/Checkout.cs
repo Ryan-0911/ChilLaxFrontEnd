@@ -15,38 +15,32 @@ namespace ChilLaxFrontEnd.Controllers
         {
             ChilLaxContext db = new ChilLaxContext();
 
-            var guid_num = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 13);
-            int maxOrderId = db.ProductOrders.Max(p => p.OrderId);
-            ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
-            List<OrderDetail> this_order_detail = db.OrderDetails.Where(o => o.OrderId == maxOrderId).ToList();
-
-            List<ProductOrderDetail> productOrderDetails = db
-                .OrderDetails 
-                .Join(db.Products,
-                           od => od.ProductId,
-                           p => p.ProductId,
-                           (od, p) => new ProductOrderDetail
-                           {
-                               Product = p,
-                               OrderDetail = od
-                           }).ToList();
-
-
-            string 商品 = string.Empty;
-           
-        
-            foreach (var productOrderDetail in productOrderDetails)
-            {
-                商品 += productOrderDetail.Product.ProductName + "/";
-            }
-
-
-
-
-
+            //產生隨機亂數
+            string guid_num = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 13);
+            string this_products = string.Empty;
             string orderId = "ChilLax" + $"{guid_num}";
+
             //需填入你的網址
             string website = $"https://localhost:7189";
+
+            //取得最新一筆訂單
+            int maxOrderId = db.ProductOrders.Max(p => p.OrderId);
+            //ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
+            List<ProductOrderDetailDTO> productOrderDetails = db.ProductOrders
+               .Where(o => o.OrderId == maxOrderId)
+               .Join(db.OrderDetails, po => po.OrderId, od => od.OrderId, (po, od) => new { ProductOrder = po, OrderDetail = od })
+               .Join(db.Products, od => od.OrderDetail.ProductId, p => p.ProductId, (od, p) => new ProductOrderDetailDTO
+               {
+                  ProductOrder = od.ProductOrder,
+                  OrderDetail = od.OrderDetail,
+                  Product = p
+               }).ToList();
+
+            foreach (var productOrderDetail in productOrderDetails)
+            {
+                this_products += $"{productOrderDetail.Product.ProductName}/";
+            }
+
             var order = new Dictionary<string, string>
             {
                 //綠界需要的參數
@@ -56,32 +50,32 @@ namespace ChilLaxFrontEnd.Controllers
                 //交易時間
                 { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
                 //交易金額
-                { "TotalAmount",  $"{this_order.OrderTotalPrice}"},
+                { "TotalAmount",  $"{productOrderDetails.FirstOrDefault().ProductOrder.OrderTotalPrice}"},
                 //交易描述
-                { "TradeDesc",  $"{this_order.OrderNote}"},
+                { "TradeDesc",  $"{productOrderDetails.FirstOrDefault().ProductOrder.OrderNote}"},
                 //商品名稱
-                { "ItemName",  $"{商品}"},
+                { "ItemName",  $"{this_products}"},
                 //付款完成通知回傳網址
                 { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
-                //Client端回傳付款結果網址
+                //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
                 //{ "OrderResultURL", $"{website}/Home/PayInfo/{orderId}"},
                 { "OrderResultURL", $"{website}/Home/Inidx"},
                 //Client端返回特店的按鈕連結
                 { "ClientRedirectURL",  $"{website}/Home/Index"},
-                //特店編號
+                //特店編號(綠界提供測試商店編號)
                 { "MerchantID",  "2000132"},
                 //付款方式
                 { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},
-                //交易類型
+                //交易類型(固定填aio)
                 { "PaymentType",  "aio"},
                 //預設付款方式
                 { "ChoosePayment",  "ALL"},
-                //CheckMacValue加密類型
+                //CheckMacValue加密類型(固定填1)
                 { "EncryptType",  "1"},
-                //是否需要額外的付款資訊
+                //是否需要額外的付款資訊(Y/N)
                 { "NeedExtraPaidInfo", "Y"}
             };
-            //檢查碼
+                              //檢查碼
             order["CheckMacValue"] = GetCheckMacValue(order);
             return View(order);
         }
