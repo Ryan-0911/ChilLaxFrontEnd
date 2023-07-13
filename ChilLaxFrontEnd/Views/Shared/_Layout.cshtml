@@ -37,7 +37,7 @@
             height: 50px;
         }
 
-        #user-info:hover{
+        #user-info:hover {
             cursor: pointer;
         }
 
@@ -51,9 +51,10 @@
             overflow: hidden;
             transition: max-height 0.5s ease-in;
         }
-        .sub-menu-wrap.open-menu{
-            max-height: 400px
-        }
+
+            .sub-menu-wrap.open-menu {
+                max-height: 400px
+            }
 
         .sub-menu {
             background: #F1EDEE;
@@ -61,7 +62,8 @@
             margin: 10px;
             border-radius: 10px;
             z-index: 1000;
-            opacity: 0.9;
+            backdrop-filter: blur(20px);
+            opacity: 0.9
         }
 
         .user-info {
@@ -105,11 +107,13 @@
                 padding: 8px;
                 margin-right: 15px;
             }
-            .sub-menu-link span{
+
+            .sub-menu-link span {
                 font-size: 22px;
                 transition: transform 0.5s;
             }
-            .sub-menu-link:hover span{
+
+            .sub-menu-link:hover span {
                 transform: translateX(5px);
                 color: #525252;
             }
@@ -185,12 +189,13 @@
         }
 
         /*頁尾連結*/
-        #footer-link > div{
+        #footer-link > div {
             transition: transform 0.5s;
         }
-        #footer-link > div:hover {
-            transform: scale(1.15);
-        }
+
+            #footer-link > div:hover {
+                transform: scale(1.15);
+            }
     </style>
 
 </head>
@@ -199,24 +204,27 @@
         <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
+                    <a asp-action="Index" asp-controller="Home">
+                        <img src="/assets/images/logo2.png" alt="" id="logo" />
+                    </a>
+                    <a class="navbar-brand" asp-action="Index" asp-controller="Home">
+                        ChilLax
+                    </a>
                     <button class="navbar-toggle"
                             type="button"
                             data-toggle="collapse"
                             data-target="#custom-collapse">
                         <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
                     </button>
-                    <img src="/assets/images/logo2.png" alt="" id="logo" />
-                    <a class="navbar-brand" href="index.html">
-                        ChilLax
-                    </a>
                 </div>
+
                 <div class="collapse navbar-collapse" id="custom-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#">Home</a>
+                            <a asp-action="Index" asp-controller="Home">Home</a>
                         </li>
                         <li>
-                            <a href="#">Focus</a>
+                            <a asp-action="Index" asp-controller="Focus">Focus</a>
                         </li>
                         <li>
                             <a href="#">ITarot</a>
@@ -227,8 +235,8 @@
                         <li>
                             <a href="#">Customer Service</a>
                         </li>
-                        <li>
-                            <img id="user-info" src="/assets/images/user.png" style="width: 35px; border-radius: 50%" onclick="toggleMenu()"/>
+                        <li style="height: 50px; padding: 8px 15px 15px 15px">
+                            <img id="user-info" src="/assets/images/user.png" style="width: 35px; border-radius: 50%" onclick="toggleMenu()" />
                         </li>
                     </ul>
                 </div>
@@ -240,7 +248,7 @@
                         </div>
                         <hr style="border: 0; height: 1px; width: 100%; background: #ccc; margin: 15px 0 10px" />
                         <a href="#" class="sub-menu-link">
-                            <img src="/assets/images/edit.png"/>
+                            <img src="/assets/images/edit.png" />
                             <p>個人資料</p>
                             <span>></span>
                         </a>
@@ -287,7 +295,7 @@
 
         <div class="link" id="footer-link" style="display: flex; justify-content: center; align-items: center">
             <div>
-                <a href="#" style="margin-right: 20px"><img src="/assets/images/peak.png"/>Our Mission</a>
+                <a href="#" style="margin-right: 20px"><img src="/assets/images/peak.png" />Our Mission</a>
             </div>
             <div>
                 <a href="#" style="margin-right: 20px"><img src="/assets/images/group.png" />Our Team</a>
@@ -304,11 +312,11 @@
     </footer>
     <script>
         let subMenu = document.querySelector('#subMenu');
-        function toggleMenu(){
+        function toggleMenu() {
             subMenu.classList.toggle("open-menu");
         }
     </script>
-@*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
