@@ -1,7 +1,406 @@
 ﻿@section Styles
 {
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,500&display=swap">
-    <link href="~/css/accountStyle.css" rel="stylesheet">
+    @*<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,500&display=swap">
+    <link href="~/css/accountStyle.css" rel="stylesheet">*@
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "poppins",sans-serif;
+        }
+
+        .background {
+            
+            /* 最下層背景 */
+            background: url('@Url.Content("~/images/login.jpg")');
+            
+            /* background-color: #98979783; */
+            background-position: center;
+            background-size: cover;
+            height: 100vh;
+            width: 100%;
+            /* margin-top:50px; */
+            filter: blur(2px);
+        }
+
+        .main {
+            position: absolute;
+            left: 50%;
+            top: 53%;
+            transform: translate(-50%,-50%);
+			width: 75%;
+            height: 700px;
+            /* margin-top: 50px; */
+
+            background: url('@Url.Content("~/images/login.jpg")');
+            /* background-image: linear-gradient(to right bottom, rgb(40, 42, 55) 0%, rgb(40, 42, 55) 20%, rgba(40, 42, 55, 0.9) 60%, rgba(17, 22, 50, 0.4) 100%),url(../images/login.jpg); */
+            background-position: center;
+            background-size: cover;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+
+            /*中間白色透明背景*/
+            .main .login-section, .main .register-section, .main .profile-section, .main .verify-section {
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%,0);
+                /* margin:0 auto; */
+                /* width: calc(100% - 58%); */
+                width: 500px;
+                height: 100%;
+                color: #fff;
+                background-color: rgba(88, 85, 85, 0.2);
+                /* backdrop-filter: blur(4px); */
+            }
+
+        .login-section .form-box, .register-section .form-box, .profile-section .form-box, .verify-section .form-box {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 登入註冊版面上下切換*/
+/*        .register-section .register {
+            margin-bottom: 50px;
+            transform: translateY(100%);
+            transition: transform .6s ease;
+            transition-delay: 0s;
+        }*/
+
+/*        .register-section.active .register { 按註冊連結(在登入畫面)，將註冊section往上
+            transform: translateY(0px);
+            transition-delay: .7s;
+        }*/
+
+        .login-section .login, .register-section .register {
+            margin-bottom: 50px;
+            transform: translateY(0px);
+            transition: transform .6s ease;
+            transition-delay: 0.7s;
+        }
+        /*
+        .login-section.active .login { 按登入連結(在註冊畫面)，將登入section往上
+            transform: translateY(100%);
+            transition-delay: 0s;
+        }*/
+
+
+
+        .login h2, .register h2, .verify-section .form-box h2 {
+            text-align: center;
+            font-size: 30px;
+            margin: 20px 0 5px 0;
+        }
+
+
+
+        .profile-section .form-box h2 {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 50px;
+        }
+
+        .login h5, .register h5, .verify-section .form-box h5 {
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .verify-section .form-box h5 {
+            color: #d9d9d9;
+            margin: 50px auto;
+            background-color: rgba(0,0,0,0.3);
+            width: 150px;
+        }
+
+        .verify-section .form-box p {
+            font-size: 14px;
+            text-align: center;
+            margin: 0 40px 30px 40px;
+        }
+
+        .form-box .input-box, .form-box .form-group {
+            width: 340px;
+            height: 50px;
+            border-bottom: 2px solid#fff;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .form-verify {
+            width: 300px;
+            /* height: 30px; */
+            left: 65%;
+            transform: translate(-65%,0);
+            position: relative;
+            margin: 30px 0;
+        }
+
+            .form-verify input {
+                padding: 5px 0 5px 30px;
+                height: 30px;
+                font-size: 16px;
+            }
+
+            .form-verify i, .form-resetPassword i {
+                color: #222222;
+                position: absolute;
+                top: 50%;
+                left: 10px;
+                transform: translateY(-50%);
+            }
+
+        .input-box input, .form-group input {
+            height: 100%;
+            color: #fff;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 18px;
+            padding-right: 20px;
+        }
+
+        .input-box input, .form-group .user_input {
+            position: absolute;
+            top: 50%;
+            /* left: 0; */
+            transform: translateY(-50%);
+        }
+
+        .form-group .birth_year {
+            width: 80px;
+            text-align: right;
+            padding: 0;
+            margin-left: 50px;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .form-group .birth_month {
+            width: 60px;
+            text-align: right;
+            padding: 0;
+            margin: 0;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .form-group .birth_date {
+            width: 60px;
+            text-align: right;
+            padding: 0;
+            margin: 0;
+            background: rgba(0,0,0,0.4);
+        }
+        .form-group select {
+            height: 100%;
+            color: #fff;
+            text-align: center;
+            background: rgba(0,0,0,0.4);
+            border: none;
+            outline: none;
+            font-size: 20px;
+            padding-right: 20px;
+            margin-left: 80px;
+        }
+
+        .input-box label, .form-group label {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            font-size: 16px;
+            font-weight: 600px;
+            pointer-events: none;
+            transition: .5s ease;
+        }
+
+        .input-box .icon, .form-group i {
+            position: absolute;
+            top: 13px;
+            right: 0;
+            font-size: 19px;
+        }
+        /*文字向上漂浮*/
+        .input-box input:focus ~ label,
+        .input-box input:valid ~ label,
+        .form-group input:focus ~ label,
+        .form-group input:valid ~ label {
+            top: -5px;
+        }
+
+        .form-group select:focus ~ label {
+            top: -5px;
+        }
+
+        .remember-password {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin: -15px 0 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+            .remember-password label input {
+                accent-color: #fff;
+                margin-right: 3px;
+            }
+
+            .remember-password a {
+                letter-spacing: 1px;
+                color: #fff;
+                text-decoration: none;
+            }
+
+                .remember-password a:hover {
+                    text-decoration: underline;
+                }
+
+        .login .btn, .register .btn {
+            /* background: #fff; */
+            width: 100%;
+            height: 45px;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #4F9D9D;
+            font-size: 16px;
+            color: #fff;
+            box-shadow: rgba(0,0,0,0.4);
+        }
+
+        .resendBtn {
+            width: 150px;
+            height: 35px;
+            margin-top: 40px;
+            left: 50%;
+            transform: translate(-50%,0);
+            position: relative;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #4F9D9D;
+            font-size: 16px;
+            color: #fff;
+            box-shadow: rgba(0,0,0,0.4);
+        }
+
+        .login .btn:hover, .register .btn:hover, .login .resendBtn:hover {
+            background-color: #D1E9E9;
+            color: black;
+        }
+
+        .clicked {
+            background-color: #9fcfcf; /* 更改按鈕的背景顏色 */
+            color: white; /* 更改按鈕的文字顏色 */
+            cursor: default;
+        }
+
+        .form-box .backBtn {
+            left: 43%;
+            margin-top: 30px;
+            position: relative;
+        }
+
+            .form-box .backBtn a {
+                color: #1c94e9;
+                font-size: 16px;
+                letter-spacing: 1px;
+            }
+
+        .create-account {
+            font-size: 14.5px;
+            text-align: center;
+            margin-top: 50px;
+            background-color: rgba(248, 248, 248, 0.1);
+            padding: 2px;
+        }
+
+            .create-account p a {
+                color: #fff;
+                font-weight: bolder;
+                text-decoration: none;
+            }
+
+                .create-account p a:hover {
+                    text-decoration: underline;
+                }
+
+        .other-login {
+            transform: translate(0, -60%);
+        }
+
+            .other-login .divider {
+                width: 100%;
+                margin: 80px 0 30px 0;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+                .other-login .divider .line {
+                    display: inline-block;
+                    max-width: 30%;
+                    width: 30%;
+                    flex: 1;
+                    height: 1px;
+                    background-color: #fff;
+                }
+
+                .other-login .divider .divider-text {
+                    vertical-align: middle;
+                    margin: 0px 20px;
+                    line-height: 0;
+                    display: inline-block;
+                    width: 100px;
+                    color: #fff;
+                }
+
+            .other-login .other-login-wrapper {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+                .other-login .other-login-wrapper .other-login-item {
+                    border: 1px solid #fff;
+                    padding: 8px;
+                    text-align: center;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    color: rgb(51, 49, 116);
+                    margin: 0 10px;
+                }
+
+                    .other-login .other-login-wrapper .other-login-item:hover {
+                        border: 1px solid #4F9D9D;
+                        background-color: #E0E0E0;
+                    }
+
+                    .other-login .other-login-wrapper .other-login-item img {
+                        width: 30px;
+                        height: 30px;
+                        vertical-align: middle;
+                    }
+
+        .footer {
+            width: 100%;
+            height: 60px;
+            background-color: #222222;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+    </style>
 }
 @{
     ViewData["Title"] = "Login";
@@ -18,8 +417,7 @@
                         <div class="create-account">
                             <p>
                                 還沒有帳號?
-                            @*@Html.ActionLink("進行會員註冊", "#",new { htmlAttributes = new { @class = "register-link" } })*@
-                                <a href="#" class="register-link">進行會員註冊</a>
+                                @Html.ActionLink("進行會員註冊", "Register", null, new { htmlAttributes = new { @class = "form-control" } } )
                             </p>
                         </div>
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -58,65 +456,13 @@
                         </div>
                     }
                 </div>
-                <div class="form-box register col-md-12 ">
-                    @using (Html.BeginForm()){
-                    @Html.AntiForgeryToken()
-                        <h2>Sign Up</h2>
-                        <h5>會員註冊</h5>
-                        <div class="create-account">
-                            <p>
-                                已經有帳號?
-                            @*@Html.ActionLink("進入會員登入", "#",new { htmlAttributes = new { @class = "login-link" } })*@
-                                <a href="#" class="login-link">進入會員登入</a>
-                            </p>
-                        </div>
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                        <div class="input-box">
-                            <span class="icon"><i class="bx bxs-user"></i></span>
-                        @Html.TextBox("txtAccount", null, new { htmlAttributes = new { @class = "form-control" } })
-                            @*<input type="text" required />*@
-                            <label>帳號</label>
-                        </div>
-                        <div class="input-box">
-                            <span class="icon"><i class="bx bxs-lock-alt"></i></span>
-                        @Html.TextBox("txtPassword", null, new { htmlAttributes = new { @class = "form-control" } })
-
-                            @*<input type="password" required />*@
-                            <label>密碼</label>
-                        </div>
-                        <div class="input-box">
-                            <span class="icon"><i class="bx bxs-lock-alt"></i></span>
-                        @Html.TextBox("txtPasswordChk", null, new { htmlAttributes = new { @class = "form-control" } })
-                            @*<input type="password" required />*@
-                            <label>確認密碼</label>
-                        </div>
-                        <button class="btn">註冊</button>
-                        <div class="other-login">
-                            <div class="divider">
-                                <span class="line"></span>
-                                <span class="divider-text">其他註冊方式</span>
-                                <span class="line"></span>
-                            </div>
-                            <div class="other-login-wrapper">
-                                <div class="other-login-item">
-                                <img src="~/images/Google.svg" alt="google">
-                                </div>
-                                <div class="other-login-item">
-                                <img src="~/images/Facebook.svg" alt="facebook">
-                                </div>
-                                <div class="other-login-item">
-                                <img src="~/images/LINE.png" alt="line">
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
+                <!--註冊會員-->
+                
             </div>
         </div>
     </article>
     <!-- SIGN UP FORM CREATION -->
     @section Scripts
     {
-        <script src="~/js/login.js"></script>
+        @*<script src="~/js/login.js"></script>*@
     }
