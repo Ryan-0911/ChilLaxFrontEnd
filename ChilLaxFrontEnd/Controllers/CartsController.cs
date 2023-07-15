@@ -31,22 +31,30 @@ namespace ChilLaxFrontEnd.Controllers
             return await _context.Carts.ToListAsync();
         }
 
-        // GET: api/Carts/5
+        // GET: api/Carts/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cart>> GetCart(int id)
+        public async Task<ActionResult<List<Cart>>> GetCart(int id)
         {
-          if (_context.Carts == null)
-          {
-              return NotFound();
-          }
-            var cart = await _context.Carts.FindAsync(id);
 
-            if (cart == null)
-            {
+            ChilLaxContext ctx = _context;
+            if (ctx.Carts == null) { 
                 return NotFound();
             }
 
-            return cart;
+            List<Cart> carts = await ctx.Carts.Where(c => c.MemberId == id).ToListAsync();
+
+            //if (_context.Carts == null)
+            //{
+            //    return NotFound();
+            //}
+            //var cart = await _context.Carts.Where(c => c.MemberId == id).ToListAsync();
+
+            //if (cart == null)
+            //{
+            //    return NotFound();
+            //}
+
+            return carts;
         }
 
         // PUT: api/Carts/5

@@ -1,5 +1,6 @@
 using ChilLaxFrontEnd.Models;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ChilLaxContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ChilLax"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ChilLax")
+);
 });
 
 var app = builder.Build();

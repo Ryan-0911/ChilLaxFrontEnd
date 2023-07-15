@@ -424,4 +424,5 @@ public partial class ChilLaxContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
 }
