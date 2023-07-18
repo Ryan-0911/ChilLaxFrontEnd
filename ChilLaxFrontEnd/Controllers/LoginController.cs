@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using System.Text.Encodings.Web;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -153,11 +155,18 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                         MemberEmail = payload.Email,
                         MemberName = payload.Name
                     };
-                    string json = JsonSerializer.Serialize(memberData);
+
+                    //string json = JsonSerializer.Serialize(memberData);
+                    string json = JsonSerializer.Serialize(memberData, new JsonSerializerOptions
+                    {
+                        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                        WriteIndented = true
+                    });
+
                     HttpContext.Session.SetString(CDictionary.SK_EXTERNALLOGIN_USER, json);
-                    //string test = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);
-                    //Member mem = JsonSerializer.Deserialize<Member>(test);
-                    //Console.WriteLine(test);
+                    string test = HttpContext.Session.GetString(CDictionary.SK_EXTERNALLOGIN_USER);
+                    Member mem = JsonSerializer.Deserialize<Member>(test);
+                    Console.WriteLine(test);
                     return RedirectToAction("registerProfile");
                 }
 
