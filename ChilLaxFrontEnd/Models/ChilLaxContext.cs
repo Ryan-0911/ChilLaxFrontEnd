@@ -77,25 +77,23 @@ public partial class ChilLaxContext : DbContext
 
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => new { e.MemberId, e.ProductId });
+            entity.HasKey(e => new { e.MemberId, e.ProductId }).HasName("Cart_PK");
 
             entity.ToTable("Cart");
 
             entity.Property(e => e.MemberId).HasColumnName("member_id");
-            entity.Property(e => e.ProductId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("product_id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.CartProductQuantity).HasColumnName("cart_product_quantity");
 
             entity.HasOne(d => d.Member).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.MemberId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Cart_Member");
+                .HasConstraintName("Cart_FK");
 
             entity.HasOne(d => d.Product).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Cart_Product");
+                .HasConstraintName("Cart_FK_1");
         });
 
         modelBuilder.Entity<CustomerService>(entity =>
@@ -128,7 +126,6 @@ public partial class ChilLaxContext : DbContext
             entity.ToTable("Employee");
 
             entity.Property(e => e.EmpId).HasColumnName("emp_id");
-            entity.Property(e => e.Available).HasColumnName("available");
             entity.Property(e => e.EmpAccount)
                 .HasMaxLength(50)
                 .HasColumnName("emp_account");
@@ -221,7 +218,6 @@ public partial class ChilLaxContext : DbContext
             entity.Property(e => e.MemberId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("member_id");
-            entity.Property(e => e.Available).HasColumnName("available");
             entity.Property(e => e.MemberAccount)
                 .HasMaxLength(50)
                 .HasColumnName("member_account");
@@ -424,5 +420,4 @@ public partial class ChilLaxContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
 }
