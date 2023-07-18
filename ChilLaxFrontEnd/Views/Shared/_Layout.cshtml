@@ -31,6 +31,8 @@
     <link href="/assets/css/style.css" rel="stylesheet" />
     <link id="color-scheme" href="/assets/css/colors/default.css" rel="stylesheet" />
 
+    @await RenderSectionAsync("Styles", required: false)
+
     <style>
         #logo {
             width: 50px;
@@ -222,7 +224,7 @@
                             <a href="#">ITarot</a>
                         </li>
                         <li>
-                            <a href="#">Shop</a>
+                            <a href="Product/Products" >Shop</a>
                         </li>
                         <li>
                             <a href="#">Customer Service</a>
