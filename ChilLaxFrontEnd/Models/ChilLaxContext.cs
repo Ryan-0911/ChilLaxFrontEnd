@@ -27,8 +27,6 @@ public partial class ChilLaxContext : DbContext
 
     public virtual DbSet<FocusSlide> FocusSlides { get; set; }
 
-    public virtual DbSet<HomeVideo> HomeVideos { get; set; }
-
     public virtual DbSet<Member> Members { get; set; }
 
     public virtual DbSet<MemberCredential> MemberCredentials { get; set; }
@@ -82,9 +80,7 @@ public partial class ChilLaxContext : DbContext
             entity.ToTable("Cart");
 
             entity.Property(e => e.MemberId).HasColumnName("member_id");
-            entity.Property(e => e.ProductId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("product_id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.CartProductQuantity).HasColumnName("cart_product_quantity");
 
             entity.HasOne(d => d.Member).WithMany(p => p.Carts)
@@ -145,7 +141,10 @@ public partial class ChilLaxContext : DbContext
         {
             entity.ToTable("FocusDetail");
 
-            entity.Property(e => e.FocusDetailId).HasColumnName("focus_detail_id");
+            entity.Property(e => e.FocusDetailId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("focus_detail_id");
             entity.Property(e => e.Duration).HasColumnName("duration");
             entity.Property(e => e.EndDatetime)
                 .HasColumnType("datetime")
@@ -169,19 +168,6 @@ public partial class ChilLaxContext : DbContext
             entity.Property(e => e.ImagePath).HasColumnName("image_path");
         });
 
-        modelBuilder.Entity<HomeVideo>(entity =>
-        {
-            entity.HasKey(e => e.VideoId);
-
-            entity.ToTable("HomeVideo");
-
-            entity.Property(e => e.VideoId).HasColumnName("video_id");
-            entity.Property(e => e.VideoName)
-                .HasMaxLength(50)
-                .HasColumnName("video_name");
-            entity.Property(e => e.VideoPath).HasColumnName("video_path");
-        });
-
         modelBuilder.Entity<Member>(entity =>
         {
             entity.HasKey(e => e.MemberId).HasName("PK_Members");
@@ -189,6 +175,7 @@ public partial class ChilLaxContext : DbContext
             entity.ToTable("Member");
 
             entity.Property(e => e.MemberId).HasColumnName("member_id");
+            entity.Property(e => e.Available).HasColumnName("available");
             entity.Property(e => e.MemberAddress)
                 .HasMaxLength(100)
                 .HasColumnName("member_address");
@@ -221,7 +208,6 @@ public partial class ChilLaxContext : DbContext
             entity.Property(e => e.MemberId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("member_id");
-            entity.Property(e => e.Available).HasColumnName("available");
             entity.Property(e => e.MemberAccount)
                 .HasMaxLength(50)
                 .HasColumnName("member_account");
@@ -241,7 +227,10 @@ public partial class ChilLaxContext : DbContext
 
             entity.ToTable("OrderDetail");
 
-            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.OrderId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("order_id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.CartProductQuantity).HasColumnName("cart_product_quantity");
 
@@ -263,7 +252,8 @@ public partial class ChilLaxContext : DbContext
             entity.ToTable("PointHistory");
 
             entity.Property(e => e.PointDetailId)
-                .ValueGeneratedNever()
+                .HasMaxLength(50)
+                .IsUnicode(false)
                 .HasColumnName("point_detail_id");
             entity.Property(e => e.MemberId).HasColumnName("member_id");
             entity.Property(e => e.ModifiedAmount).HasColumnName("modified_amount");
@@ -309,7 +299,10 @@ public partial class ChilLaxContext : DbContext
 
             entity.ToTable("ProductOrder");
 
-            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.OrderId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("order_id");
             entity.Property(e => e.MemberId).HasColumnName("member_id");
             entity.Property(e => e.OrderAddress).HasColumnName("order_address");
             entity.Property(e => e.OrderDate)
@@ -404,7 +397,10 @@ public partial class ChilLaxContext : DbContext
         {
             entity.ToTable("TarotOrder");
 
-            entity.Property(e => e.TarotOrderId).HasColumnName("tarot_order_id");
+            entity.Property(e => e.TarotOrderId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("tarot_order_id");
             entity.Property(e => e.CardResult)
                 .HasMaxLength(50)
                 .HasColumnName("card_result");

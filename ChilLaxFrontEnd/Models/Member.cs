@@ -23,6 +23,8 @@ public partial class Member
 
     public DateTime MemberJoinTime { get; set; }
 
+    public bool? Available { get; set; }
+
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
     public virtual ICollection<CustomerService> CustomerServices { get; set; } = new List<CustomerService>();

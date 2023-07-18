@@ -1,8 +1,11 @@
-﻿@{
+﻿@model IEnumerable<ChilLaxFrontEnd.Models.Announcement>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <style>
+
     /*主題圖文*/
     @@media screen and (max-width: 767px) {
         #tarot-pic {
@@ -86,9 +89,10 @@
         animation-delay: 0.4s;
     }
 
-    h2{
-        font-weight: 700;
+    h1 {
+        font-weight: 800;
     }
+
 </style>
 
 <section style="
@@ -97,8 +101,17 @@
           max-height: 100vh;
           overflow: hidden;
         ">
-    <div class="announcement"
-         style="width: 100%; height: 30%; background-color: azure"></div>
+    <div id="ticker-box" style="
+         position: absolute; top: 50px; width: 100%; background-color: cadetblue">
+        <ul style="color: white; font-size:16px">
+            @{
+                foreach (var item in Model)
+                {
+                    <li><i class="fa-solid fa-bullhorn fa-shake fa-lg" style="color: #e5a906;"></i>  @item.Announcement1</li>
+                }
+            }
+        </ul>
+    </div>
     <div class="video-bg-filter"
          style="
             position: absolute;
@@ -106,8 +119,9 @@
             width: 100%;
             height: 100%;
             top: 0;
+            pointer-events: none
           "></div>
-    <video autoplay loop muted style="width: 100%; height: 100%">
+    <video autoplay loop muted style="width: 100%; height: 100%; pointer-events: none">
         <source src="https://cdn.pixabay.com/vimeo/492700392/mountains-59291.mp4?width=1280&hash=8afc15449435ae88744a4b406ccc4dfdd2124a7e" type="video/mp4" />
     </video>
 
@@ -132,38 +146,58 @@
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-sm-6 col-md-6">
-                <h2 class="text-center">專注頁面</h2>
+            <div class="col-sm-6 col-md-6 text-box">
+                <h1 class="text-center" style="margin-bottom: 30px">專注頁面</h1>
                 <h4>
-                    包含雨天、森林、海浪、風鈴、柴火五種沈浸式體驗，仿真的視覺與聽覺饗宴不僅能治癒身心靈，每十分鐘還能獲取點數50點，集滿300點即可進行AI占卜一次
+                    包含雨天、森林、海浪、風鈴、柴火等多種沈浸式體驗，仿真的視覺與聽覺饗宴不僅能治癒身心靈，每十分鐘還能獲取點數50點，集滿300點即可進行AI占卜一次
                 </h4>
             </div>
             <div class="col-sm-6 col-md-6" id="focus-pic">
-                <img src="/assets/images/breathing-exercise-animate.svg" alt="" />
+                <img src="/assets/images/breathing-exercise-animate.svg" width="550" alt="Situation Slides" />
             </div>
         </div>
         <div class="row" style="display: flex; flex-wrap: wrap">
-            <div class="col-sm-6 col-md-6" id="tarot-desc" style="order: 1">
-                <h2 class="text-center">AI占卜</h2>
+            <div class="col-sm-6 col-md-6 text-box" id="tarot-desc" style="order: 1">
+                <h1 class="text-center" style="margin-bottom: 30px">AI占卜</h1>
                 <h4>
                     被任何疑難雜症困擾著嗎？快來體驗由AI技術打造而成的塔羅牌遊戲，保證使您身心舒暢不再焦慮
                 </h4>
             </div>
             <div class="col-sm-6 col-md-6" id="tarot-pic">
-                <img src="/assets/images/christmas-angel-animate.svg" alt="" />
+                <img src="/assets/images/christmas-angel-animate.svg" width="550" alt="Tarot" />
             </div>
         </div>
 
         <div class="row">
-            <div class="col-sm-6 col-md-6">
-                <h2 class="text-center">療癒商城</h2>
+            <div class="col-sm-6 col-md-6 text-box">
+                <h1 class="text-center" style="margin-bottom: 30px">療癒商城</h1>
                 <h4>
                     我們提供紓壓小物、擺飾、精油、美食等商品，希望藉此幫助您轉換情緒，告別壞心情
                 </h4>
             </div>
             <div class="col-sm-6 col-md-6" id="shop-pic">
-                <img src="/assets/images/in-no-time-animate.svg" alt=""  />
+                <img src="/assets/images/in-no-time-animate.svg" width="550" alt="Shop" />
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script src="/assets/js/news-ticker.js"></script>
+    <script>startTicker('ticker-box');</script>
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script>
+        ScrollReveal({
+            reset: true,
+            distance: '60px',
+            duration: 2500,
+            delay: 400
+        });
+        ScrollReveal().reveal('.text-box', { delay: 300, origin: 'left' });
+        ScrollReveal().reveal('#focus-pic, #tarot-pic, #shop-pic', { delay: 300, origin: 'right' });
+    </script>
+
+
+
+
+}
