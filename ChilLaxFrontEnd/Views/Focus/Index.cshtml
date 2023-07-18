@@ -1,0 +1,378 @@
+﻿@model IEnumerable<ChilLaxFrontEnd.Models.FocusSlide>
+
+@{
+    ViewData["Title"] = "專注頁面";
+}
+
+<style>
+    body {
+        margin: 0;
+        font-family: Helvetica, sans-serif;
+        background: #000
+    }
+
+    /*情境式圖片容器*/
+    .image-slider {
+        margin-bottom: -50px;
+    }
+
+    /*沙漏動態圖示*/
+    .hourglassBox {
+        z-index: 1000;
+        display: block;
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+
+    /*專注時間設定容器*/
+    .timeSetter {
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 6px double #E0E0E0;
+        padding: 15px 30px;
+        border-radius: 10px;
+        position: absolute;
+        width: 25%;
+        top: 17%;
+        left: 50%;
+        transform: translate(-50%, 50%);
+    }
+
+        /* @@media screen and (max-width: 767px) {
+                                    .timeSetter {
+                                        width: 50%;
+                                    }*/
+
+        .timeSetter h3 {
+            color: white;
+            font-weight: 500;
+        }
+
+    /*專注時間設定下拉式選單*/
+    #timeSelect {
+        width: 120px;
+        height: 30px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    /*專注時間設定按鈕*/
+    .timeBtn {
+        padding: 0.6em 2em;
+        border: none;
+        outline: none;
+        color: rgb(255, 255, 255);
+        background: #111;
+        cursor: pointer;
+        position: relative;
+        z-index: 0;
+        border-radius: 10px;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        font-size: 1.5rem;
+    }
+
+        .timeBtn:before {
+            content: "";
+            background: linear-gradient( 45deg, #00ffd5, #002bff);
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(5px);
+            -webkit-filter: blur(5px);
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            animation: glowing-timeBtn 20s linear infinite;
+            transition: opacity 0.3s ease-in-out;
+            border-radius: 10px;
+        }
+
+    @@keyframes glowing-timeBtn {
+        0% {
+            background-position: 0 0;
+        }
+
+        50% {
+            background-position: 400% 0;
+        }
+
+        100% {
+            background-position: 0 0;
+        }
+    }
+
+    .timeBtn:after {
+        z-index: -1;
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #222;
+        left: 0;
+        top: 0;
+        border-radius: 10px;
+    }
+
+    /*情境字幕容器*/
+    .titleBox {
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    /*情境字幕*/
+    .animate-charcter {
+        text-transform: capitalize;
+        background-image: linear-gradient(-225deg, #08AEEA 0%, #2AF598 100%);
+        background-size: auto auto;
+        background-clip: border-box;
+        background-size: 200% auto;
+        color: #fff;
+        background-clip: text;
+        text-fill-color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textclip 2s linear infinite;
+        display: inline-block;
+        font-size: 50px;
+    }
+    /*情境字幕動畫*/
+    @@keyframes textclip {
+        to {
+            background-position: 200% center;
+        }
+    }
+
+    /*情境圖片*/
+    .slide {
+        width: 100%;
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    /*左右切換鍵*/
+    .arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        z-index: 100;
+        background: rgba(0, 0, 0, .1);
+        border-radius: 50%;
+        transform: background 500ms;
+    }
+
+        .arrow img {
+            width: 50px;
+        }
+
+        .arrow:hover {
+            background: rgba(0, 0, 0, .4);
+        }
+
+    .l {
+        left: 0;
+    }
+
+    .r {
+        right: 0;
+    }
+
+    /*背景遮罩*/
+    .mask {
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        position: fixed;
+        z-index: 999;
+        background: rgba(0,0,0,0.4);
+    }
+    /* html 標籤要用的樣式 ，跟窗口一樣大，內容超出隱藏，避免出現滾動條 */
+    .htmlMask {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+</style>
+
+
+<section class="image-slider">
+
+    <div class="arrow l" onclick="prev()">
+        <img src="~/assets/images/l.png" alt="L" />
+    </div>
+    @{
+        foreach (var fs in Model)
+        {
+            string image_path = @"https://localhost:44385/assets/images/" + fs.ImagePath;
+            string audio_path = @"https://localhost:44385/assets/audios/" + fs.AudioPath;
+            <div class="slide" style="background-image: url(@image_path)">
+                <div class="titleBox">
+                    <h3 class="animate-charcter">@fs.Category</h3>
+                </div>
+            </div>
+            <audio class="sound" src="@audio_path" loop> </audio>
+        }
+    }
+
+    <div class="arrow r" onclick="next()">
+        <img src="~/assets/images/r.png" alt="R" />
+    </div>
+    <div class="hourglassBox">
+        <i id="hourglass" class="fa-solid fa-hourglass-half fa-beat-fade" style="color: #77e9e1; cursor: pointer; font-size: 5rem"></i>
+    </div>
+    <div class="timeSetter">
+        <h3>請選擇專注時間</h3>
+        <p style="margin-top: -5px; color: #E0E0E0; font-size: 12px">(50 points/ 10 minutes)</p>
+        <select id="timeSelect" name="focus-time">
+            <option>10</option>
+            <option>20</option>
+            <option>30</option>
+            <option>40</option>
+            <option>50</option>
+            <option>60</option>
+        </select>
+        <br />
+        <button class="timeBtn" role="button">確定</button>
+    </div>
+
+</section>
+
+@section Scripts
+    {
+    <script>
+        //情境畫面切換操作
+        let slide = document.querySelectorAll('.slide');
+        let sound = document.querySelectorAll('.sound');
+        //頁面遮罩
+        let hourglassBox = document.querySelector(".hourglassBox");
+        let timeBtn = document.querySelector(".timeBtn");
+        let timeSetter = document.querySelector(".timeSetter");
+        let titleBox = document.querySelectorAll(".titleBox");
+
+        console.log(slide);
+        console.log(titleBox);
+        console.log(sound);
+
+        var current = 0;
+
+        function cls() {
+            for (let i = 0; i < slide.length; i++) {
+                slide[i].style.display = 'none';
+                titleBox[i].style.display = "none";
+            }
+        }
+
+        function next() {
+            cls();
+            sound[current].pause();
+            if (current === slide.length - 1) current = -1;
+            current++;
+
+            sound[current].play();
+            slide[current].style.display = 'block';
+            slide[current].style.opacity = 0.4;
+            titleBox[current].style.display = "block";
+
+            var x = 0.4;
+            var intX = setInterval(function () {
+                x += 0.1;
+                slide[current].style.opacity = x;
+                if (x >= 1) {
+                    clearInterval(intX);
+                    x = 0.4;
+                }
+            }, 100);
+
+        }
+
+        function prev() {
+            cls();
+            sound[current].pause();
+            if (current === 0) current = slide.length;
+            current--;
+
+            sound[current].play();
+            slide[current].style.display = 'block';
+            slide[current].style.opacity = 0.4;
+            titleBox[current].style.display = "block";
+
+            var x = 0.4;
+            var intX = setInterval(function () {
+                x += 0.1;
+                slide[current].style.opacity = x;
+                if (x >= 1) {
+                    clearInterval(intX);
+                    x = 0.4;
+                }
+            }, 100);
+
+        }
+
+        function start() {
+            cls();
+            slide[current].style.display = 'block';
+            titleBox[current].style.display = "block";
+            sound[current].play();
+        }
+
+        /*
+        *  生成 mask
+        *  */
+        let createMask = () => {
+            // 如果 mask 已經存在了，就不用再創建mask了
+            if (document.getElementById("mask")) {
+                return true;
+            }
+            let mask = document.createElement("div");
+            mask.id = "mask";
+            mask.className = "mask";
+            // 把 mask 添加到body 裏。
+            document.body.appendChild(mask);
+            // 控制 <html> 標籤的樣式
+            document.documentElement.classList.add("htmlMask");
+            titleBox[current].style.display = "none";
+        };
+        /*
+        * 刪除 mask
+        * */
+        let deleteMask = () => {
+            let mask;
+            // 如果 mask 存在，就刪除
+            if (mask = document.getElementById("mask")) {
+                // 移除 mask 上的點擊事件
+                mask.removeEventListener("click", deleteMask);
+                // 刪除 mask 標籤
+                mask.parentNode.removeChild(mask);
+                // 去掉 <html> 標籤的特定樣式
+                document.documentElement.classList.remove("htmlMask");
+                // 顯示情境圖片、播放情境音效
+                start();
+                // 清除沙漏圖示
+                hourglassBox.style.display = "none";
+                // 清除時間設定
+                timeSetter.style.display = "none";
+                let focusTime = parseInt(document.querySelector("#timeSelect").value);
+                console.log(focusTime);
+            }
+        };
+
+        window.addEventListener("load", function () {
+            createMask();
+        })
+
+        timeBtn.addEventListener("click", deleteMask);
+    </script>
+}
