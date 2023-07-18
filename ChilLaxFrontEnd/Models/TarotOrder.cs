@@ -5,7 +5,7 @@ namespace ChilLaxFrontEnd.Models;
 
 public partial class TarotOrder
 {
-    public int TarotOrderId { get; set; }
+    public string TarotOrderId { get; set; } = null!;
 
     public int MemberId { get; set; }
 

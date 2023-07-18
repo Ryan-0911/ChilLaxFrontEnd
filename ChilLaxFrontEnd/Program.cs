@@ -1,10 +1,17 @@
 using CoreMVC_SignalR_Chat.Hubs;
+using ChilLaxFrontEnd.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
+builder.Services.AddDbContext<ChilLaxContext>(
+      options => options.UseSqlServer(
+      builder.Configuration.GetConnectionString("ChilLax")));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
