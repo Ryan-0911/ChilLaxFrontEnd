@@ -443,15 +443,20 @@
                                 <span class="line"></span>
                             </div>
                             <div class="other-login-wrapper">
-                                <div class="other-login-item">
-                                    <img src="~/images/Google.svg" alt="google">
-                                </div>
-                                <div class="other-login-item">
-                                <img src="~/images/Facebook.svg" alt="facebook">
-                                </div>
-                                <div class="other-login-item">
-                                <img src="~/images/LINE.png" alt="line">
-                                </div>
+                            <script src="https://accounts.google.com/gsi/client" async defer></script>
+                            <div id="g_id_onload"
+                                 data-client_id="24117042909-f73r9qksf4se9ka68pgdviie2ucsl4h4.apps.googleusercontent.com"
+                                 data-login_uri="https://localhost:7189/Login/ValidGoogleLogin"
+                                 data-auto_prompt="false">
+                            </div>
+                            <div class="g_id_signin"
+                                 data-type="standard"
+                                 data-size="large"
+                                 data-theme="outline"
+                                 data-text="sign_in_with"
+                                 data-shape="rectangular"
+                                 data-logo_alignment="left">
+                            </div>
                             </div>
                         </div>
                     }
@@ -464,5 +469,6 @@
     <!-- SIGN UP FORM CREATION -->
     @section Scripts
     {
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
         @*<script src="~/js/login.js"></script>*@
     }

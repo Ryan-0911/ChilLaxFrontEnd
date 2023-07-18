@@ -4,22 +4,29 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Principal;
 using System.Diagnostics;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using Google.Apis.Auth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChilLaxFrontEnd.Controllers
 {
     public class LoginController : Controller
     {
 
-        private readonly ILogger<LoginController> _logger;
+        //private readonly ILogger<LoginController> _logger;
 
-        public LoginController(ILogger<LoginController> logger)
-        {
-            _logger = logger;
-        }
-        //public IActionResult Index()
+        //public LoginController(ILogger<LoginController> logger)
         //{
-        //    return View();
+        //    _logger = logger;
         //}
+        private readonly ChilLaxContext _context;
+
+        public LoginController(ChilLaxContext context)
+        {
+            _context = context;
+        }
+
 
         public IActionResult Login()
         {
@@ -30,6 +37,8 @@ namespace ChilLaxFrontEnd.Controllers
         {
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
                 t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
+
+            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
             Member member = (new ChilLaxContext()).Members.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
             LoginViewModel user = new LoginViewModel
@@ -37,7 +46,8 @@ namespace ChilLaxFrontEnd.Controllers
                 txtAccount = membercredential.MemberAccount,
                 txtPassword = membercredential.MemberPassword
             };
-            if (membercredential != null && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)
+            
+            if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)   
             {
                 string json = JsonSerializer.Serialize(user);
                 HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
@@ -56,6 +66,8 @@ namespace ChilLaxFrontEnd.Controllers
         {
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
 t => t.MemberAccount.Equals(vm.txtRegisterAccount));
+
+            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
             //MemberCredential membercredential=new MemberCredential();
             //Member member = new Member();
             MemberCredential mc = new MemberCredential
@@ -63,7 +75,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 MemberAccount = vm.txtRegisterAccount,
                 MemberPassword = vm.txtRegisterPassword
             };
-            if (membercredential == null && vm.txtRegisterPassword != null && vm.txtRegisterPasswordChk == vm.txtRegisterPassword)
+            if (accountExists == false && vm.txtRegisterPassword != null && vm.txtRegisterPasswordChk == vm.txtRegisterPassword)
             {
                 string json = JsonSerializer.Serialize(mc);
                 HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, json);
@@ -109,6 +121,104 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             }
             return View();
         }
+
+        //Google第三方登入
+
+        public IActionResult ValidGoogleLogin()
+        {
+            string? formCredential = Request.Form["credential"]; //回傳憑證
+            string? formToken = Request.Form["g_csrf_token"]; //回傳令牌
+            string? cookiesToken = Request.Cookies["g_csrf_token"]; //Cookie 令牌
+
+            // 驗證 Google Token
+            GoogleJsonWebSignature.Payload? payload = VerifyGoogleToken(formCredential, formToken, cookiesToken).Result;
+
+
+            if (payload == null)
+            {
+                // 驗證失敗
+                ViewData["Msg"] = "驗證 Google 授權失敗";
+                Console.WriteLine(ViewData["Msg"]);
+
+            }
+            else
+            {
+                PropertyInfo[] properties = payload.GetType().GetProperties();
+                Member member = new Member();
+                bool emailExists = _context.Members.Any(m => m.MemberEmail.Equals(payload.Email));
+                if (emailExists == false)
+                {
+                    var memberData = new
+                    {
+                        MemberEmail = payload.Email,
+                        MemberName = payload.Name
+                    };
+                    string json = JsonSerializer.Serialize(memberData);
+                    HttpContext.Session.SetString(CDictionary.SK_EXTERNALLOGIN_USER, json);
+                    //string test = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);
+                    //Member mem = JsonSerializer.Deserialize<Member>(test);
+                    //Console.WriteLine(test);
+                    return RedirectToAction("registerProfile");
+                }
+
+            }
+
+            //return View();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string? formCredential, string? formToken, string? cookiesToken)
+        {
+            // 檢查空值
+            if (formCredential == null || formToken == null && cookiesToken == null)
+            {
+                return null;
+            }
+
+            GoogleJsonWebSignature.Payload? payload;
+            try
+            {
+                // 驗證 token
+                if (formToken != cookiesToken)
+                {
+                    return null;
+                }
+
+                // 驗證憑證
+                IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
+                string GoogleApiClientId = Config.GetSection("GoogleApiClientId").Value;
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string>() { GoogleApiClientId }
+                };
+                payload = await GoogleJsonWebSignature.ValidateAsync(formCredential, settings);
+                if (!payload.Issuer.Equals("accounts.google.com") && !payload.Issuer.Equals("https://accounts.google.com"))
+                {
+                    return null;
+                }
+                if (payload.ExpirationTimeSeconds == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    DateTime now = DateTime.Now.ToUniversalTime();
+                    DateTime expiration = DateTimeOffset.FromUnixTimeSeconds((long)payload.ExpirationTimeSeconds).DateTime;
+                    if (now > expiration)
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+            return payload;
+        }
+
+
+
         public IActionResult forgetPassword()
         {
 
