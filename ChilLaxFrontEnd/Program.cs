@@ -1,15 +1,19 @@
 using ChilLaxFrontEnd.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ChilLaxContext>(
+      options => options.UseSqlServer(
+      builder.Configuration.GetConnectionString("ChilLax")));
 
-// ¥[¤J³o¬q³]©w¡A´N¥i¥H¦bControllersªº«Øºc¨ç¦¡ª`¤J¦¹ª«¥ó
+// ï¿½[ï¿½Jï¿½oï¿½qï¿½]ï¿½wï¿½Aï¿½Nï¿½iï¿½Hï¿½bControllersï¿½ï¿½ï¿½Øºcï¿½ç¦¡ï¿½`ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 builder.Services.AddDbContext<ChilLaxContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("ChilLaxConnection")
-    ));  // «Ø¥ß¤@­Ó ChilLaxContext ª«¥ó¥X¨Ó
+    ));  // ï¿½Ø¥ß¤@ï¿½ï¿½ ChilLaxContext ï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½
 
 var app = builder.Build();
 

@@ -5,7 +5,7 @@ namespace ChilLaxFrontEnd.Models;
 
 public partial class PointHistory
 {
-    public int PointDetailId { get; set; }
+    public string PointDetailId { get; set; } = null!;
 
     public int MemberId { get; set; }
 
