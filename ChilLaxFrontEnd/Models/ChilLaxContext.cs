@@ -75,7 +75,7 @@ public partial class ChilLaxContext : DbContext
 
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => new { e.MemberId, e.ProductId });
+            entity.HasKey(e => new { e.MemberId, e.ProductId }).HasName("Cart_PK");
 
             entity.ToTable("Cart");
 
@@ -86,12 +86,12 @@ public partial class ChilLaxContext : DbContext
             entity.HasOne(d => d.Member).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.MemberId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Cart_Member");
+                .HasConstraintName("Cart_FK");
 
             entity.HasOne(d => d.Product).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Cart_Product");
+                .HasConstraintName("Cart_FK_1");
         });
 
         modelBuilder.Entity<CustomerService>(entity =>
@@ -124,7 +124,6 @@ public partial class ChilLaxContext : DbContext
             entity.ToTable("Employee");
 
             entity.Property(e => e.EmpId).HasColumnName("emp_id");
-            entity.Property(e => e.Available).HasColumnName("available");
             entity.Property(e => e.EmpAccount)
                 .HasMaxLength(50)
                 .HasColumnName("emp_account");
