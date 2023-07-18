@@ -5,7 +5,7 @@ namespace ChilLaxFrontEnd.Models;
 
 public partial class FocusDetail
 {
-    public int FocusDetailId { get; set; }
+    public string FocusDetailId { get; set; } = null!;
 
     public DateTime StartDatetime { get; set; }
 

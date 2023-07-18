@@ -20,6 +20,27 @@ namespace ChilLaxFrontEnd.Controllers
             return View(data);
         }
 
+        public IActionResult Mission()
+        {
+            return View();
+        }
+
+        public IActionResult Team()
+        {
+            return View();
+        }
+
+        public IActionResult Attribution()
+        {
+            return View();
+        }
+
+        public IActionResult PointRecord()
+        {
+            return View();
+        }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

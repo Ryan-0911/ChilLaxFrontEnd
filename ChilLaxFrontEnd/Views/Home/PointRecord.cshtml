@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "點數紀錄";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
+    <style>
+        thead {
+            background: #373F47;
+            color: white;
+        }
+    </style>
+}
+
+<div class="container" style="margin-top: 100px">
+    <table>
+        <thead>
+            <tr>
+                <td>交易號碼</td>
+                <td>修改來源</td>
+                <td>異動數量</td>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js"></script>
+    <script src="//cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js" defer></script>
+    <script>
+        $(document).ready(function () {
+            $("table").dataTable({
+                ajax: {
+                    type: "GET",
+                    url: "https://localhost:7189/api/PointHistories",
+                    dataSrc: function (data) { return data; }
+                },
+                columns: [
+                    { "data": "pointDetailId", "width": "25%" },
+                    { "data": "modifiedSource", "width": "25%" },
+                    { "data": "modifiedAmount", "width": "25%" },
+                ],
+                fixedHeader: { header: true }
+            });
+        });
+    </script>
+}

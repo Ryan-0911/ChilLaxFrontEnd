@@ -30,7 +30,7 @@
     <!-- Main stylesheet and color file-->
     <link href="/assets/css/style.css" rel="stylesheet" />
     <link id="color-scheme" href="/assets/css/colors/default.css" rel="stylesheet" />
-
+    @await RenderSectionAsync("Styles", required: false)
     <style>
         #logo {
             width: 50px;
@@ -252,7 +252,7 @@
                             <p>個人資料</p>
                             <span>></span>
                         </a>
-                        <a href="#" class="sub-menu-link">
+                        <a asp-action="PointRecord" asp-controller="Home" class="sub-menu-link">
                             <img src="/assets/images/footprint.png" />
                             <p>點數紀錄</p>
                             <span>></span>
@@ -295,13 +295,13 @@
 
         <div class="link" id="footer-link" style="display: flex; justify-content: center; align-items: center">
             <div>
-                <a href="#" style="margin-right: 20px"><img src="/assets/images/peak.png" />Our Mission</a>
+                <a asp-action="Mission" asp-controller="Home" style="margin-right: 20px"><img src="/assets/images/peak.png" />Our Mission</a>
             </div>
             <div>
-                <a href="#" style="margin-right: 20px"><img src="/assets/images/group.png" />Our Team</a>
+                <a asp-action="Team" asp-controller="Home" style="margin-right: 20px"><img src="/assets/images/group.png" />Our Team</a>
             </div>
             <div>
-                <a href="#" style="margin-right: 20px"><img src="/assets/images/present.png" alt="attribution" />Attribution</a>
+                <a asp-action="Attribution" asp-controller="Home" style="margin-right: 20px"><img src="/assets/images/present.png" alt="attribution" />Attribution</a>
             </div>
         </div>
         <div style="text-align: center">
@@ -316,10 +316,9 @@
             subMenu.classList.toggle("open-menu");
         }
     </script>
-    @*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
     <script src="~/assets/lib/jquery/dist/jquery.js"></script>
     <script src="~/assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/assets/lib/wow/dist/wow.js"></script>
@@ -333,5 +332,6 @@
     <script src="~/assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
     <script src="~/assets/js/plugins.js"></script>
     <script src="~/assets/js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
