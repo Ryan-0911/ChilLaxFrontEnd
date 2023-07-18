@@ -39,6 +39,7 @@ namespace CoreMVC_SignalR_Chat.Hubs
         /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception ex)
         {
+            int a = 0;
             string id = ConnIDList.Where(p => p == Context.ConnectionId).FirstOrDefault();
             if (id != null)
             {
