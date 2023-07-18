@@ -1,7 +1,6 @@
 using CoreMVC_SignalR_Chat.Hubs;
 using ChilLaxFrontEnd.Models;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
