@@ -29,7 +29,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr id="@item.Cart?.ProductId">
+                <tr>
                     <td>
                         <img class="productimg" src="https://localhost:44385/assets/images/@item.Product?.ProductImg">
                     </td>
@@ -50,7 +50,7 @@
                     </td>
                     <td>
                         <div>
-                            <button onclick="delete()" class="button">刪除</button>
+                            <button onclick="deleteCart(this.value)" value="@item.Cart?.ProductId" class="btn">刪除</button>
                         </div>
                     </td>
                 </tr>
@@ -63,3 +63,22 @@
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts{
+
+<script>
+    const baseAddress = "https://localhost:7189"
+    
+        function deleteCart(productId) {
+        $.ajax({
+            type:"GET",
+                url: `${baseAddress}/Carts/Delete/${productId}`
+        }).done(data =>{
+            alert("刪除成功");
+        }).fail(err => {
+            alert(err.statusText);
+        });
+    };
+
+</script>
+}
