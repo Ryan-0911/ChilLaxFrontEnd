@@ -92,26 +92,27 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             return View();
         }
         [HttpPost]
-        public IActionResult registerProfile(RegisterViewModel rvm)
+        public IActionResult registerProfile(LoginViewModel vm)
         {
             Member member = new Member
             {
-                MemberName = rvm.memberName,
-                MemberTel = rvm.memberPhone,
-                MemberEmail = rvm.memberEmail,
-                MemberSex = rvm.memberGender,
-                MemberBirthday = rvm.memberBirth,
-                MemberAddress = rvm.memberAddress,
+                MemberName = vm.memberName,
+                MemberTel = vm.memberPhone,
+                MemberEmail = vm.memberEmail,
+                MemberSex = vm.memberGender,
+                MemberBirthday = vm.memberBirth,
+                MemberAddress = vm.memberAddress,
                 MemberPoint = 0,
                 MemberJoinTime = DateTime.Now,
                 Available = true
             };
 
+
             string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
             MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm
             Console.WriteLine(mc);
 
-            if (rvm.memberName != null && rvm.memberPhone != null && rvm.memberEmail!= null && rvm.memberBirth != null)
+            if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail!= null && vm.memberBirth != null)
             {
 
                 ChilLaxContext db = new ChilLaxContext();
@@ -140,23 +141,25 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             {
                 // 驗證失敗
                 ViewData["Msg"] = "驗證 Google 授權失敗";
-                Console.WriteLine(ViewData["Msg"]);
-
             }
             else
             {
                 PropertyInfo[] properties = payload.GetType().GetProperties();
-                Member member = new Member();
+                //Member member = new Member();
                 bool emailExists = _context.Members.Any(m => m.MemberEmail.Equals(payload.Email));
+                var memberData = new
+                {
+                    MemberEmail = payload.Email,
+                    MemberName = payload.Name
+                };
+                LoginViewModel lvm = new LoginViewModel
+                {
+                    memberEmail = payload.Email,
+                    memberName = payload.Name
+                };
                 if (emailExists == false)
                 {
-                    var memberData = new
-                    {
-                        MemberEmail = payload.Email,
-                        MemberName = payload.Name
-                    };
-
-                    //string json = JsonSerializer.Serialize(memberData);
+                    
                     string json = JsonSerializer.Serialize(memberData, new JsonSerializerOptions
                     {
                         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -164,10 +167,13 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     });
 
                     HttpContext.Session.SetString(CDictionary.SK_EXTERNALLOGIN_USER, json);
-                    string test = HttpContext.Session.GetString(CDictionary.SK_EXTERNALLOGIN_USER);
-                    Member mem = JsonSerializer.Deserialize<Member>(test);
-                    Console.WriteLine(test);
-                    return RedirectToAction("registerProfile");
+                    //string test = HttpContext.Session.GetString(CDictionary.SK_EXTERNALLOGIN_USER);
+                    //Member mem = JsonSerializer.Deserialize<Member>(test);
+                    //Console.WriteLine(test);
+                    //return RedirectToAction("registerProfile");
+               
+                    return View(lvm);
+
                 }
 
             }

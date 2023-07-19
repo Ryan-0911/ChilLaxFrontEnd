@@ -405,6 +405,8 @@
 @{
     ViewData["Title"] = "Login";
 }
+@using System.ComponentModel.DataAnnotations
+@model ChilLaxFrontEnd.ViewModels.LoginViewModel
     <div class="background"></div>
     <article>
         <div class="main container">
@@ -420,15 +422,19 @@
                                 @Html.ActionLink("進行會員註冊", "Register", null, new { htmlAttributes = new { @class = "form-control" } } )
                             </p>
                         </div>
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
                         <div class="input-box">
                         <span class="icon bx bxs-envelope"><i class="bx bxs-envelope"></i></span>
-                        @Html.TextBox("txtAccount", null, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.TextBox("txtAccount", null, new { htmlAttributes = new { @class = "form-control",required = "required" } })
+                        @Html.ValidationMessageFor(model => model.txtAccount)
+
                             <label>帳號</label>
                         </div>
                         <div class="input-box">
                             <span class="icon"><i class="bx bxs-lock-alt"></i></span>
-                        @Html.TextBox("txtPassword", null, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.TextBox("txtPassword", null, new { htmlAttributes = new { @class = "form-control",required = "required" } })
+                        @Html.ValidationMessageFor(model => model.txtPassword)
+
                             <label>密碼</label>
                         </div>
                         <div class="remember-password">
@@ -444,19 +450,19 @@
                             </div>
                             <div class="other-login-wrapper">
                             <script src="https://accounts.google.com/gsi/client" async defer></script>
-                            <div id="g_id_onload"
-                                 data-client_id="24117042909-f73r9qksf4se9ka68pgdviie2ucsl4h4.apps.googleusercontent.com"
-                                 data-login_uri="https://localhost:7189/Login/ValidGoogleLogin"
-                                 data-auto_prompt="false">
-                            </div>
-                            <div class="g_id_signin"
-                                 data-type="standard"
-                                 data-size="large"
-                                 data-theme="outline"
-                                 data-text="sign_in_with"
-                                 data-shape="rectangular"
-                                 data-logo_alignment="left">
-                            </div>
+                                <div id="g_id_onload"
+                                     data-client_id="24117042909-f73r9qksf4se9ka68pgdviie2ucsl4h4.apps.googleusercontent.com"
+                                     data-login_uri="https://localhost:7189/Login/ValidGoogleLogin"
+                                     data-auto_prompt="false">
+                                </div>
+                                <div class="g_id_signin"
+                                     data-type="standard"
+                                     data-size="large"
+                                     data-theme="outline"
+                                     data-text="sign_in_with"
+                                     data-shape="rectangular"
+                                     data-logo_alignment="left">
+                                </div>
                             </div>
                         </div>
                     }

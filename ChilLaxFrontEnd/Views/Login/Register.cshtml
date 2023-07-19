@@ -396,6 +396,8 @@
 @{
     ViewData["Title"] = "Register";
 }
+@using System.ComponentModel.DataAnnotations
+@model ChilLaxFrontEnd.ViewModels.LoginViewModel
 <div id="app">
     <div class="background"></div>
     <article>
@@ -414,24 +416,26 @@
                             
                         </p>
                     </div>
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
 
                     <div class="input-box">
                         <span class="icon"><i class="bx bxs-user"></i></span>
-                        @Html.TextBox("txtRegisterAccount", null, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.TextBox("txtRegisterAccount", null, new { htmlAttributes = new { @class = "form-control",required = "required" } })
+                        @Html.ValidationMessageFor(model => model.txtRegisterAccount)
                         @*<input type="text" required />*@
                         <label>帳號</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><i class="bx bxs-lock-alt"></i></span>
-                        @Html.TextBox("txtRegisterPassword", null, new { htmlAttributes = new { @class = "form-control" } })
-
+                            @Html.TextBox("txtRegisterPassword", null, new { htmlAttributes = new { @class = "form-control",required = "required" } })
+                        @Html.ValidationMessageFor(model => model.txtRegisterPassword)
                         @*<input type="password" required />*@
                         <label>密碼</label>
                     </div>
                     <div class="input-box">
                         <span class="icon"><i class="bx bxs-lock-alt"></i></span>
-                        @Html.TextBox("txtRegisterPasswordChk", null, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.TextBox("txtRegisterPasswordChk", null, new { htmlAttributes = new { @class = "form-control",required = "required" } })
+                        @Html.ValidationMessageFor(model => model.txtRegisterPasswordChk)
                         @*<input type="password" required />*@
                         <label>確認密碼</label>
                     </div>
@@ -443,15 +447,20 @@
                             <span class="line"></span>
                         </div>
                         <div class="other-login-wrapper">
-                            <div class="other-login-item">
-                                <img src="~/images/Google.svg" alt="google">
-                            </div>
-                            <div class="other-login-item">
-                                <img src="~/images/Facebook.svg" alt="facebook">
-                            </div>
-                            <div class="other-login-item">
-                                <img src="~/images/LINE.png" alt="line">
-                            </div>
+                                <script src="https://accounts.google.com/gsi/client" async defer></script>
+                                <div id="g_id_onload"
+                                     data-client_id="24117042909-f73r9qksf4se9ka68pgdviie2ucsl4h4.apps.googleusercontent.com"
+                                     data-login_uri="https://localhost:7189/Login/ValidGoogleLogin"
+                                     data-auto_prompt="false">
+                                </div>
+                                <div class="g_id_signin"
+                                     data-type="standard"
+                                     data-size="large"
+                                     data-theme="outline"
+                                     data-text="sign_in_with"
+                                     data-shape="rectangular"
+                                     data-logo_alignment="left">
+                                </div>
                         </div>
                     </div>
                 }
@@ -461,3 +470,8 @@
 </article>
 </div>
 
+@section Scripts
+{
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+}
