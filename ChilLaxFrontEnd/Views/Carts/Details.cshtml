@@ -4,7 +4,11 @@
 }
 <style>
     .productimg{
-        height:150px
+        height: 150px;
+    }
+    .td_txt{
+        height: 150px;
+        line-height: 100px;
     }
 </style>
 
@@ -25,21 +29,35 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr id="@item.Cart?.ProductId">
                     <td>
                         <img class="productimg" src="https://localhost:44385/assets/images/@item.Product?.ProductImg">
                     </td>
-                    <td>@item.Product?.ProductName</td>
-                    <td>@item.Product?.ProductPrice</td>
-                    <td align='center' valign="middle">@item.Cart?.CartProductQuantity</td>
                     <td>
-                        <button onclick="delete()" class="button">刪除</button>
+                        <div class="td_txt">
+                            @item.Product?.ProductName
+                        </div>
+                    </td>
+                    <td>
+                        <div class="td_txt">
+                            @item.Product?.ProductPrice
+                        </div>
+                    </td>
+                    <td>
+                        <div class="td_txt">
+                            @item.Cart?.CartProductQuantity
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <button onclick="delete()" class="button">刪除</button>
+                        </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
+<button onclick="Checkout()">結帳</button>
 </div>
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
