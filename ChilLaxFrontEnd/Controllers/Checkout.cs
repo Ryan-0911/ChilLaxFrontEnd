@@ -38,7 +38,7 @@ namespace ChilLaxFrontEnd.Controllers
 
             foreach (var productOrderDetail in productOrderDetails)
             {
-                this_products += $"{productOrderDetail.Product.ProductName}/";
+                this_products += $"{productOrderDetail.Product?.ProductName}/";
             }
 
             var order = new Dictionary<string, string>
@@ -50,9 +50,9 @@ namespace ChilLaxFrontEnd.Controllers
         //交易時間
         { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
         //交易金額
-        { "TotalAmount",  $"{productOrderDetails.FirstOrDefault().ProductOrder.OrderTotalPrice}"},
+        { "TotalAmount",  $"{productOrderDetails.FirstOrDefault() ?.ProductOrder?.OrderTotalPrice}"},
         //交易描述
-        { "TradeDesc",  $"{productOrderDetails.FirstOrDefault().ProductOrder.OrderNote}"},
+        { "TradeDesc",  $"{productOrderDetails.FirstOrDefault() ?.ProductOrder?.OrderNote}"},
         //商品名稱
         { "ItemName",  $"{this_products}"},
         //付款完成通知回傳網址
