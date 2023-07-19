@@ -11,5 +11,10 @@ namespace ChilLaxFrontEnd.Controllers
             var data = db.FocusSlides.ToList();
             return View(data);
         }
+
+        public string EarnPoint()
+        {
+            return "";
+        }
     }
 }

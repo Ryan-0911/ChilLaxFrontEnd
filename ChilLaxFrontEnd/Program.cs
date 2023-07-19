@@ -1,7 +1,6 @@
 using CoreMVC_SignalR_Chat.Hubs;
 using ChilLaxFrontEnd.Models;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +12,7 @@ builder.Services.AddDbContext<ChilLaxContext>(
       options => options.UseSqlServer(
       builder.Configuration.GetConnectionString("ChilLax")));
 
+builder.Services.AddSession();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,14 +25,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseSession();
 app.MapHub<ChatHub>("/chatHub");
 
 

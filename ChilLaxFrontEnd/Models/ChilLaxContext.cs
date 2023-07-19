@@ -51,7 +51,7 @@ public partial class ChilLaxContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=ChilLax;Integrated Security=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ChilLax;Integrated Security=True;Trust Server Certificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -75,7 +75,7 @@ public partial class ChilLaxContext : DbContext
 
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => new { e.MemberId, e.ProductId }).HasName("Cart_PK");
+            entity.HasKey(e => new { e.MemberId, e.ProductId });
 
             entity.ToTable("Cart");
 
@@ -86,12 +86,12 @@ public partial class ChilLaxContext : DbContext
             entity.HasOne(d => d.Member).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.MemberId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Cart_FK");
+                .HasConstraintName("FK_Cart_Member");
 
             entity.HasOne(d => d.Product).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Cart_FK_1");
+                .HasConstraintName("FK_Cart_Product");
         });
 
         modelBuilder.Entity<CustomerService>(entity =>
@@ -124,6 +124,7 @@ public partial class ChilLaxContext : DbContext
             entity.ToTable("Employee");
 
             entity.Property(e => e.EmpId).HasColumnName("emp_id");
+            entity.Property(e => e.Available).HasColumnName("available");
             entity.Property(e => e.EmpAccount)
                 .HasMaxLength(50)
                 .HasColumnName("emp_account");
