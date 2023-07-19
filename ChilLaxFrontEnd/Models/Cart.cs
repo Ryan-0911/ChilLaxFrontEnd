@@ -9,7 +9,7 @@ public partial class Cart
 
     public int ProductId { get; set; }
 
-    public int? CartProductQuantity { get; set; }
+    public int CartProductQuantity { get; set; }
 
     public virtual Member Member { get; set; } = null!;
 

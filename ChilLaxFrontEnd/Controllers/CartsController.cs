@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ChilLaxFrontEnd.Models;
+using ChilLaxFrontEnd.Models.DTO;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -26,7 +27,7 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         // GET: Carts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<ActionResult<List<CartDTO>>> Details(int? id)
         {
             if (id == null || _context.Carts == null)
             {
@@ -36,7 +37,15 @@ namespace ChilLaxFrontEnd.Controllers
             var cart = await _context.Carts
                 .Include(c => c.Member)
                 .Include(c => c.Product)
-                .FirstOrDefaultAsync(m => m.MemberId == id);
+                .Where(c => c.MemberId == id)
+                .Join(_context.Members, c => c.MemberId, m => m.MemberId,(c, m) => new {Carts = c, Members = m})
+                .Join(_context.Products, c => c.Carts.ProductId, p => p.ProductId, (c, p) =>new CartDTO {
+                    Cart = c.Carts,
+                    Member = c.Members,
+                    Product = p
+                    })
+                .ToListAsync();
+            Console.WriteLine(cart);
             if (cart == null)
             {
                 return NotFound();
