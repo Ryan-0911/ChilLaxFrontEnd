@@ -12,11 +12,7 @@ builder.Services.AddDbContext<ChilLaxContext>(
       options => options.UseSqlServer(
       builder.Configuration.GetConnectionString("ChilLax")));
 
-// �[�J�o�q�]�w�A�N�i�H�bControllers���غc�禡�`�J������
-builder.Services.AddDbContext<ChilLaxContext>(
-    option => option.UseSqlServer(builder.Configuration.GetConnectionString("ChilLaxConnection")
-    ));  // �إߤ@�� ChilLaxContext ����X��
-
+builder.Services.AddSession();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,14 +25,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseSession();
 app.MapHub<ChatHub>("/chatHub");
 
 
