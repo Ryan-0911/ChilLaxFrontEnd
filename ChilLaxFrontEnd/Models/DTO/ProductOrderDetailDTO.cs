@@ -5,7 +5,7 @@ namespace ChilLaxFrontEnd.Models.DTO
 {
     public class ProductOrderDetailDTO
     {
-        ChilLaxContext db = new ChilLaxContext();
+        //ChilLaxContext db = new ChilLaxContext();
 
         public ProductOrder? ProductOrder { get; set; }
         public OrderDetail? OrderDetail { get; set; }
