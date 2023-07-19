@@ -44,9 +44,21 @@
     }
 
         /* @@media screen and (max-width: 767px) {
-                                    .timeSetter {
-                                        width: 50%;
-                                    }*/
+                                            .timeSetter {
+                                                    z-index: 1000;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    align-items: center;
+                                    border: 6px double #E0E0E0;
+                                    padding: 15px 30px;
+                                    border-radius: 10px;
+                                    position: absolute;
+                                    width: 50%;
+                                    top: 17%;
+                                    left: 50%;
+                                    transform: translate(-50%, 50%);
+                                            }*/
 
         .timeSetter h3 {
             color: white;
@@ -123,8 +135,9 @@
 
     /*情境字幕容器*/
     .titleBox {
+        display: none;
         position: absolute;
-        bottom: 50px;
+        bottom: 70px;
         left: 50%;
         transform: translate(-50%, 0);
     }
@@ -142,7 +155,7 @@
         -webkit-text-fill-color: transparent;
         animation: textclip 2s linear infinite;
         display: inline-block;
-        font-size: 50px;
+        font-size: 30px;
     }
     /*情境字幕動畫*/
     @@keyframes textclip {
@@ -205,6 +218,25 @@
         width: 100%;
         overflow: hidden;
     }
+
+    /*圓形時間進度條*/
+    #progressCanvas {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 70px;
+        /*   animation: fadeIn 5s ease-in;*/
+    }
+    /*
+                                    @@keyframes fadeIn {
+                                        from {
+                                            opacity: 0;
+                                        }
+
+                                        to {
+                                            opacity: 1;
+                                        }
+                                    }*/
 </style>
 
 
@@ -247,27 +279,25 @@
         <br />
         <button class="timeBtn" role="button">確定</button>
     </div>
+    <canvas id="progressCanvas" width="150" height="150"></canvas>
 
+    <a asp-action="EarnPoint" asp-controller="Focus"><i class="fa-solid fa-gift fa-beat-fade" style="position: absolute; top: 100px; right: 10%; color: #2aee11; font-size: 5rem"></i></a>
 </section>
 
 @section Scripts
     {
     <script>
-        //情境畫面切換操作
+        let current = 0;
         let slide = document.querySelectorAll('.slide');
         let sound = document.querySelectorAll('.sound');
-        //頁面遮罩
         let hourglassBox = document.querySelector(".hourglassBox");
         let timeBtn = document.querySelector(".timeBtn");
         let timeSetter = document.querySelector(".timeSetter");
         let titleBox = document.querySelectorAll(".titleBox");
+        let fstart = null;
+        let fend = null;
 
-        console.log(slide);
-        console.log(titleBox);
-        console.log(sound);
-
-        var current = 0;
-
+        // 情境畫面切換---------------------------------------------------------------------------------------------
         function cls() {
             for (let i = 0; i < slide.length; i++) {
                 slide[i].style.display = 'none';
@@ -320,7 +350,7 @@
             }, 100);
 
         }
-
+        // 背景遮罩---------------------------------------------------------------------------------------------
         function start() {
             cls();
             slide[current].style.display = 'block';
@@ -328,9 +358,6 @@
             sound[current].play();
         }
 
-        /*
-        *  生成 mask
-        *  */
         let createMask = () => {
             // 如果 mask 已經存在了，就不用再創建mask了
             if (document.getElementById("mask")) {
@@ -345,15 +372,12 @@
             document.documentElement.classList.add("htmlMask");
             titleBox[current].style.display = "none";
         };
-        /*
-        * 刪除 mask
-        * */
+
+        // 刪除 mask
         let deleteMask = () => {
             let mask;
             // 如果 mask 存在，就刪除
             if (mask = document.getElementById("mask")) {
-                // 移除 mask 上的點擊事件
-                mask.removeEventListener("click", deleteMask);
                 // 刪除 mask 標籤
                 mask.parentNode.removeChild(mask);
                 // 去掉 <html> 標籤的特定樣式
@@ -364,8 +388,19 @@
                 hourglassBox.style.display = "none";
                 // 清除時間設定
                 timeSetter.style.display = "none";
+                // 繪製計時器
                 let focusTime = parseInt(document.querySelector("#timeSelect").value);
-                console.log(focusTime);
+                startCountup(focusTime);
+                // 紀錄當前時間
+                var m = new Date();
+                fstart =
+                    m.getUTCFullYear() + "/" +
+                    ("0" + (m.getUTCMonth() + 1)).slice(-2) + "/" +
+                    ("0" + m.getUTCDate()).slice(-2) + " " +
+                    ("0" + m.getUTCHours()).slice(-2) + ":" +
+                    ("0" + m.getUTCMinutes()).slice(-2) + ":" +
+                    ("0" + m.getUTCSeconds()).slice(-2);
+                console.log(fstart);
             }
         };
 
@@ -374,5 +409,90 @@
         })
 
         timeBtn.addEventListener("click", deleteMask);
+
+        // CountUp 圓形進度條---------------------------------------------------------------------------------------------
+        var canvas = document.getElementById("progressCanvas");
+        var context = canvas.getContext("2d");
+        var centerX = canvas.width / 2;
+        var centerY = canvas.height / 2;
+        var radius = 50;
+        var lineWidth = 10;
+        var totalTime = 0; // 倒计时总时间
+        var currentTime = 0; // 当前倒计时时间
+        var progress = 0; // 进度，取值范围为 0 到 1
+        var intervalId = null; // setInterval 的 ID
+
+        function drawProgressCircle() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            context.lineWidth = lineWidth;
+            context.strokeStyle = "#486375";
+            context.stroke();
+
+            var startAngle = -Math.PI / 2;
+            var endAngle = startAngle + progress * 2 * Math.PI;
+            context.beginPath();
+            context.arc(centerX, centerY, radius, startAngle, endAngle);
+            context.lineWidth = lineWidth;
+            context.strokeStyle = "#759fbd";
+            context.stroke();
+
+            // 绘制动态时间
+            context.fillStyle = "#fff";
+            context.font = "14px Arial";
+            context.textAlign = "center";
+            context.textBaseline = "middle";
+            context.fillText(formatTime(currentTime), centerX, centerY);
+
+            // 绘制用户设置的时间
+            context.font = "18px Arial";
+            context.fillText(
+                formatTime(totalTime).slice(0, 2) + "分",
+                centerX,
+                centerY + 30
+            );
+        }
+
+        function startCountup(minutes) {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+
+            totalTime = minutes * 60;
+            currentTime = 0;
+            progress = 0;
+
+            intervalId = setInterval(updateCountup, 1000);
+        }
+
+        function updateCountup() {
+            currentTime++;
+
+            if (currentTime > totalTime) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+
+            progress = currentTime / totalTime;
+            drawProgressCircle();
+        }
+
+        function formatTime(timeInSeconds) {
+            var minutes = Math.floor(timeInSeconds / 60);
+            var seconds = timeInSeconds % 60;
+
+            var formattedMinutes = ("0" + minutes).slice(-2);
+            var formattedSeconds = ("0" + seconds).slice(-2);
+
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        // 離開或重整頁面時發出提醒---------------------------------------------------------------------------------------------
+        window.addEventListener("beforeunload", function (event) {
+            event.preventDefault();
+            event.returnValue = "點數將無法持續累積，確定要離開專注頁面嗎？"; // 大多瀏覽器已不支援自訂訊息
+        });
     </script>
 }
