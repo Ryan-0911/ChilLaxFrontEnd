@@ -1,0 +1,47 @@
+﻿@model List<ChilLaxFrontEnd.Models.DTO.CartDTO>
+@{
+    ViewData["Title"] = "Details";
+}
+<style>
+    .productimg{
+        height:150px
+    }
+</style>
+
+
+<div>
+    <h4>購物車</h4>
+    <hr />
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th>商品圖片</th>
+                <th>商品名稱</th>
+                <th>商品價格</th>
+                <th>商品數量</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img class="productimg" src="https://localhost:44385/assets/images/@item.Product?.ProductImg">
+                    </td>
+                    <td>@item.Product?.ProductName</td>
+                    <td>@item.Product?.ProductPrice</td>
+                    <td align='center' valign="middle">@item.Cart?.CartProductQuantity</td>
+                    <td>
+                        <button onclick="delete()" class="button">刪除</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

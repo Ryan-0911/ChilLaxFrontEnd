@@ -1,14 +1,16 @@
+using CoreMVC_SignalR_Chat.Hubs;
 using ChilLaxFrontEnd.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<ChilLaxContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ChilLax"));
-});
+builder.Services.AddSignalR();
+builder.Services.AddDbContext<ChilLaxContext>(
+      options => options.UseSqlServer(
+      builder.Configuration.GetConnectionString("ChilLax")));
 
 builder.Services.AddSession();
 var app = builder.Build();
@@ -29,4 +31,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.UseSession();
+app.MapHub<ChatHub>("/chatHub");
+
+
 app.Run();
