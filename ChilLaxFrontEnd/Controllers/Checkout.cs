@@ -117,8 +117,6 @@ namespace ChilLaxFrontEnd.Controllers
                     _context.PointHistories.Add(pointHistory);
                     await _context.SaveChangesAsync();
 
-                    // 執行其他非同步資料庫操作...
-
                     // 提交交易
                     await transaction.CommitAsync();
 
