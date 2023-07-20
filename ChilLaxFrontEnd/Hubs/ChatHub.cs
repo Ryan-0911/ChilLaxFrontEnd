@@ -1,6 +1,8 @@
 ﻿using ChilLaxFrontEnd.Models;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using OpenAI_API.Completions;
+using OpenAI_API.Models;
 
 namespace CoreMVC_SignalR_Chat.Hubs
 {
@@ -16,7 +18,7 @@ namespace CoreMVC_SignalR_Chat.Hubs
         public override async Task OnConnectedAsync()
         {
             Member db = new Member();
-            //db.MemberId = 2;
+            db.MemberId = 2;
             if (ConnIDList.Where(p => p == db.MemberId).FirstOrDefault() == null)
             {
                 ConnIDList.Add(db.MemberId);
@@ -29,7 +31,7 @@ namespace CoreMVC_SignalR_Chat.Hubs
             await Clients.Client(Context.ConnectionId).SendAsync("UpdSelfID", db.MemberId);
 
             // 更新聊天內容
-            await Clients.All.SendAsync("UpdContent", "新連線 ID: " + db.MemberId);
+            //await Clients.All.SendAsync("UpdContent", "新連線 ID: " + db.MemberId);
 
             await base.OnConnectedAsync();
         }
@@ -69,16 +71,31 @@ namespace CoreMVC_SignalR_Chat.Hubs
         {
             if (string.IsNullOrEmpty(sendToID))
             {
-                await Clients.All.SendAsync("UpdContent", selfID + " 說: " + message);
+                await Clients.All.SendAsync("UpdContent", selfID + " 你說: " + message);
             }
             else
             {
-                // 接收人
-                await Clients.Client(sendToID).SendAsync("UpdContent", selfID + " 私訊向你說: " + message);
-
-                // 發送人
-                await Clients.Client(Context.ConnectionId).SendAsync("UpdContent", "你向 " + sendToID + " 私訊說: " + message);
+                
             }
+            // 使用 GPT 機器人獲取回應
+            //var api = new OpenAI_API.OpenAIAPI("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");
+            //// 提取 GPT 機器人的回應
+            //var gptResponse = string.Empty;
+            //await api.Completions.StreamCompletionAsync(
+            //new CompletionRequest(
+
+            //   message + "你是一個塔羅牌占卜師，你要很熱情地回覆我想要詢問的事情，你負責幫所有人占卜任何塔羅牌相關的問題，如果我詢問非「塔羅牌占卜」相關的問題，你要說「我不太理解呢，建議您詢問占卜相關的問題哦」",
+            //   model: Model.DavinciText,
+            //   max_tokens: 2048,
+            //   temperature: 0.5,
+            //   presencePenalty: 0.1,
+            //   frequencyPenalty: 0.1),
+            //res => gptResponse += res.ToString());
+
+            //// 將 GPT 機器人的回應發送到聊天室
+            //await Clients.All.SendAsync("UpdContent", "AI占卜師:" + gptResponse);
+        
+
         }
     }
 }

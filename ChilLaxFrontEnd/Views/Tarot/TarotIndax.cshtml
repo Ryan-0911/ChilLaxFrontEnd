@@ -8,24 +8,51 @@
             align-items: center;
             justify-content: center;
         }
+
+        .button-container {
+            display: grid;
+            place-items: center;
+        }
+        #shuffleBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #5E005E;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
         .chat-container {
             
             height: 400px;
             overflow-y: scroll; /* 設置滾動條，使內容超出高度時可以滾動 */
         }
 
-        .fortuneTeller{
+        .fortuneTeller {
             height: 500px;
-            width: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
+        
+        .fortuneTeller img {
+            max-width: 100%; /* 確保圖片不超過父元素的寬度 */
+            max-height: 100%; /* 確保圖片不超過父元素的高度 */
+        }
+
+        .col-8{
+            margin-bottom: 120px;
+        }
+    </style>
+
         .conn2, .conn {
             color:#FCFCFC;
-            background-color:
+            background-color: #FCFCFC;
         }
+
+        
     </style>
 }
 <div class="col-md fortuneTeller">
@@ -49,8 +76,10 @@
     </div>
     <!-- Add more tarot cards as needed -->
 </div>
-<button id="shuffleBtn">Shuffle Tarot Cards</button>
 
+<div class="button-container">
+    <button id="shuffleBtn" >Shuffle Tarot Cards</button>
+</div>
 
 <div class="col-md-12 chat-container">
     <div class="col-12">
@@ -65,16 +94,13 @@
         @*<h4>個人 ID: <span id="SelfID"></span></h4>*@
         <div class="mb-3">
             <label for="message" class="form-label">發送訊息 :</label>
-            <input type="text" class="form-control" id="message">
+            <input type="text" placeholder="請輸入您的疑問" class="form-control" id="message" autocomplete="off">
         </div>
-        
+       
         <button type="button" class="btn btn-primary" id="sendButton">傳送訊息</button>
     </div>
-    <div class="col-4">
-        <h4 calss="conn">連線 ID 列表</h4>
-        <ul class="list-group conn2" id="IDList">
-        </ul>
-    </div>
+    
+    
 </div>
 
 
