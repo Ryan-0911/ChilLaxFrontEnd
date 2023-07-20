@@ -1,26 +1,58 @@
-﻿<h1>即時聊天範例</h1>
+﻿<h1>AI占卜師</h1>
+@section Styles{
+    <link href="/assets/css/Tarot_css/Tarotstyle.css" rel="stylesheet" />
+    <style>
+        
+        h1{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-container {
+            
+            height: 400px;
+            overflow-y: scroll; /* 設置滾動條，使內容超出高度時可以滾動 */
+        }
 
-<div class="row">
-    <div class="col-8">
-        <h4>個人 ID: <span id="SelfID"></span></h4>
-        <div class="mb-3">
-            <label for="message" class="form-label">發送訊息</label>
-            <input type="text" class="form-control" id="message">
-        </div>
-        <div class="mb-3">
-            <label for="sendToID" class="form-label">指定 ID</label>
-            <input type="text" class="form-control" id="sendToID">
-        </div>
-        <button type="button" class="btn btn-primary" id="sendButton">傳送訊息</button>
-    </div>
-    <div class="col-4">
-        <h4>連線 ID 列表</h4>
-        <ul class="list-group" id="IDList">
-        </ul>
-    </div>
+        .fortuneTeller{
+            height: 500px;
+            width: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .conn2, .conn {
+            color:#FCFCFC;
+            background-color:
+        }
+    </style>
+}
+<div class="col-md fortuneTeller">
+    <img src="~/assets/images/占卜師.png" />
+    
 </div>
 
-<div class="row mt-3">
+
+<div class="tarot-container">
+    <div class="tarot-card" id="card1">
+
+        <div class="card-name" id="cardName1"></div>
+    </div>
+    <div class="tarot-card" id="card2">
+
+        <div class="card-name" id="cardName2"></div>
+    </div>
+    <div class="tarot-card" id="card3">
+
+        <div class="card-name" id="cardName3"></div>
+    </div>
+    <!-- Add more tarot cards as needed -->
+</div>
+<button id="shuffleBtn">Shuffle Tarot Cards</button>
+
+
+<div class="col-md-12 chat-container">
     <div class="col-12">
         <h3>聊天內容</h3>
         <ul class="list-group" id="Content">
@@ -28,8 +60,29 @@
     </div>
 </div>
 
-@section scripts{
+<div class="col-md-12">
+    <div class="col-8">
+        @*<h4>個人 ID: <span id="SelfID"></span></h4>*@
+        <div class="mb-3">
+            <label for="message" class="form-label">發送訊息 :</label>
+            <input type="text" class="form-control" id="message">
+        </div>
+        
+        <button type="button" class="btn btn-primary" id="sendButton">傳送訊息</button>
+    </div>
+    <div class="col-4">
+        <h4 calss="conn">連線 ID 列表</h4>
+        <ul class="list-group conn2" id="IDList">
+        </ul>
+    </div>
+</div>
+
+
+
+@section Scripts{
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/Tarot/Tarot.js"></script>
+    
     <script>
         var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
