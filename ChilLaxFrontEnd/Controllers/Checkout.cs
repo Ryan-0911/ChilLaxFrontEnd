@@ -25,7 +25,7 @@ namespace ChilLaxFrontEnd.Controllers
             string guid_num = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 13);
             string this_products = string.Empty;
             string orderId = "ChilLax" + $"{guid_num}";
-
+            string msg = "備註欄";
             //需填入你的網址
             string website = $"https://localhost:7189";
 
@@ -47,6 +47,8 @@ namespace ChilLaxFrontEnd.Controllers
                 this_products += $"{productOrderDetail.Product?.ProductName}/";
             }
 
+            
+
             var order = new Dictionary<string, string>
             {
                 //綠界需要的參數
@@ -58,13 +60,13 @@ namespace ChilLaxFrontEnd.Controllers
                 //交易金額
                 { "TotalAmount",  $"{productOrderDetails.FirstOrDefault() ?.ProductOrder?.OrderTotalPrice}"},
                 //交易描述
-                { "TradeDesc",  $"{productOrderDetails.FirstOrDefault() ?.ProductOrder?.OrderNote}"},
+                { "TradeDesc",  $"{msg}"},
                 //商品名稱
                 { "ItemName",  $"{this_products}"},
                 //付款完成通知回傳網址
                 { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
                 //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                { "OrderResultURL", $"{website}/Checkout/UpdatePayment/{orderId}"},
+                { "OrderResultURL", $"{website}/Checkout/UpdatePayment/{maxOrderId}"},
                 //Client端返回特店的按鈕連結
                 { "ClientRedirectURL",  $"{website}/Home/Index"},
                 //特店編號(綠界提供測試商店編號)
