@@ -1,0 +1,72 @@
+﻿@model ChilLaxFrontEnd.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SupplierId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SupplierId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductDesc)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductDesc)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductPrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductPrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductImg)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductImg)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductQuantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductQuantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductCategory)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductCategory)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductState)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductState)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

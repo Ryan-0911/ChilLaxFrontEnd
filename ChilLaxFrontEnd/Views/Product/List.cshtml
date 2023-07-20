@@ -4,80 +4,214 @@
     ViewData["Title"] = "List";
 }
 
-<h2>List</h2>
+@section Styles{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="~/assets/css/product_css/product_index2.css" rel="stylesheet" />
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SupplierId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductDesc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductImg)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductQuantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductCategory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductState)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SupplierId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductDesc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductImg)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductCategory)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductState)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700"
+          rel="stylesheet" />
+
+    <!-- Bootstrap -->
+    <link href="~/assets/css/product_css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.rtl.min.css" integrity="sha384-beJoAY4VI2Q+5IPXjI207/ntOuaz06QYCdpWfWRv4lSFDyUSqsM0W+wiAMr2I185" crossorigin="anonymous"> -->
+    <!-- Slick -->
+    <link href="~/assets/css/product_css/slick.css" rel="stylesheet" />
+    <link href="~/assets/css/product_css/slick-theme.css" rel="stylesheet" />
+
+    <!-- nouislider -->
+    <link href="~/assets/css/product_css/nouislider.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome Icon -->
+    <link href="~/assets/css/product_css/font-awesome.min.css" rel="stylesheet" />
+
+    <!-- Custom stlylesheet -->
+    <link href="~/assets/css/product_css/style.css" rel="stylesheet" />
 }
-    </tbody>
-</table>
+
+
+<!-- p_container start -->
+<div class="p_container">
+    <!-- row -->
+    <div class="p_row">
+        <!-- 電商導覽列 -->
+        <!-- black-nav -->
+        <div class="black-nav">
+            <!-- wrap -->
+            <div class="wrap">
+
+                <!-- SEARCH BAR start -->
+                <div class="col-md-6">
+                    <div class="header-search">
+                        @using (Html.BeginForm()){
+                            @Html.TextBox("txtKeyword", null , new { style = "width: 500px; height:40px; margin-left: 160px; border-radius: 40px 40px 40px 40px; color: navy; font-weight: 900;" })
+                            <input type="submit" class="search-btn" style="float: right" placeholder="Search here" value="Search" />
+                            @*@Html.TextBox("txtKeyword")  <input class="input" type="submit" style="margin-left: 160px" placeholder="Search here" />
+                            <button type="submit" class="search-btn" value="Search">Search</button>*@
+                        }
+                    </div>
+                </div>
+                <!-- /SEARCH BAR over -->
+                <!-- 喜好商品、購物車 -->
+                <ul class="black-nav-right">
+                    <li class="like">
+                        <a href="#">
+                            <img src="~/assets/images/heart1.png" />
+                            <i>喜好商品（0）</i>
+                        </a>
+                        <div class="like-list">
+                            有喜歡的商品嗎？點擊愛心收藏起來吧♥
+                        </div>
+                    </li>
+                    <li class="cart">
+                        <a href="#">
+                            <img src="~/assets/images/icons8-cart.gif" />
+                            <i>購物車（0）</i>
+                        </a>
+                        <div class="cart-list">
+                            購物車內還沒有東西，趕緊點選商品加入購物車吧！
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- wrap -->
+        </div>
+        <!-- black-nav -->
+    </div>
+    <!-- row over -->
+</div>
+<!-- container over -->
+<!-- container over -->
+<!-- Top Sale商品 -->
+<section class="hero-section">
+    <div class="top-left-text" style="padding-top: 80px;"><p>Top Sale 熱銷商品</p></div>  <!-- 30 + header的高度 -->
+    <div class="top_card-grid">
+        <div class="top_card">
+            <a href="#">
+                <div class="top_card__background"></div>
+                <div class="top_card__content">
+                    <p class="top_card__category">Top One</p>
+                    <h3 class="top_card__heading">香氛蠟燭</h3>
+                    <img style="height:250px; width:250px" src="~/assets/images/香氛蠟燭.jpg" />
+                </div>
+            </a>
+        </div>
+        <div class="top_card">
+            <a href="#">
+                <div class="top_card__background"></div>
+                <div class="top_card__content">
+                    <p class="top_card__category">Top Two</p>
+                    <h3 class="top_card__heading">盆栽造型擴香石</h3>
+                    <img style="height:250px; width:250px" src="~/assets/images/盆栽擴香石.jpg" />
+                </div>
+            </a>
+        </div>
+        <div class="top_card">
+            <a href="#">
+                <div class="top_card__background"></div>
+                <div class="top_card__content">
+                    <p class="top_card__category">Top Three</p>
+                    <h3 class="top_card__heading">溫冷緊緻按摩儀</h3>
+                    <img style="height:250px; width:250px" src="~/assets/images/舒壓按摩小物.jpg" />
+                </div>
+            </a>
+        </div>
+        <div class="top_card">
+            <a href="#">
+                <div class="top_card__background" ></div>
+                <div class="top_card__content">
+                    <p class="top_card__category">Top Four</p>
+                    <h3 class="top_card__heading">水豚君擺飾</h3>
+                    <img style="height:250px; width:250px" src="~/assets/images/裝飾擺設.jpg" />
+                </div>
+            </a>
+        </div>
+        <div class="top_card">
+            <a href="#">
+                <div class="top_card__background"></div>
+                <div class="top_card__content">
+                    <p class="top_card__category">Top Five</p>
+                    <h7 class="top_card__heading">流沙畫小夜燈</h7>
+                    <img style="height:250px; width:250px" src="~/assets/images/3d流沙畫小夜燈.jpg" />
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+<!-- Top Sale商品 over -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- 類別分類 -->
+            <div class="col-md-12">
+                <div class="section-title">
+                    <h3 class="title">所有商品</h3>
+                    <div class="section-nav">
+                        <ul class="section-tab-nav tab-nav">
+                            <li class="active">
+                                <a data-toggle="tab" href="#tab1" class="no-underline">所有商品</a>
+                            </li>
+                            <li><a data-toggle="tab" href="#tab1" class="no-underline">居家香氛</a></li>
+                            <li><a data-toggle="tab" href="#tab1" class="no-underline">紓壓小物</a></li>
+                            <li><a data-toggle="tab" href="#tab1" class="no-underline">擺飾裝飾</a></li>
+                            <li><a data-toggle="tab" href="#tab1" class="no-underline">按摩精油</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 類別分類 -->
+            <!-- 商品呈現 start-->
+
+    @{
+        int count = 0;
+        foreach (var item in Model) 
+        {
+            count++;
+         
+            <div class="col-md-3 mb-4">
+                <div class="thumbnail" style="height: 450px;">
+                            <img src="~/assets/images/@Html.DisplayFor(modelItem => item.ProductImg)" class="card-img-top img-fluid  mx-auto d-block" style="width: 230px;height: 260px;">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">
+                            <a href="product_introduce.html" class="no-underline">@Html.DisplayFor(modelItem => item.ProductName)</a>
+                        </h4>
+                        <h5 class="product-price" style="text-align:right">$ @Html.DisplayFor(modelItem => item.ProductPrice) 元</h5>
+                        <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
+                        <div class="button-container">
+                            <button class="add-to-wishlist">
+                                <i class="fa fa-heart-o"></i><span class="tooltipp">加入喜愛商品</span>
+                            </button>
+                            <div class="add-to-cart">
+                                <button class="add-to-cart-btn">
+                                    <i class="fa fa-shopping-cart"></i>加入購物車
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="card-footer">
+                      <small class="text-body-secondary">Last updated 3 mins ago</small>
+                    </div> -->
+                </div>
+            </div>
+        }
+    }
+
+            <!-- 商品呈現 over-->
+
+        </div>
+        <!-- row Over -->
+    </div>
+    <!-- container Over -->
+</div>
+<!-- SECTION Over -->
+
+
+
+@section Scripts{
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>    <!-- 使用Vue之前 要先引用Vue-->
+    <!-- Using Vue from CDN -->
+}
