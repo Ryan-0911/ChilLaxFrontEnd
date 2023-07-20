@@ -68,7 +68,7 @@ namespace ChilLaxFrontEnd.Controllers
                 //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
                 { "OrderResultURL", $"{website}/Checkout/UpdatePayment/{maxOrderId}"},
                 //Client端返回特店的按鈕連結
-                { "ClientRedirectURL",  $"{website}/Home/Index"},
+                { "ClientRedirectURL",  $"{website}"},
                 //特店編號(綠界提供測試商店編號)
                 { "MerchantID",  "2000132"},
                 //付款方式
@@ -89,22 +89,66 @@ namespace ChilLaxFrontEnd.Controllers
         }
         //Checkout/UpdatePayment/1
         [HttpGet]
-        public async Task<string> UpdatePayment(int? id)
+        public async Task<string> UpdatePaymentAsync(int? id)
         {
             if (id == null || _context.ProductOrders == null)
                 return "付款失敗";
 
-            ProductOrder productOrder = await _context.ProductOrders.FirstOrDefaultAsync(po => po.OrderId == id.ToString());
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    ProductOrder productOrder = await _context.ProductOrders.FirstOrDefaultAsync(po => po.OrderId == id.ToString());
 
-            if (productOrder == null)
-                return "找不到該訂單";
+                    if (productOrder == null)
+                        return "找不到該訂單";
 
-            productOrder.OrderPayment = true;
-            _context.ProductOrders.Update(productOrder);
-            await _context.SaveChangesAsync();
+                    //修改付款狀態
+                    productOrder.OrderPayment = true;
+                    _context.ProductOrders.Update(productOrder);
+                    await _context.SaveChangesAsync();
 
-            return "付款成功";
+                    //新增點數回饋
+                    PointHistory pointHistory = new PointHistory();
+                    pointHistory.ModifiedSource = "product";
+                    pointHistory.MemberId = productOrder.MemberId;
+                    pointHistory.PointDetailId = productOrder.OrderId;
+                    pointHistory.ModifiedAmount =(int)Math.Floor(productOrder.OrderTotalPrice / 10.0);
+                    _context.PointHistories.Add(pointHistory);
+                    await _context.SaveChangesAsync();
+
+                    // 執行其他非同步資料庫操作...
+
+                    // 提交交易
+                    await transaction.CommitAsync();
+
+                    return "付款成功";
+                }
+                catch (Exception ex)
+                {
+                    // 發生例外時回滾交易
+                    await transaction.RollbackAsync();
+                    return "付款失敗：" + ex.Message;
+                }
+            }
         }
+
+        //public async Task<string> UpdatePayment(int? id)
+        //{
+        //    if (id == null || _context.ProductOrders == null)
+        //        return "付款失敗";
+
+        //    ProductOrder productOrder = await _context.ProductOrders.FirstOrDefaultAsync(po => po.OrderId == id.ToString());
+
+        //    if (productOrder == null)
+        //        return "找不到該訂單";
+
+        //    productOrder.OrderPayment = true;
+        //    _context.ProductOrders.Update(productOrder);
+        //    await _context.SaveChangesAsync();
+
+        //    return "付款成功";
+        //}
 
         private string GetCheckMacValue(Dictionary<string, string> order)
         {
