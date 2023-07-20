@@ -133,23 +133,6 @@ namespace ChilLaxFrontEnd.Controllers
             }
         }
 
-        //public async Task<string> UpdatePayment(int? id)
-        //{
-        //    if (id == null || _context.ProductOrders == null)
-        //        return "付款失敗";
-
-        //    ProductOrder productOrder = await _context.ProductOrders.FirstOrDefaultAsync(po => po.OrderId == id.ToString());
-
-        //    if (productOrder == null)
-        //        return "找不到該訂單";
-
-        //    productOrder.OrderPayment = true;
-        //    _context.ProductOrders.Update(productOrder);
-        //    await _context.SaveChangesAsync();
-
-        //    return "付款成功";
-        //}
-
         private string GetCheckMacValue(Dictionary<string, string> order)
         {
             var param = order.Keys.OrderBy(x => x).Select(key => key + "=" + order[key]).ToList();
