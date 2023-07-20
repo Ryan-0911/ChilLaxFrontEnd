@@ -11,12 +11,6 @@ namespace ChilLaxFrontEnd.Controllers
 {
     public class Checkout : Controller
     {
-        private readonly ChilLaxContext _context;
-        public Checkout(ChilLaxContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ActionResult<string>> Index()
         {
             ChilLaxContext db = new ChilLaxContext();
@@ -48,60 +42,43 @@ namespace ChilLaxFrontEnd.Controllers
             }
 
             var order = new Dictionary<string, string>
-            {
-                //綠界需要的參數
+    {
+        //綠界需要的參數
 
-                //訂單編號，測試階段為避免重複以亂數產稱
-                { "MerchantTradeNo",  orderId},
-                //交易時間
-                { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
-                //交易金額
-                { "TotalAmount",  $"{productOrderDetails.FirstOrDefault() ?.ProductOrder?.OrderTotalPrice}"},
-                //交易描述
-                { "TradeDesc",  $"{productOrderDetails.FirstOrDefault() ?.ProductOrder?.OrderNote}"},
-                //商品名稱
-                { "ItemName",  $"{this_products}"},
-                //付款完成通知回傳網址
-                { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
-                //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                { "OrderResultURL", $"{website}/Checkout/UpdatePayment/{orderId}"},
-                //Client端返回特店的按鈕連結
-                { "ClientRedirectURL",  $"{website}/Home/Index"},
-                //特店編號(綠界提供測試商店編號)
-                { "MerchantID",  "2000132"},
-                //付款方式
-                { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},
-                //交易類型(固定填aio)
-                { "PaymentType",  "aio"},
-                //預設付款方式
-                { "ChoosePayment",  "ALL"},
-                //CheckMacValue加密類型(固定填1)
-                { "EncryptType",  "1"},
-                //是否需要額外的付款資訊(Y/N)
-                { "NeedExtraPaidInfo", "Y"}
-            };
+        //訂單編號，測試階段為避免重複以亂數產稱
+        { "MerchantTradeNo",  orderId},
+        //交易時間
+        { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
+        //交易金額
+        { "TotalAmount",  $"{productOrderDetails.FirstOrDefault() ?.ProductOrder?.OrderTotalPrice}"},
+        //交易描述
+        { "TradeDesc",  $"{productOrderDetails.FirstOrDefault() ?.ProductOrder?.OrderNote}"},
+        //商品名稱
+        { "ItemName",  $"{this_products}"},
+        //付款完成通知回傳網址
+        { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
+        //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
+        //{ "OrderResultURL", $"{website}/Home/PayInfo/{orderId}"},
+        { "OrderResultURL", $"{website}/Home/Inidx"},
+        //Client端返回特店的按鈕連結
+        { "ClientRedirectURL",  $"{website}/Home/Index"},
+        //特店編號(綠界提供測試商店編號)
+        { "MerchantID",  "2000132"},
+        //付款方式
+        { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},
+        //交易類型(固定填aio)
+        { "PaymentType",  "aio"},
+        //預設付款方式
+        { "ChoosePayment",  "ALL"},
+        //CheckMacValue加密類型(固定填1)
+        { "EncryptType",  "1"},
+        //是否需要額外的付款資訊(Y/N)
+        { "NeedExtraPaidInfo", "Y"}
+    };
 
             //檢查碼
             order["CheckMacValue"] = GetCheckMacValue(order);
             return View(order);
-        }
-        //Checkout/UpdatePayment/1
-        [HttpGet]
-        public async Task<string> UpdatePayment(int? id)
-        {
-            if (id == null || _context.ProductOrders == null)
-                return "付款失敗";
-
-            ProductOrder productOrder = await _context.ProductOrders.FirstOrDefaultAsync(po => po.OrderId == id.ToString());
-
-            if (productOrder == null)
-                return "找不到該訂單";
-
-            productOrder.OrderPayment = true;
-            _context.ProductOrders.Update(productOrder);
-            await _context.SaveChangesAsync();
-
-            return "付款成功";
         }
 
         private string GetCheckMacValue(Dictionary<string, string> order)
