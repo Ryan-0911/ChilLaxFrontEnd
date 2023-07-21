@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<ChilLaxFrontEnd.Models.Product>
+
+@{
     ViewData["Title"] = "Shop";
 }
 
@@ -62,9 +64,9 @@
                             </div>
                         </li>
                         <li class="cart">
-                            <a href="#">
+                        <a href="/Carts/Details/1">
                             <img src="~/assets/images/icons8-cart.gif" />
-                                <i>購物車（0）</i>
+                            <i>購物車（0）</i>
                             </a>
                             <div class="cart-list">
                                 購物車內還沒有東西，趕緊點選商品加入購物車吧！
@@ -160,14 +162,20 @@
                 <!-- 類別分類 -->
                 <!-- 商品呈現 start-->
                 <!-- <div class="card-group"> -->
+            @{
+                int count = 0;
+                foreach (var item in Model) 
+                {
+                    count++;
+
                 <div class="col-md-3 mb-4">
                 <div class="thumbnail" style="height: 450px;">
                     <img src="~/assets/images/小奶龍.jpg" class="card-img-top img-fluid  mx-auto d-block" style="width: 230px;height: 260px;">
                         <div class="card-body">
                             <h3 class="card-title text-center">
-                                <a href="product_introduce.html" class="no-underline">小奶龍</a>
+                                    <a href="product_introduce.html" class="no-underline">@Html.DisplayFor(modelItem => item.ProductName)</a>
                             </h3>
-                            <h4 class="product-price">$980.00</h4>
+                                <h4 class="product-price">@Html.DisplayFor(modelItem => item.ProductPrice)</h4>
                             <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
                             <div class="button-container">
                                 <button class="add-to-wishlist">
@@ -185,132 +193,9 @@
                         </div> -->
                     </div>
                 </div>
-                <div class="col-md-3 mb-4">
-                <div class="thumbnail" style="height: 450px;">
-                    <img src="~/assets/images/小奶龍.jpg" class="card-img-top img-fluid  mx-auto d-block" style="width: 230px;height: 260px;">
-                        <div class="card-body">
-                            <h3 class="card-title text-center">
-                                <a href="#" class="no-underline">小奶龍</a>
-                            </h3>
-                            <h4 class="product-price">$980.00</h4>
-
-                        <div class="button-container">
-                            <button class="add-to-wishlist">
-                                <i class="fa fa-heart-o"></i><span class="tooltipp">加入喜愛商品</span>
-                            </button>
-                            <div class="add-to-cart">
-                                <button class="add-to-cart-btn">
-                                    <i class="fa fa-shopping-cart"></i>加入購物車
-                                </button>
-                            </div>
-                        </div>
-                        </div>
-                        <!-- <div class="card-footer">
-                          <small class="text-body-secondary">Last updated 3 mins ago</small>
-                        </div> -->
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                <div class="thumbnail" style="height: 450px;">
-                    <img src="~/assets/images/3d流沙畫小夜燈.jpg" class="card-img-top img-fluid  mx-auto d-block" style="width: 230px;height: 260px;">
-                        <div class="card-body">
-                            <h3 class="card-title text-center">
-                                <a href="#" class="no-underline">3D流沙畫小夜燈</a>
-                            </h3>
-                            <h4 class="product-price">$980.00</h4>
-
-                        <div class="button-container">
-                            <button class="add-to-wishlist">
-                                <i class="fa fa-heart-o"></i><span class="tooltipp">加入喜愛商品</span>
-                            </button>
-                            <div class="add-to-cart">
-                                <button class="add-to-cart-btn">
-                                    <i class="fa fa-shopping-cart"></i>加入購物車
-                                </button>
-                            </div>
-                        </div>
-                        </div>
-                        <!-- <div class="card-footer">
-                          <small class="text-body-secondary">Last updated 3 mins ago</small>
-                        </div> -->
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                <div class="thumbnail" style="height: 450px;">
-                    <img src="~/assets/images/盆栽擴香石.jpg" class="card-img-top img-fluid  mx-auto d-block" style="width: 230px;height: 260px;">
-                        <div class="card-body">
-                            <h3 class="card-title text-center">
-                                <a href="#" class="no-underline">盆栽擴香石</a>
-                            </h3>
-                            <h4 class="product-price">$980.00</h4>
-
-                        <div class="button-container">
-                            <button class="add-to-wishlist">
-                                <i class="fa fa-heart-o"></i><span class="tooltipp">加入喜愛商品</span>
-                            </button>
-                            <div class="add-to-cart">
-                                <button class="add-to-cart-btn">
-                                    <i class="fa fa-shopping-cart"></i>加入購物車
-                                </button>
-                            </div>
-                        </div>
-                        </div>
-                        <!-- <div class="card-footer">
-                          <small class="text-body-secondary">Last updated 3 mins ago</small>
-                        </div> -->
-                    </div>
-                </div>
-            <div class="col-md-3 mb-4">
-                <div class="thumbnail" style="height: 450px;">
-                    <img src="~/assets/images/香氛蠟燭.jpg" class="card-img-top img-fluid  mx-auto d-block" style="width: 230px;height: 260px;">
-                        <div class="card-body">
-                            <h3 class="card-title text-center">
-                                <a href="#" class="no-underline">香氛蠟燭</a>
-                            </h3>
-                            <h4 class="product-price">$980.00</h4>
-
-                        <div class="button-container">
-                            <button class="add-to-wishlist">
-                                <i class="fa fa-heart-o"></i><span class="tooltipp">加入喜愛商品</span>
-                            </button>
-                            <div class="add-to-cart">
-                                <button class="add-to-cart-btn">
-                                    <i class="fa fa-shopping-cart"></i>加入購物車
-                                </button>
-                            </div>
-                        </div>
-                        </div>
-                        <!-- <div class="card-footer">
-                          <small class="text-body-secondary">Last updated 3 mins ago</small>
-                        </div> -->
-                    </div>
-                </div>
-            <div class="col-md-3 mb-4">
-                <div class="thumbnail" style="height: 450px;">
-                    <img src="~/assets/images/舒壓按摩小物.jpg" class="card-img-top img-fluid  mx-auto d-block" style="width: 230px;height: 260px;">
-                        <div class="card-body">
-                            <h3 class="card-title text-center">
-                                <a href="#" class="no-underline">舒壓按摩小物</a>
-                            </h3>
-                            <h4 class="product-price">$980.00</h4>
-
-                        <div class="button-container">
-                            <button class="add-to-wishlist">
-                                <i class="fa fa-heart-o"></i><span class="tooltipp">加入喜愛商品</span>
-                            </button>
-                            <div class="add-to-cart">
-                                <button class="add-to-cart-btn">
-                                    <i class="fa fa-shopping-cart"></i>加入購物車
-                                </button>
-                            </div>
-                        </div>
-                        </div>
-                        <!-- <div class="card-footer">
-                          <small class="text-body-secondary">Last updated 3 mins ago</small>
-                        </div> -->
-                    </div>
-                </div>
-                <!-- </div> -->
+                }
+            }
+               
                 <!-- 商品呈現 over-->
 
             </div>

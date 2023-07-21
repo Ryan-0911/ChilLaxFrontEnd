@@ -5,7 +5,7 @@ namespace ChilLaxFrontEnd.ViewModels
     public class LoginViewModel
     {
         //登入
-
+        public int Id { get; set; }
         [Required(ErrorMessage = "請輸入帳號")]
         public string txtAccount { get; set; }
 
