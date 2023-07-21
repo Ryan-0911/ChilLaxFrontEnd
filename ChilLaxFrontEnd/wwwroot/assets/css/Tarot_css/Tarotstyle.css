@@ -25,7 +25,16 @@
     margin-top: 20px;
 }
 
-
+#shuffleBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
 
 @keyframes fadeIn {
     from {
@@ -61,20 +70,3 @@
 .card-appeared {
     animation-name: fadeIn;
 }
-.fadeOutButton {
-    animation-name: fadeOut;
-    animation-duration: 1s;
-    animation-fill-mode: both;
-}
-
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
-}
-
-
