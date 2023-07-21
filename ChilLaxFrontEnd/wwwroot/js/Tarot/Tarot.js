@@ -1,5 +1,37 @@
 ﻿
+$('#sendButton').on('click', function () {
+    let selfID = $('#SelfID').html();
+    let message = $('#message').val();
+    let sendToID = $('#sendToID').val();
 
+    // 獲取三張牌的名稱
+    let card1 = $('#cardName1').text();
+    let card2 = $('#cardName2').text();
+    let card3 = $('#cardName3').text();
+
+    // 將三張牌的名稱組合成字串，使用逗號分隔
+    let threeCards = card1 + "," + card2 + "," + card3;
+
+    connection.invoke("SendMessage", threeCards, selfID, message, sendToID).catch(function (err) {
+        alert('傳送錯誤: ' + err.toString());
+    });
+});
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("/chatHub")
+    .build();
+
+// 啟動連接
+connection.start().then(function () {
+    console.log("SignalR 連接已啟動。");
+}).catch(function (err) {
+    console.error("啟動SignalR連接時出錯：" + err);
+});
+
+// 處理從伺服器接收到的"SendMessage"方法呼叫
+connection.on("SendMessage", function (gptResponse) {
+    // 在這裡處理從伺服器接收到的GPT機器人的回應
+    console.log("從伺服器接收到的GPT回應：", gptResponse);
+});
     const tarotCards = [
         "愚者", "魔術師", "女祭司", "皇后", "皇帝", "教皇", "戀愛", "戰車", "力量", "隱士",
         "命運之輪", "正義", "倒吊人", "死神", "節制", "惡魔", "高塔", "星星", "月亮", "太陽", "審判", "世界"
@@ -11,7 +43,7 @@
     let currentIndex = 0;
     let shuffledIndexes = [];
     let intervalId = null;  //為了在每次輸入後清空輸入欄位設定的計時器
-
+    let threeCards = [];
 
     const tarotCardImages = tarotCards.map(card => '../../images/' + card + '.jpg');
 
@@ -108,29 +140,70 @@
     }
     
 
-    function showNextCard() {
-        if (currentIndex <= 3) {
-            const cardIndex = currentIndex - 1;
-            const tarotCardElement = tarotCardElements[cardIndex];
-            const imgElement = tarotCardElement.querySelector("img");
+//    function showNextCard() {
+//        if (currentIndex <= 3) {
+//            const cardIndex = currentIndex - 1;
+//            const tarotCardElement = tarotCardElements[cardIndex];
+//            const imgElement = tarotCardElement.querySelector("img");
 
-            // 更新塔羅牌圖片和名稱並移除動畫效果
-            imgElement.src = tarotCardImages[shuffledIndexes[cardIndex]];
+//            // 更新塔羅牌圖片和名稱並移除動畫效果
+//            imgElement.src = tarotCardImages[shuffledIndexes[cardIndex]];
 
-            const tarotNameElement = document.getElementById("cardName" + currentIndex);
-            tarotNameElement.textContent = tarotCards[shuffledIndexes[cardIndex]];
+//            const tarotNameElement = document.getElementById("cardName" + currentIndex);
+//            tarotNameElement.textContent = tarotCards[shuffledIndexes[cardIndex]];
 
-            tarotCardElement.classList.remove("card-removed");
-            tarotCardElement.classList.add("card-appeared");
+//            tarotCardElement.classList.remove("card-removed");
+//            tarotCardElement.classList.add("card-appeared");
 
-            setTimeout(showNextCard, 1000);
-            currentIndex++;
-        } else{
-            currentIndex = 0;
-            shuffleBtn.classList.add("fadeOutButton");
-            // 隱藏按鈕，使按鈕只需按一次後就會消失
-        }
+//            setTimeout(showNextCard, 1000);
+//            currentIndex++;
+//        } else{
+//            currentIndex = 0;
+//            shuffleBtn.classList.add("fadeOutButton");
+//            // 隱藏按鈕，使按鈕只需按一次後就會消失
+//        }
         
+//}
+function showNextCard() {
+    connection.on("SendMessage", function (gptResponse) {
+        // 在這裡處理從伺服器接收到的GPT機器人的回應
+        console.log("從伺服器接收到的GPT回應：", gptResponse);
+    });
+
+    if (currentIndex <= 3) {
+        const cardIndex = currentIndex - 1;
+        const tarotCardElement = tarotCardElements[cardIndex];
+        const imgElement = tarotCardElement.querySelector("img");
+
+        // 更新塔羅牌圖片和名稱並移除動畫效果
+        imgElement.src = tarotCardImages[shuffledIndexes[cardIndex]];
+
+        const tarotNameElement = document.getElementById("cardName" + currentIndex);
+        const cardName = tarotCards[shuffledIndexes[cardIndex]];
+        tarotNameElement.textContent = cardName;
+
+        // 將cardName的值作為參數傳遞給SendMessage方法
+        threeCards.push(cardName);
+
+        if (currentIndex === 3) {
+            const threeCardsString = threeCards.join(", "); // 將threeCards以逗號分隔轉為字串
+            connection.invoke("SendMessage", threeCardsString) // 使用invoke呼叫SendMessage方法，並傳遞threeCardsString作為參數
+                .catch(function (err) {
+                    console.error(err);
+                });
+        }
+
+        tarotCardElement.classList.remove("card-removed");
+        tarotCardElement.classList.add("card-appeared");
+
+        setTimeout(showNextCard, 1000);
+        currentIndex++;
+    } else {
+        currentIndex = 0;
+        shuffleBtn.classList.add("fadeOutButton");
+        // 隱藏按鈕，使按鈕只需按一次後就會消失
     }
+    
+}
 
 
