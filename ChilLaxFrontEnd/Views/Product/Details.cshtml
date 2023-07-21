@@ -9,64 +9,42 @@
 <div>
     <h4>Product</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductId)
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(modelItem => modelItem.ProductImg)
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductId)
+        <dd class="col-sm-10">
+            <img src="@Html.DisplayFor(model => model.ProductImg)" />    @*圖片*@
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.SupplierId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.SupplierId)
-        </dd>
-        <dt>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProductName)
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductName)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductName)            @*名稱*@
         </dd>
-        <dt>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProductDesc)
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductDesc)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductDesc)      @*簡介*@
         </dd>
-        <dt>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProductPrice)
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductPrice)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductPrice)            @*價格*@
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductImg)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductImg)
-        </dd>
-        <dt>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProductQuantity)
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductQuantity)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductQuantity)            @*庫存*@
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductCategory)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductDesc)
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductCategory)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductState)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductState)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductDesc)                          @*內容*@
         </dd>
     </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
 </div>
