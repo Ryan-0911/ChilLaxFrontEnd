@@ -26,12 +26,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 app.UseAuthorization();
+app.MapHub<ChatHub>("/chatHub");
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.UseSession();
-app.MapHub<ChatHub>("/chatHub");
-
-
+    pattern: "{controller=Login}/{action=Login}/{id?}");
 app.Run();

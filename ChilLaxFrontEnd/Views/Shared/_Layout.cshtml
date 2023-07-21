@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using ChilLaxFrontEnd.ViewModels;
+@using System.Text.Json
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -243,8 +246,11 @@
                 <div class="sub-menu-wrap" id="subMenu">
                     <div class="sub-menu">
                         <div class="user-info">
-                            <img src="/assets/images/profilePic.jpg" />
-                            <h3>James Ald</h3>
+                            @{
+                                string json = Context.Session.GetString(CDictionary.SK_LOINGED_USER);
+                                Member member = JsonSerializer.Deserialize<Member>(json);
+                                <h3>@member.MemberName</h3>
+                            }
                         </div>
                         <hr style="border: 0; height: 1px; width: 100%; background: #ccc; margin: 15px 0 10px" />
                         <a href="#" class="sub-menu-link">
@@ -254,10 +260,10 @@
                         </a>
                         <a asp-action="PointRecord" asp-controller="Home" class="sub-menu-link">
                             <img src="/assets/images/footprint.png" />
-                            <p>點數紀錄</p>
+                            <p>總點數</p>
                             <span>></span>
                         </a>
-                        <a href="#" class="sub-menu-link">
+                        <a asp-action="Login" asp-controller="Login" class="sub-menu-link">
                             <img src="/assets/images/logout.png" />
                             <p>登出</p>
                             <span>></span>

@@ -30,7 +30,7 @@ namespace ChilLaxFrontEnd.Controllers
             string website = $"https://localhost:7189";
 
             //取得最新一筆訂單
-            string maxOrderId = await db.ProductOrders.MaxAsync(p => p.OrderId);
+            int maxOrderId = await db.ProductOrders.MaxAsync(p => p.OrderId);
             //ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
             List<ProductOrderDetailDTO> productOrderDetails = await db.ProductOrders
                .Where(o => o.OrderId == maxOrderId)
