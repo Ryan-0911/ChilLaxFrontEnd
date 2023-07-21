@@ -125,11 +125,11 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 Available = true
             };
 
-            if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail!= null && vm.memberBirth != null && HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
+            //if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail!= null && vm.memberBirth != null && HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
 
-            string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
-            MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm
-            Console.WriteLine(mc);
+            //string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
+            //MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm
+            //Console.WriteLine(mc);
 
             if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail != null && vm.memberBirth != null)
             {
