@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ChilLaxFrontEnd.Models
+namespace ChilLaxFrontEnd.Models;
+
+public partial class Supplier
 {
-    public partial class Supplier
-    {
-        public Supplier()
-        {
-            Products = new HashSet<Product>();
-            Purchases = new HashSet<Purchase>();
-        }
+    public int SupplierId { get; set; }
 
-        public int SupplierId { get; set; }
-        public string SupplierName { get; set; } = null!;
-        public string SupplierTel { get; set; } = null!;
-        public string SupplierAddress { get; set; } = null!;
+    public string SupplierName { get; set; } = null!;
 
-        public virtual ICollection<Product> Products { get; set; }
-        public virtual ICollection<Purchase> Purchases { get; set; }
-    }
+    public string SupplierTel { get; set; } = null!;
+
+    public string SupplierAddress { get; set; } = null!;
+
+    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+
+    public virtual ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
 }

@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using ChilLaxFrontEnd.Models;
 using ChilLaxFrontEnd.Models.DTO;
 
-
 namespace ChilLaxFrontEnd.Controllers
 {
     public class CartsController : Controller
@@ -20,8 +19,6 @@ namespace ChilLaxFrontEnd.Controllers
             _context = context;
         }
 
-        int mid = 1;
-
         // GET: Carts
         public async Task<IActionResult> Index()
         {
@@ -32,8 +29,11 @@ namespace ChilLaxFrontEnd.Controllers
         // GET: Carts/Details/5
         public async Task<ActionResult<List<CartDTO>>> Details(int? id)
         {
-            if (id == null || _context.Carts == null) return NotFound();
-   
+            if (id == null || _context.Carts == null)
+            {
+                return NotFound();
+            }
+
             var cart = await _context.Carts
                 .Include(c => c.Member)
                 .Include(c => c.Product)
@@ -45,8 +45,12 @@ namespace ChilLaxFrontEnd.Controllers
                     Product = p
                     })
                 .ToListAsync();
+            Console.WriteLine(cart);
+            if (cart == null)
+            {
+                return NotFound();
+            }
 
-            if (cart == null) return NotFound();
             return View(cart);
         }
 
@@ -132,41 +136,43 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         // GET: Carts/Delete/5
-        [HttpDelete("{id}")]
-        public async Task<string> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Carts == null) return "刪除失敗";
+            if (id == null || _context.Carts == null)
+            {
+                return NotFound();
+            }
 
-            Cart? cart = await _context.Carts
+            var cart = await _context.Carts
                 .Include(c => c.Member)
                 .Include(c => c.Product)
-                .FirstOrDefaultAsync(c => c.MemberId == mid && c.ProductId == id);
-            if (cart == null) return "刪除失敗";
+                .FirstOrDefaultAsync(m => m.MemberId == id);
+            if (cart == null)
+            {
+                return NotFound();
+            }
 
-            _context.Carts.Remove(cart);
-            await _context.SaveChangesAsync();
-
-            return "刪除成功";
+            return View(cart);
         }
 
-        //// POST: Carts/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_context.Carts == null)
-        //    {
-        //        return Problem("Entity set 'ChilLaxContext.Carts'  is null.");
-        //    }
-        //    var cart = await _context.Carts.FindAsync(id);
-        //    if (cart != null)
-        //    {
-        //        _context.Carts.Remove(cart);
-        //    }
+        // POST: Carts/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.Carts == null)
+            {
+                return Problem("Entity set 'ChilLaxContext.Carts'  is null.");
+            }
+            var cart = await _context.Carts.FindAsync(id);
+            if (cart != null)
+            {
+                _context.Carts.Remove(cart);
+            }
             
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         private bool CartExists(int id)
         {

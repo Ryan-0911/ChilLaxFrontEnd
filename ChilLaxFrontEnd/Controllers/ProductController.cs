@@ -6,12 +6,6 @@ namespace ChilLaxFrontEnd.Controllers
     public class ProductController : Controller
     {
         ChilLaxContext db = new ChilLaxContext();
-        private readonly ChilLaxContext _context;
-
-        public ProductController(ChilLaxContext context)
-        {
-            _context = context;
-        }
 
         public IActionResult Index()
         {
@@ -23,39 +17,11 @@ namespace ChilLaxFrontEnd.Controllers
             return View();
         }
 
-        public IActionResult List()
+        public ActionResult List()
         {
-            //string keyword;
-            //if (Request.Form.TryGetValue("txtKeyword", out var keywordValue))
-            //{
-            //    keyword = keywordValue;
-            //}
-            //else
-            //{
-            //    keyword = null;
-            //}
-
-            //IEnumerable<Product> datas = null;
-            //if (string.IsNullOrEmpty(keyword))
-            //{
-            //    datas = from p in db.Products
-            //            select p;
-            //}
-            //else
-            //{
-            //    datas = db.Products.Where(p => p.ProductName.Contains(keyword));
-            //}
-
-            //return View(datas);
-
             var datas = from p in db.Products
                         select p;
             return View(datas);
-        }
-
-        public IActionResult Details() 
-        {
-            return View();
         }
 
 

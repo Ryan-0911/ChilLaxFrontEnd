@@ -12,6 +12,9 @@ namespace ChilLaxFrontEnd.Controllers
             return View(data);
         }
 
-
+        public string EarnPoint()
+        {
+            return "";
+        }
     }
 }

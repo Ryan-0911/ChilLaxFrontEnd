@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 using System.Text.Encodings.Web;
 
 namespace ChilLaxFrontEnd.Controllers
@@ -33,35 +34,26 @@ namespace ChilLaxFrontEnd.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public IActionResult Login(LoginViewModel vm)
         {
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
                 t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
-            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
 
+            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
             Member member = (new ChilLaxContext()).Members.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
-
-            if (membercredential != null && member != null)
+            LoginViewModel user = new LoginViewModel
             {
-                MemberViewModel user = new MemberViewModel
-                {
-                    txtAccount = membercredential.MemberAccount,
-                    txtPassword = membercredential.MemberPassword,
-                    memberName = member.MemberName,
-                    Id = member.MemberId,
-                    
-                };
-                Console.WriteLine(user);
-                if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)
-                {
-                    string json = JsonSerializer.Serialize(member);
-                    Console.WriteLine(json);
-                    HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
-                    return RedirectToAction("Index", "Home");
-                }
+                txtAccount = membercredential.MemberAccount,
+                txtPassword = membercredential.MemberPassword
+            };
+            
+            if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)   
+            {
+                string json = JsonSerializer.Serialize(user);
+                HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }
@@ -120,7 +112,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm
             Console.WriteLine(mc);
 
-            if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail != null && vm.memberBirth != null)
+            if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail!= null && vm.memberBirth != null)
             {
 
                 ChilLaxContext db = new ChilLaxContext();
@@ -167,7 +159,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 };
                 if (emailExists == false)
                 {
-
+                    
                     string json = JsonSerializer.Serialize(memberData, new JsonSerializerOptions
                     {
                         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -179,7 +171,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     //Member mem = JsonSerializer.Deserialize<Member>(test);
                     //Console.WriteLine(test);
                     //return RedirectToAction("registerProfile");
-
+               
                     return View(lvm);
 
                 }
@@ -250,7 +242,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
         [HttpPost]
         public IActionResult forgetPassword(RegisterViewModel rvm)
         {
-
+            
             return View();
         }
 

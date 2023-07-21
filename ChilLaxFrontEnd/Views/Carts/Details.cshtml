@@ -4,11 +4,7 @@
 }
 <style>
     .productimg{
-        height: 150px;
-    }
-    .td_txt{
-        height: 150px;
-        line-height: 100px;
+        height:150px
     }
 </style>
 
@@ -33,52 +29,19 @@
                     <td>
                         <img class="productimg" src="https://localhost:44385/assets/images/@item.Product?.ProductImg">
                     </td>
+                    <td>@item.Product?.ProductName</td>
+                    <td>@item.Product?.ProductPrice</td>
+                    <td align='center' valign="middle">@item.Cart?.CartProductQuantity</td>
                     <td>
-                        <div class="td_txt">
-                            @item.Product?.ProductName
-                        </div>
-                    </td>
-                    <td>
-                        <div class="td_txt">
-                            @item.Product?.ProductPrice
-                        </div>
-                    </td>
-                    <td>
-                        <div class="td_txt">
-                            @item.Cart?.CartProductQuantity
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <button onclick="deleteCart(this.value)" value="@item.Cart?.ProductId" class="btn">刪除</button>
-                        </div>
+                        <button onclick="delete()" class="button">刪除</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-<button onclick="Checkout()">結帳</button>
+
 </div>
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>
 </div>
-
-@section Scripts{
-
-<script>
-    const baseAddress = "https://localhost:7189"
-    
-        function deleteCart(productId) {
-        $.ajax({
-            type:"GET",
-                url: `${baseAddress}/Carts/Delete/${productId}`
-        }).done(data =>{
-            alert("刪除成功");
-        }).fail(err => {
-            alert(err.statusText);
-        });
-    };
-
-</script>
-}
