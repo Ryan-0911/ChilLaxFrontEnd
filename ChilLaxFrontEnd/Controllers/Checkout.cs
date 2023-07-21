@@ -34,7 +34,10 @@ namespace ChilLaxFrontEnd.Controllers
             //ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
             List<ProductOrderDetailDTO> productOrderDetails = await db.ProductOrders
                .Where(o => o.OrderId == maxOrderId)
-               .Join(db.OrderDetails, po => po.OrderId, od => od.OrderId, (po, od) => new { ProductOrder = po, OrderDetail = od })
+               .Join(db.OrderDetails,
+                     po => po.OrderId,
+                     od => od.OrderId,
+                     (po, od) => new { ProductOrder = po, OrderDetail = od })
                .Join(db.Products, od => od.OrderDetail.ProductId, p => p.ProductId, (od, p) => new ProductOrderDetailDTO
                {
                    ProductOrder = od.ProductOrder,
@@ -47,7 +50,7 @@ namespace ChilLaxFrontEnd.Controllers
                 this_products += $"{productOrderDetail.Product?.ProductName}/";
             }
 
-            
+
 
             var order = new Dictionary<string, string>
             {
@@ -113,7 +116,7 @@ namespace ChilLaxFrontEnd.Controllers
                     pointHistory.ModifiedSource = "product";
                     pointHistory.MemberId = productOrder.MemberId;
                     pointHistory.PointDetailId = (productOrder.OrderId).ToString();
-                    pointHistory.ModifiedAmount =(int)Math.Floor(productOrder.OrderTotalPrice / 10.0);
+                    pointHistory.ModifiedAmount = (int)Math.Floor(productOrder.OrderTotalPrice / 10.0);
                     _context.PointHistories.Add(pointHistory);
                     await _context.SaveChangesAsync();
 
