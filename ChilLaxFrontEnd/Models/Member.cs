@@ -23,7 +23,7 @@ namespace ChilLaxFrontEnd.Models
         public bool? MemberSex { get; set; }
         public int? MemberPoint { get; set; }
         public DateTime MemberJoinTime { get; set; }
-        public bool? Available { get; set; }
+        public bool Available { get; set; }
         public string? Provider { get; set; }
         public string? ProviderUserId { get; set; }
 

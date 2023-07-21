@@ -10,6 +10,7 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using System.Text.Encodings.Web;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -86,15 +87,20 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
             //MemberCredential membercredential=new MemberCredential();
             //Member member = new Member();
-            MemberCredential mc = new MemberCredential
+            
+            string password = vm.txtRegisterPassword;  // 假設這是使用者輸入的密碼
+            string salt = BCrypt.Net.BCrypt.GenerateSalt();// 產生隨機的鹽值
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);// 將密碼和鹽值一起加密
+
+            var memberData = new 
             {
                 MemberAccount = vm.txtRegisterAccount,
-                MemberPassword = vm.txtRegisterPassword
+                MemberPassword = hashedPassword
 
             };
             if (accountExists == false && vm.txtRegisterPassword != null && vm.txtRegisterPasswordChk == vm.txtRegisterPassword)
             {
-                string json = JsonSerializer.Serialize(mc);
+                string json = JsonSerializer.Serialize(memberData);
                 HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, json);
                 return RedirectToAction("registerProfile");
             }

@@ -240,7 +240,7 @@ namespace ChilLaxFrontEnd.Models
                     .HasColumnName("member_account");
 
                 entity.Property(e => e.MemberPassword)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .HasColumnName("member_password");
 
                 entity.HasOne(d => d.Member)

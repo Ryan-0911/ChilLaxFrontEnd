@@ -10,6 +10,6 @@ namespace ChilLaxFrontEnd.Models
         public string EmpName { get; set; } = null!;
         public string EmpAccount { get; set; } = null!;
         public string EmpPassword { get; set; } = null!;
-        public bool? Available { get; set; }
+        public bool Available { get; set; }
     }
 }
