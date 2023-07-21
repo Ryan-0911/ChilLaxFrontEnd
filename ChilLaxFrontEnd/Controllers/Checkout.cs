@@ -98,7 +98,7 @@ namespace ChilLaxFrontEnd.Controllers
             {
                 try
                 {
-                    ProductOrder productOrder = await _context.ProductOrders.FirstOrDefaultAsync(po => po.OrderId == id.ToString());
+                    ProductOrder productOrder = await _context.ProductOrders.FirstOrDefaultAsync(po => po.OrderId == id);
 
                     if (productOrder == null)
                         return "找不到該訂單";
@@ -112,7 +112,7 @@ namespace ChilLaxFrontEnd.Controllers
                     PointHistory pointHistory = new PointHistory();
                     pointHistory.ModifiedSource = "product";
                     pointHistory.MemberId = productOrder.MemberId;
-                    pointHistory.PointDetailId = productOrder.OrderId;
+                    pointHistory.PointDetailId = (productOrder.OrderId).ToString();
                     pointHistory.ModifiedAmount =(int)Math.Floor(productOrder.OrderTotalPrice / 10.0);
                     _context.PointHistories.Add(pointHistory);
                     await _context.SaveChangesAsync();
