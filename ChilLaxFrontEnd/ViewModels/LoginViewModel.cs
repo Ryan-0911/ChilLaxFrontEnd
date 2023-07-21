@@ -42,5 +42,12 @@ namespace ChilLaxFrontEnd.ViewModels
         public DateTime memberBirth { get; set; }
         public string memberAddress { get; set; }
 
+        public string Provider { get; set; }
+
+        public string ProviderUserId { get; set; }
+
+        
+
+
     }
 }

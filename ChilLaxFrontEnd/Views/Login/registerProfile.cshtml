@@ -189,7 +189,7 @@
                             <div class="inner-input">
                                 <i class="fas fa-user"></i>
                                     @*<input type="text" id="f-name" class="user_input" v-model="memberName"  required>*@
-                            @Html.TextBox("memberName",Model.memberName, new { @class = "user_input",autocomplete = "off" })
+                            @Html.TextBox("memberName",null, new { @class = "user_input",autocomplete = "off" })
                                     @Html.ValidationMessageFor(model => model.memberName,null,new { @class = "validation-error-message" })
                                 <label>姓名</label>
                             </div>
@@ -247,7 +247,7 @@
                             <div class="inner-input">
                                 <i class="fa-solid fa-map-location-dot"></i>
                             @*<input type="text" id="address" v-model="memberAddress" class="user_input" required>*@
-                            @Html.TextBox("memberAddress",Model.memberEmail, new { @class = "user_input",autocomplete = "off"})
+                            @Html.TextBox("memberAddress",null, new { @class = "user_input",autocomplete = "off"})
 
                                 <label>通訊地址</label>
                             </div>

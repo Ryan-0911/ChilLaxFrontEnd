@@ -47,17 +47,22 @@ namespace ChilLaxFrontEnd.Controllers
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
             if (membercredential!=null && member!= null) 
             {
-                MemberViewModel user = new MemberViewModel
-                {
-                    txtAccount = membercredential.MemberAccount,
-                    txtPassword = membercredential.MemberPassword,
-                    memberName = member.MemberName,
-                    Id = member.MemberId
-                };   
+                //MemberViewModel user = new MemberViewModel
+                //{
+                //    txtAccount = membercredential.MemberAccount,
+                //    txtPassword = membercredential.MemberPassword,
+                //    memberName = member.MemberName,
+                //    Id = member.MemberId
+                //};   
                 
                 if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)   
                 {
-                    string json = JsonSerializer.Serialize(user);
+                    string json = JsonSerializer.Serialize(member, new JsonSerializerOptions
+                    {
+                        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                        WriteIndented = true
+                    });
+                    //string json = JsonSerializer.Serialize(member);
                     Console.WriteLine(json);
                     HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
                     return RedirectToAction("Index", "Home");
@@ -154,6 +159,8 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             {
                 // 驗證失敗
                 ViewData["Msg"] = "驗證 Google 授權失敗";
+                return RedirectToAction("Login");
+
             }
             else
             {
@@ -163,14 +170,14 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 bool emailExists = _context.Members.Any(m => m.MemberEmail.Equals(payload.Email));
                 var memberData = new
                 {
-                    MemberEmail = payload.Email,
-                    MemberName = payload.Name
-                    
+                    Provider = "Google",
+                    ProviderUserId = payload.Subject
                 };
                 LoginViewModel lvm = new LoginViewModel
                 {
                     memberEmail = payload.Email,
                     memberName = payload.Name
+                    
                 };
                 if (emailExists == false)
                 {
@@ -185,10 +192,9 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     //string test = HttpContext.Session.GetString(CDictionary.SK_EXTERNALLOGIN_USER);
                     //Member mem = JsonSerializer.Deserialize<Member>(test);
                     //Console.WriteLine(test);
+
+                    return View(lvm);
                     //return RedirectToAction("registerProfile");
-               
-                    //return View(lvm);
-                    return RedirectToAction("registerProfile");
 
 
                 }
@@ -198,6 +204,38 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             //return View();
             return RedirectToAction("Index", "Home");
         }
+
+
+        [HttpPost]
+        public IActionResult ProcessGoogleLogin(LoginViewModel vm)
+        {
+            string json = HttpContext.Session.GetString(CDictionary.SK_EXTERNALLOGIN_USER);
+            Member mem = JsonSerializer.Deserialize<Member>(json);
+            Member member = new Member
+            {
+                MemberName = vm.memberName,
+                MemberTel = vm.memberPhone,
+                MemberEmail = vm.memberEmail,
+                MemberSex = vm.memberGender,
+                MemberBirthday = vm.memberBirth,
+                MemberAddress = vm.memberAddress,
+                MemberPoint = 0,
+                MemberJoinTime = DateTime.Now,
+                Available = true,
+                Provider = mem.Provider,
+                ProviderUserId = mem.ProviderUserId
+            };
+
+            if (member.MemberName != null && member.MemberTel != null && member.MemberEmail != null && member.MemberBirthday != null && member.Provider != null && member.ProviderUserId != null)
+            {
+                db.Members.Add(member);
+                db.SaveChanges();
+
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+
 
         public async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string? formCredential, string? formToken, string? cookiesToken)
         {
@@ -249,6 +287,14 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             return payload;
         }
 
+        //登出
+        public IActionResult Logout()
+        {
+            
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Login");
+        }
 
 
         public IActionResult forgetPassword()

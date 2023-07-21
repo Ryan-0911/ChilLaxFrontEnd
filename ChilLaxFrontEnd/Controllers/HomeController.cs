@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace ChilLaxFrontEnd.Controllers
 {
-    public class HomeController : PreventController
+    public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
