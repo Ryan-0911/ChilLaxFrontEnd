@@ -1,0 +1,80 @@
+
+
+.tarot-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.tarot-card {
+    width: 150px;
+    height: 250px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    /* grid-template-rows: auto 1fr; */
+    flex-direction: column-reverse;
+}
+
+.card-name {
+    margin-top: 20px;
+}
+
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.tarot-card {
+    /* ... 之前的CSS保持不變 ... */
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+/* 新增動畫效果 */
+.card-removed {
+    animation-name: fadeOut;
+}
+
+.card-appeared {
+    animation-name: fadeIn;
+}
+.fadeOutButton {
+    animation-name: fadeOut;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+

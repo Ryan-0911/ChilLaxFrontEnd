@@ -1,26 +1,87 @@
-﻿<h1>即時聊天範例</h1>
+﻿<h1>AI占卜師</h1>
+@section Styles{
+    <link href="/assets/css/Tarot_css/Tarotstyle.css" rel="stylesheet" />
+    <style>
+        
+        h1{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-<div class="row">
-    <div class="col-8">
-        <h4>個人 ID: <span id="SelfID"></span></h4>
-        <div class="mb-3">
-            <label for="message" class="form-label">發送訊息</label>
-            <input type="text" class="form-control" id="message">
-        </div>
-        <div class="mb-3">
-            <label for="sendToID" class="form-label">指定 ID</label>
-            <input type="text" class="form-control" id="sendToID">
-        </div>
-        <button type="button" class="btn btn-primary" id="sendButton">傳送訊息</button>
-    </div>
-    <div class="col-4">
-        <h4>連線 ID 列表</h4>
-        <ul class="list-group" id="IDList">
-        </ul>
-    </div>
+        .button-container {
+            display: grid;
+            place-items: center;
+        }
+        #shuffleBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #5E005E;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .chat-container {
+            
+            height: 400px;
+            overflow-y: scroll; /* 設置滾動條，使內容超出高度時可以滾動 */
+        }
+
+        .fortuneTeller {
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        
+        .fortuneTeller img {
+            max-width: 100%; /* 確保圖片不超過父元素的寬度 */
+            max-height: 100%; /* 確保圖片不超過父元素的高度 */
+        }
+
+        .col-8{
+            margin-bottom: 120px;
+        }
+    </style>
+
+        .conn2, .conn {
+            color:#FCFCFC;
+            background-color: #FCFCFC;
+        }
+
+        
+    </style>
+}
+<div class="col-md fortuneTeller">
+    <img src="~/assets/images/占卜師.png" />
+    
 </div>
 
-<div class="row mt-3">
+
+<div class="tarot-container">
+    <div class="tarot-card" id="card1">
+
+        <div class="card-name" id="cardName1"></div>
+    </div>
+    <div class="tarot-card" id="card2">
+
+        <div class="card-name" id="cardName2"></div>
+    </div>
+    <div class="tarot-card" id="card3">
+
+        <div class="card-name" id="cardName3"></div>
+    </div>
+    <!-- Add more tarot cards as needed -->
+</div>
+
+<div class="button-container">
+    <button id="shuffleBtn" >Shuffle Tarot Cards</button>
+</div>
+
+<div class="col-md-12 chat-container">
     <div class="col-12">
         <h3>聊天內容</h3>
         <ul class="list-group" id="Content">
@@ -28,8 +89,26 @@
     </div>
 </div>
 
-@section scripts{
+<div class="col-md-12">
+    <div class="col-8">
+        @*<h4>個人 ID: <span id="SelfID"></span></h4>*@
+        <div class="mb-3">
+            <label for="message" class="form-label">發送訊息 :</label>
+            <input type="text" placeholder="請輸入您的疑問" class="form-control" id="message" autocomplete="off">
+        </div>
+       
+        <button type="button" class="btn btn-primary" id="sendButton">傳送訊息</button>
+    </div>
+    
+    
+</div>
+
+
+
+@section Scripts{
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/Tarot/Tarot.js"></script>
+    
     <script>
         var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
