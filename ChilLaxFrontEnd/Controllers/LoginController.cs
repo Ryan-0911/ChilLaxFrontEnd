@@ -49,15 +49,7 @@ namespace ChilLaxFrontEnd.Controllers
 
             if (membercredential != null && member != null)
             {
-                MemberViewModel user = new MemberViewModel
-                {
-                    txtAccount = membercredential.MemberAccount,
-                    txtPassword = membercredential.MemberPassword,
-                    memberName = member.MemberName,
-                    Id = member.MemberId,
-                    
-                };
-                Console.WriteLine(user);
+                member.MemberPoint = _context.PointHistories.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
                 if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)
                 {
                     string json = JsonSerializer.Serialize(member);
@@ -145,9 +137,12 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     MemberPassword = mc.MemberPassword
                 };
                 db.MemberCredentials.Add(credential);
-                db.SaveChanges();   
-                             
-                return RedirectToAction("Index", "Home");
+                db.SaveChanges();
+
+                
+
+                return RedirectToAction("Login");
+
             }
             return View();
         }
@@ -162,19 +157,18 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             // 驗證 Google Token
             GoogleJsonWebSignature.Payload? payload = VerifyGoogleToken(formCredential, formToken, cookiesToken).Result;
-
+            Member member = (new ChilLaxContext()).Members.FirstOrDefault(
+                t => t.MemberEmail.Equals(payload.Email) && t.Available == true);
 
             if (payload == null)
             {
                 // 驗證失敗
                 ViewData["Msg"] = "驗證 Google 授權失敗";
                 return RedirectToAction("Login");
-
             }
             else
             {
                 PropertyInfo[] properties = payload.GetType().GetProperties();
-                //Member member = new Member();
                 
                 bool emailExists = _context.Members.Any(m => m.MemberEmail.Equals(payload.Email));
                 var memberData = new
@@ -182,13 +176,13 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     Provider = "Google",
                     ProviderUserId = payload.Subject
                 };
-                LoginViewModel lvm = new LoginViewModel
+                var view = new
                 {
                     memberEmail = payload.Email,
                     memberName = payload.Name
                     
                 };
-                if (emailExists == false)
+                if (member == null)
                 {
 
                     string json = JsonSerializer.Serialize(memberData, new JsonSerializerOptions
@@ -198,21 +192,24 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     });
 
                     HttpContext.Session.SetString(CDictionary.SK_EXTERNALLOGIN_USER, json);
-                    //string test = HttpContext.Session.GetString(CDictionary.SK_EXTERNALLOGIN_USER);
-                    //Member mem = JsonSerializer.Deserialize<Member>(test);
-                    //Console.WriteLine(test);
-                    //return RedirectToAction("registerProfile");
 
-                    return View(lvm);
+                    return View(view);
                     //return RedirectToAction("registerProfile");
 
 
                 }
+                else 
+                {
+                    member.MemberPoint = _context.PointHistories.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
+                        
+                    string json = JsonSerializer.Serialize(member);
+                    //Console.WriteLine(json);
+                    HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
+                    return RedirectToAction("Index", "Home");
+                 
+                }
 
             }
-
-            //return View();
-            return RedirectToAction("Index", "Home");
         }
 
 
@@ -241,7 +238,14 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 db.Members.Add(member);
                 db.SaveChanges();
 
+                string Memjson = JsonSerializer.Serialize(member);
+                //Console.WriteLine(json);
+                HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, Memjson);
                 return RedirectToAction("Index", "Home");
+
+                //return RedirectToAction("Index", "Home");
+                //return RedirectToAction("Login");
+
             }
             return View();
         }

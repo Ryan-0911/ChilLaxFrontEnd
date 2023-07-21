@@ -188,7 +188,7 @@
                         <div class="inner-input">
                             <i class="fas fa-user"></i>
                             @*<input type="text" id="f-name" class="user_input" v-model="memberName"  required>*@
-                            @Html.TextBox("memberName",null, new { @class = "user_input",autocomplete = "off",id="memberName" })
+                            @Html.TextBox("memberName",Model.memberName, new { @class = "user_input",autocomplete = "off",id="memberName" })
                             @Html.ValidationMessageFor(model => model.memberName,null,new { @class = "validation-error-message" })
                             <label>姓名</label>
                         </div>
@@ -206,7 +206,7 @@
                         <div class="inner-input">
                             <i class="fa-solid fa-envelope"></i>
                             @*<input type="email" id="email" v-model="memberEmail" class="user_input" required>*@
-                            @Html.TextBox("memberEmail",null, new { type="email",@class = "user_input",autocomplete = "off",id="memberEmail" })
+                            @Html.TextBox("memberEmail",Model.memberEmail, new { type="email",@class = "user_input",autocomplete = "off",id="memberEmail" })
                             @Html.ValidationMessageFor(model => model.memberEmail,null,new { @class = "validation-error-message" })
                             <label>信箱</label>
                         </div>
