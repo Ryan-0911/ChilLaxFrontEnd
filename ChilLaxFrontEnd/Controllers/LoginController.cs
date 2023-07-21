@@ -41,22 +41,24 @@ namespace ChilLaxFrontEnd.Controllers
         public IActionResult Login(LoginViewModel vm)
         {
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
-                t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
-            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
+                t => t.MemberAccount.Equals(vm.txtAccount));
+            //bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
 
             Member member = (new ChilLaxContext()).Members.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
 
-            if (membercredential != null && member != null)
+            bool isPwdMatch = BCrypt.Net.BCrypt.Verify(vm.txtPassword, membercredential.MemberPassword);
+            Console.WriteLine("驗證結果：" + isPwdMatch); // 印出 true
+
+            if (membercredential != null && member != null && isPwdMatch == true)
             {
                 member.MemberPoint = _context.PointHistories.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
-                if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)
-                {
-                    string json = JsonSerializer.Serialize(member);
-                    Console.WriteLine(json);
-                    HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
-                    return RedirectToAction("Index", "Home");
-                }
+                
+                string json = JsonSerializer.Serialize(member);
+                Console.WriteLine(json);
+                HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
+                return RedirectToAction("Index", "Home");
+                
             }
             
             return View();
@@ -176,7 +178,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     Provider = "Google",
                     ProviderUserId = payload.Subject
                 };
-                var view = new
+                var view = new LoginViewModel
                 {
                     memberEmail = payload.Email,
                     memberName = payload.Name
@@ -194,9 +196,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     HttpContext.Session.SetString(CDictionary.SK_EXTERNALLOGIN_USER, json);
 
                     return View(view);
-                    //return RedirectToAction("registerProfile");
-
-
+                   
                 }
                 else 
                 {
@@ -322,6 +322,21 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             return View();
         }
+
+        public IActionResult editMemberProfile()
+        {
+
+            return View();
+        }
+        [HttpPost]
+        public IActionResult editMemberProfile(LoginViewModel vm)
+        {
+
+            return View();
+        }
+
+
+
 
 
     }
