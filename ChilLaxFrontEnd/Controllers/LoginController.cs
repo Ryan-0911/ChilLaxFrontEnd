@@ -22,6 +22,8 @@ namespace ChilLaxFrontEnd.Controllers
         //{
         //    _logger = logger;
         //}
+        ChilLaxContext db = new ChilLaxContext();
+
         private readonly ChilLaxContext _context;
 
         public LoginController(ChilLaxContext context)
@@ -43,18 +45,25 @@ namespace ChilLaxFrontEnd.Controllers
             bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
             Member member = (new ChilLaxContext()).Members.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
-            LoginViewModel user = new LoginViewModel
+            if (membercredential!=null && member!= null) 
             {
-                txtAccount = membercredential.MemberAccount,
-                txtPassword = membercredential.MemberPassword
-            };
-            
-            if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)   
-            {
-                string json = JsonSerializer.Serialize(user);
-                HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
-                return RedirectToAction("Index", "Home");
+                MemberViewModel user = new MemberViewModel
+                {
+                    txtAccount = membercredential.MemberAccount,
+                    txtPassword = membercredential.MemberPassword,
+                    memberName = member.MemberName,
+                    Id = member.MemberId
+                };   
+                
+                if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)   
+                {
+                    string json = JsonSerializer.Serialize(user);
+                    Console.WriteLine(json);
+                    HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
+                    return RedirectToAction("Index", "Home");
+                }
             }
+            
             return View();
         }
 
@@ -76,6 +85,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             {
                 MemberAccount = vm.txtRegisterAccount,
                 MemberPassword = vm.txtRegisterPassword
+
             };
             if (accountExists == false && vm.txtRegisterPassword != null && vm.txtRegisterPasswordChk == vm.txtRegisterPassword)
             {
@@ -107,19 +117,22 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 Available = true
             };
 
-
-            string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
-            MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm
-            Console.WriteLine(mc);
-
-            if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail!= null && vm.memberBirth != null)
+            if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail!= null && vm.memberBirth != null && HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
             {
-
-                ChilLaxContext db = new ChilLaxContext();
                 db.Members.Add(member);
-                db.MemberCredentials.Add(mc);
                 db.SaveChanges();
 
+                string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
+                MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm 
+                MemberCredential credential = new MemberCredential 
+                {
+                    MemberId = member.MemberId,
+                    MemberAccount = mc.MemberAccount,
+                    MemberPassword = mc.MemberPassword
+                };
+                db.MemberCredentials.Add(credential);
+                db.SaveChanges();   
+                             
                 return RedirectToAction("Index", "Home");
             }
             return View();
@@ -146,11 +159,13 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             {
                 PropertyInfo[] properties = payload.GetType().GetProperties();
                 //Member member = new Member();
+                
                 bool emailExists = _context.Members.Any(m => m.MemberEmail.Equals(payload.Email));
                 var memberData = new
                 {
                     MemberEmail = payload.Email,
                     MemberName = payload.Name
+                    
                 };
                 LoginViewModel lvm = new LoginViewModel
                 {
@@ -172,7 +187,9 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     //Console.WriteLine(test);
                     //return RedirectToAction("registerProfile");
                
-                    return View(lvm);
+                    //return View(lvm);
+                    return RedirectToAction("registerProfile");
+
 
                 }
 
@@ -240,7 +257,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             return View();
         }
         [HttpPost]
-        public IActionResult forgetPassword(RegisterViewModel rvm)
+        public IActionResult forgetPassword(LoginViewModel vm)
         {
             
             return View();

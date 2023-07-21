@@ -1,7 +1,8 @@
-﻿@section Styles
-{
-    @*<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,500&display=swap">
-    <link href="~/css/accountStyle.css" rel="stylesheet">*@
+﻿@{
+    Layout = null;
+ }
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
     <style>
         * {
             margin: 0;
@@ -27,7 +28,7 @@
         .main {
             position: absolute;
             left: 50%;
-            top: 53%;
+            top: 50%;
             transform: translate(-50%,-50%);
 			width: 75%;
             height: 700px;
@@ -43,7 +44,7 @@
 
 
             /*中間白色透明背景*/
-            .main .login-section, .main .register-section, .main .profile-section, .main .verify-section {
+            .main .login-section{
                 position: absolute;
                 left: 50%;
                 transform: translate(-50%,0);
@@ -56,7 +57,7 @@
                 /* backdrop-filter: blur(4px); */
             }
 
-        .login-section .form-box, .register-section .form-box, .profile-section .form-box, .verify-section .form-box {
+        .login-section .form-box{
             position: absolute;
             display: flex;
             justify-content: center;
@@ -78,7 +79,7 @@
             transition-delay: .7s;
         }*/
 
-        .login-section .login, .register-section .register {
+        .login-section .login{
             margin-bottom: 50px;
             transform: translateY(0px);
             transition: transform .6s ease;
@@ -92,149 +93,65 @@
 
 
 
-        .login h2, .register h2, .verify-section .form-box h2 {
+        .login h2{
             text-align: center;
             font-size: 30px;
             margin: 20px 0 5px 0;
         }
 
-
-
-        .profile-section .form-box h2 {
-            text-align: center;
-            font-size: 30px;
-            margin-bottom: 50px;
-        }
-
-        .login h5, .register h5, .verify-section .form-box h5 {
+        .login h5{
             text-align: center;
             font-size: 16px;
         }
 
-        .verify-section .form-box h5 {
-            color: #d9d9d9;
-            margin: 50px auto;
-            background-color: rgba(0,0,0,0.3);
-            width: 150px;
-        }
-
-        .verify-section .form-box p {
-            font-size: 14px;
-            text-align: center;
-            margin: 0 40px 30px 40px;
-        }
-
-        .form-box .input-box, .form-box .form-group {
-            width: 340px;
+        .form-box .input-box{
+            width: 400px;
             height: 50px;
             border-bottom: 2px solid#fff;
             margin: 30px 0;
             position: relative;
         }
 
-        .form-verify {
-            width: 300px;
-            /* height: 30px; */
-            left: 65%;
-            transform: translate(-65%,0);
-            position: relative;
-            margin: 30px 0;
-        }
 
-            .form-verify input {
-                padding: 5px 0 5px 30px;
-                height: 30px;
-                font-size: 16px;
-            }
-
-            .form-verify i, .form-resetPassword i {
-                color: #222222;
-                position: absolute;
-                top: 50%;
-                left: 10px;
-                transform: translateY(-50%);
-            }
-
-        .input-box input, .form-group input {
+        .input-box input{
             height: 100%;
             color: #fff;
             background: transparent;
             border: none;
             outline: none;
             font-size: 18px;
-            padding-right: 20px;
-        }
-
-        .input-box input, .form-group .user_input {
             position: absolute;
             top: 50%;
             /* left: 0; */
-            transform: translateY(-50%);
+            transform: translateY(-40%);
+            width: 350px;
+            padding-left: 80px;
+            text-transform:none;
         }
 
-        .form-group .birth_year {
-            width: 80px;
-            text-align: right;
-            padding: 0;
-            margin-left: 50px;
-            background: rgba(0,0,0,0.4);
-        }
 
-        .form-group .birth_month {
-            width: 60px;
-            text-align: right;
-            padding: 0;
-            margin: 0;
-            background: rgba(0,0,0,0.4);
-        }
-
-        .form-group .birth_date {
-            width: 60px;
-            text-align: right;
-            padding: 0;
-            margin: 0;
-            background: rgba(0,0,0,0.4);
-        }
-        .form-group select {
-            height: 100%;
-            color: #fff;
-            text-align: center;
-            background: rgba(0,0,0,0.4);
-            border: none;
-            outline: none;
-            font-size: 20px;
-            padding-right: 20px;
-            margin-left: 80px;
-        }
-
-        .input-box label, .form-group label {
+        .input-box label{
             position: absolute;
             top: 50%;
             left: 0;
-            transform: translateY(-50%);
+            transform: translateY(-30%);
             font-size: 16px;
-            font-weight: 600px;
             pointer-events: none;
             transition: .5s ease;
         }
 
-        .input-box .icon, .form-group i {
+        .input-box .icon{
             position: absolute;
             top: 13px;
             right: 0;
             font-size: 19px;
         }
         /*文字向上漂浮*/
-        .input-box input:focus ~ label,
-        .input-box input:valid ~ label,
-        .form-group input:focus ~ label,
-        .form-group input:valid ~ label {
+        .input-box input:focus ~ label
+       {
             top: -5px;
         }
 
-        .form-group select:focus ~ label {
-            top: -5px;
-        }
 
         .remember-password {
             font-size: 14px;
@@ -260,7 +177,7 @@
                     text-decoration: underline;
                 }
 
-        .login .btn, .register .btn {
+        .login .btn{
             /* background: #fff; */
             width: 100%;
             height: 45px;
@@ -274,63 +191,33 @@
             box-shadow: rgba(0,0,0,0.4);
         }
 
-        .resendBtn {
-            width: 150px;
-            height: 35px;
-            margin-top: 40px;
-            left: 50%;
-            transform: translate(-50%,0);
-            position: relative;
-            outline: none;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background: #4F9D9D;
-            font-size: 16px;
-            color: #fff;
-            box-shadow: rgba(0,0,0,0.4);
-        }
-
-        .login .btn:hover, .register .btn:hover, .login .resendBtn:hover {
+        .login .btn:hover{
             background-color: #D1E9E9;
             color: black;
         }
 
-        .clicked {
-            background-color: #9fcfcf; /* 更改按鈕的背景顏色 */
-            color: white; /* 更改按鈕的文字顏色 */
-            cursor: default;
-        }
-
-        .form-box .backBtn {
-            left: 43%;
-            margin-top: 30px;
-            position: relative;
-        }
-
-            .form-box .backBtn a {
-                color: #1c94e9;
-                font-size: 16px;
-                letter-spacing: 1px;
-            }
-
         .create-account {
-            font-size: 14.5px;
-            text-align: center;
+            
             margin-top: 50px;
             background-color: rgba(248, 248, 248, 0.1);
-            padding: 2px;
         }
 
-            .create-account p a {
-                color: #fff;
-                font-weight: bolder;
-                text-decoration: none;
-            }
+        .create-account p
+        {
+            font-size: 14.5px;
+            text-align: center;
+            line-height: 2.5;
+        }
 
-                .create-account p a:hover {
-                    text-decoration: underline;
-                }
+        .create-account a {
+            color: #fff;
+            font-weight: bolder;
+            text-decoration: none;
+        }
+
+        .create-account a:hover {
+            text-decoration: underline;
+        }
 
         .other-login {
             transform: translate(0, -60%);
@@ -345,23 +232,24 @@
                 justify-content: space-between;
             }
 
-                .other-login .divider .line {
-                    display: inline-block;
-                    max-width: 30%;
-                    width: 30%;
-                    flex: 1;
-                    height: 1px;
-                    background-color: #fff;
-                }
+            .other-login .divider .line {
+                display: inline-block;
+                max-width: 30%;
+                width: 30%;
+                flex: 1;
+                height: 1px;
+                background-color: #fff;
+            }
 
-                .other-login .divider .divider-text {
-                    vertical-align: middle;
-                    margin: 0px 20px;
-                    line-height: 0;
-                    display: inline-block;
-                    width: 100px;
-                    color: #fff;
-                }
+            .other-login .divider .divider-text {
+                vertical-align: middle;
+                margin: 0px 20px;
+                line-height: 0;
+                display: inline-block;
+                width: 100px;
+                color: #fff;
+                font-size: 15px;
+            }
 
             .other-login .other-login-wrapper {
                 width: 100%;
@@ -370,38 +258,38 @@
                 align-items: center;
             }
 
-                .other-login .other-login-wrapper .other-login-item {
-                    border: 1px solid #fff;
-                    padding: 8px;
-                    text-align: center;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    font-weight: 600;
-                    color: rgb(51, 49, 116);
-                    margin: 0 10px;
-                }
+            .other-login .other-login-wrapper .other-login-item {
+                border: 1px solid #fff;
+                padding: 8px;
+                text-align: center;
+                border-radius: 10px;
+                cursor: pointer;
+                font-weight: 600;
+                color: rgb(51, 49, 116);
+                margin: 0 10px;
+            }
 
-                    .other-login .other-login-wrapper .other-login-item:hover {
-                        border: 1px solid #4F9D9D;
-                        background-color: #E0E0E0;
-                    }
+            .other-login .other-login-wrapper .other-login-item:hover {
+                border: 1px solid #4F9D9D;
+                background-color: #E0E0E0;
+            }
 
-                    .other-login .other-login-wrapper .other-login-item img {
-                        width: 30px;
-                        height: 30px;
-                        vertical-align: middle;
-                    }
+            .other-login .other-login-wrapper .other-login-item img {
+                width: 30px;
+                height: 30px;
+                vertical-align: middle;
+            }
 
-        .footer {
-            width: 100%;
-            height: 60px;
-            background-color: #222222;
-            position: absolute;
-            left: 0;
-            bottom: 0;
-        }
+            .pwdVisibility {
+                color: white;
+                font-size:16px;
+                background-color:transparent;
+                border:none;
+                margin-right:12px;
+            }
+
     </style>
-}
+
 @{
     ViewData["Title"] = "Login";
 }
@@ -419,21 +307,26 @@
                         <div class="create-account">
                             <p>
                                 還沒有帳號?
-                                @Html.ActionLink("進行會員註冊", "Register", null, new { htmlAttributes = new { @class = "form-control" } } )
+                            @Html.ActionLink("進行會員註冊", "Register", null,new { @class = "register-link" })
                             </p>
                         </div>
                     @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
                         <div class="input-box">
-                        <span class="icon bx bxs-envelope"><i class="bx bxs-envelope"></i></span>
-                        @Html.TextBox("txtAccount", null, new { htmlAttributes = new { @class = "form-control",required = "required" } })
-                        @Html.ValidationMessageFor(model => model.txtAccount)
+                            <span class="icon"><i class="bi bi-person-circle"></i></span>
+                        @Html.TextBox("txtAccount", null,new { @class = "form-control",autocomplete = "off",required = "required" })
+                            @Html.ValidationMessageFor(model => model.txtAccount)
 
                             <label>帳號</label>
                         </div>
                         <div class="input-box">
-                            <span class="icon"><i class="bx bxs-lock-alt"></i></span>
-                        @Html.TextBox("txtPassword", null, new { htmlAttributes = new { @class = "form-control",required = "required" } })
-                        @Html.ValidationMessageFor(model => model.txtPassword)
+                            <span class="icon">
+                                <button type="button" class="pwdVisibility" id="togglePassword" onclick="togglePasswordVisibility()">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                        @Html.TextBox("txtPassword", null, new { type = "password",@class = "form-control",id = "passwordInput" ,autocomplete = "off",required = "required" })
+                            @Html.ValidationMessageFor(model => model.txtPassword)
 
                             <label>密碼</label>
                         </div>
@@ -441,7 +334,7 @@
                             <label for="checkbox"><input type="checkbox" id="checkbox" class="remeber_account" />記住帳號</label>
                             <a href="#" class="forget_password">忘記密碼</a>
                         </div>
-                    <input type="submit" value="登入" class="btn btn-default" />
+                        <input type="submit" value="登入" class="btn btn-default" />
                         <div class="other-login">
                             <div class="divider">
                                 <span class="line"></span>
@@ -473,8 +366,22 @@
         </div>
     </article>
     <!-- SIGN UP FORM CREATION -->
-    @section Scripts
-    {
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById("passwordInput");
+            var toggleButton = document.getElementById("togglePassword");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                passwordInput.type = "password";
+                toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        }
+
+    </script>
+
         @*<script src="~/js/login.js"></script>*@
-    }
+  
