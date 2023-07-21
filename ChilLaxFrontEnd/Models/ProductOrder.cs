@@ -10,7 +10,7 @@ namespace ChilLaxFrontEnd.Models
             OrderDetails = new HashSet<OrderDetail>();
         }
 
-        public string OrderId { get; set; } = null!;
+        public int OrderId { get; set; }
         public int MemberId { get; set; }
         public bool OrderPayment { get; set; }
         public int OrderTotalPrice { get; set; }

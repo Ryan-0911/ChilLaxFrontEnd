@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 using System.Text.Encodings.Web;
 using Microsoft.CodeAnalysis.Scripting;
 
@@ -37,33 +36,31 @@ namespace ChilLaxFrontEnd.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Login(LoginViewModel vm)
         {
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
                 t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
-
             bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
+
             Member member = (new ChilLaxContext()).Members.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
-            if (membercredential!=null && member!= null) 
+
+            if (membercredential != null && member != null)
             {
-                //MemberViewModel user = new MemberViewModel
-                //{
-                //    txtAccount = membercredential.MemberAccount,
-                //    txtPassword = membercredential.MemberPassword,
-                //    memberName = member.MemberName,
-                //    Id = member.MemberId
-                //};   
-                
-                if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)   
+                MemberViewModel user = new MemberViewModel
                 {
-                    string json = JsonSerializer.Serialize(member, new JsonSerializerOptions
-                    {
-                        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                        WriteIndented = true
-                    });
-                    //string json = JsonSerializer.Serialize(member);
+                    txtAccount = membercredential.MemberAccount,
+                    txtPassword = membercredential.MemberPassword,
+                    memberName = member.MemberName,
+                    Id = member.MemberId,
+                    
+                };
+                Console.WriteLine(user);
+                if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)
+                {
+                    string json = JsonSerializer.Serialize(member);
                     Console.WriteLine(json);
                     HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
                     return RedirectToAction("Index", "Home");
@@ -129,6 +126,12 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             };
 
             if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail!= null && vm.memberBirth != null && HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
+
+            string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
+            MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm
+            Console.WriteLine(mc);
+
+            if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail != null && vm.memberBirth != null)
             {
                 db.Members.Add(member);
                 db.SaveChanges();
@@ -187,7 +190,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 };
                 if (emailExists == false)
                 {
-                    
+
                     string json = JsonSerializer.Serialize(memberData, new JsonSerializerOptions
                     {
                         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -198,6 +201,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     //string test = HttpContext.Session.GetString(CDictionary.SK_EXTERNALLOGIN_USER);
                     //Member mem = JsonSerializer.Deserialize<Member>(test);
                     //Console.WriteLine(test);
+                    //return RedirectToAction("registerProfile");
 
                     return View(lvm);
                     //return RedirectToAction("registerProfile");
@@ -311,7 +315,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
         [HttpPost]
         public IActionResult forgetPassword(LoginViewModel vm)
         {
-            
+
             return View();
         }
 

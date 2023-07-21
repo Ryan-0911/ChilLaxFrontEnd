@@ -220,9 +220,14 @@
             text-decoration: underline;
         }
 
-        .other-login {
-            transform: translate(0, -60%);
-        }
+                .main {
+                    position: absolute;
+                    left: 50%;
+                    top: 53%;
+                    transform: translate(-50%,-50%);
+                    width: 75%;
+                    height: 700px;
+                    /* margin-top: 50px; */
 
             .other-login .divider {
                 width: 100%;
@@ -252,12 +257,13 @@
                 font-size: 15px;
             }
 
-            .other-login .other-login-wrapper {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
+                /* 登入註冊版面上下切換*/
+        /*        .register-section .register {
+                    margin-bottom: 50px;
+                    transform: translateY(100%);
+                    transition: transform .6s ease;
+                    transition-delay: 0s;
+                }*/
 
             .other-login .other-login-wrapper .other-login-item {
                 border: 1px solid #fff;
@@ -301,7 +307,8 @@
         <div class="main container">
             <div class="row login-section">
                 <div class="form-box login col-md-12">
-                @using (Html.BeginForm()){
+                @using (Html.BeginForm())
+                {
                     @Html.AntiForgeryToken()
                         <h2>Sign In</h2>
                         <h5>會員登入</h5>
@@ -362,7 +369,7 @@
                     }
                 </div>
                 <!--註冊會員-->
-                
+
             </div>
         </div>
     </article>

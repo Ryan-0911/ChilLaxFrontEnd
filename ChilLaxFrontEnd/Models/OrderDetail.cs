@@ -5,7 +5,7 @@ namespace ChilLaxFrontEnd.Models
 {
     public partial class OrderDetail
     {
-        public string OrderId { get; set; } = null!;
+        public int OrderId { get; set; }
         public int ProductId { get; set; }
         public int CartProductQuantity { get; set; }
 
