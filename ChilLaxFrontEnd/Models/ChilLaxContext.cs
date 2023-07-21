@@ -220,6 +220,10 @@ namespace ChilLaxFrontEnd.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("member_tel");
+
+                entity.Property(e => e.Provider).HasMaxLength(50);
+
+                entity.Property(e => e.ProviderUserId).HasMaxLength(100);
             });
 
             modelBuilder.Entity<MemberCredential>(entity =>
@@ -229,7 +233,7 @@ namespace ChilLaxFrontEnd.Models
                 entity.ToTable("MemberCredential");
 
                 entity.Property(e => e.MemberId)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedNever()
                     .HasColumnName("member_id");
 
                 entity.Property(e => e.MemberAccount)
@@ -237,7 +241,7 @@ namespace ChilLaxFrontEnd.Models
                     .HasColumnName("member_account");
 
                 entity.Property(e => e.MemberPassword)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .HasColumnName("member_password");
 
                 entity.HasOne(d => d.Member)
@@ -340,7 +344,10 @@ namespace ChilLaxFrontEnd.Models
 
                 entity.ToTable("ProductOrder");
 
-                entity.Property(e => e.OrderId).HasColumnName("order_id");
+                entity.Property(e => e.OrderId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("order_id");
 
                 entity.Property(e => e.MemberId).HasColumnName("member_id");
 

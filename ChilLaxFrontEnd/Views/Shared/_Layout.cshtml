@@ -263,7 +263,8 @@
                             <p>總點數</p>
                             <span>></span>
                         </a>
-                        <a asp-action="Login" asp-controller="Login" class="sub-menu-link">
+                        @*<a href="#" class="sub-menu-link">*@
+                        <a href="@Url.Action("Logout", "Login")" class="sub-menu-link">
                             <img src="/assets/images/logout.png" />
                             <p>登出</p>
                             <span>></span>

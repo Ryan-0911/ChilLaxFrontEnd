@@ -1,14 +1,25 @@
-const loginsec = document.querySelector('.login-section')
-const registersec = document.querySelector('.register-section')
+//const loginsec = document.querySelector('.login-section')
+//const registersec = document.querySelector('.register-section')
 
-const loginlink=document.querySelector('.login-link')
-const registerlink=document.querySelector('.register-link')
-registerlink.addEventListener('click',()=>{
-    registersec.classList.add('active')
-})
-loginlink.addEventListener('click',()=>{
-    loginsec.classList.remove('active')
-})
+//const loginlink=document.querySelector('.login-link')
+//const registerlink=document.querySelector('.register-link')
+//registerlink.addEventListener('click',()=>{
+//    registersec.classList.add('active')
+//})
+//loginlink.addEventListener('click',()=>{
+//    loginsec.classList.remove('active')
+//})
+$('.register-link').on('click', function () {
+    $('.register-section').addClass('active');
+    $('.login-section').removeClass('active');
+});
+
+// 當按下登入連結時，切換類別以觸發動畫效果
+$('.login-link').on('click', function () {
+    $('.login-section').addClass('active');
+    $('.register-section').removeClass('active');
+});
+
 
 // 驗證信箱功能
 // let emailInput = document.getElementById('email-input');
