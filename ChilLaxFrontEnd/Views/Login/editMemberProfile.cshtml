@@ -224,7 +224,7 @@
                     </div>
                     <div class="form-mc">
                         <i class="fa-solid fa-children"></i>
-                        <label>性別</label>
+                            <label>性別(選填)</label>
                             @{
                                 var genderList = new[]
                                 {
@@ -245,7 +245,7 @@
                     </div>
                     <div class="form-mc">
                         <i class="fa-solid fa-map-location-dot"></i>
-                        <label>通訊地址</label>
+                            <label>通訊地址(選填)</label>
                             @Html.EditorFor(model => model.memberAddress, new { autocomplete = "off"})
                     </div>
                     <div class="form-mc">

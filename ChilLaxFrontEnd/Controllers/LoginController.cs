@@ -120,19 +120,24 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail != null && vm.memberBirth != null)
             {
-                db.Members.Add(member);
-                db.SaveChanges();
 
                 string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
                 MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm 
-                MemberCredential credential = new MemberCredential 
+                if (mc!=null) 
                 {
-                    MemberId = member.MemberId,
-                    MemberAccount = mc.MemberAccount,
-                    MemberPassword = mc.MemberPassword
-                };
-                db.MemberCredentials.Add(credential);
-                db.SaveChanges();
+                    db.Members.Add(member);
+                    db.SaveChanges();
+
+                    MemberCredential credential = new MemberCredential 
+                    {
+                        MemberId = member.MemberId,
+                        MemberAccount = mc.MemberAccount,
+                        MemberPassword = mc.MemberPassword
+                    };
+                    db.MemberCredentials.Add(credential);
+                    db.SaveChanges();
+                
+                }
 
                 
 
