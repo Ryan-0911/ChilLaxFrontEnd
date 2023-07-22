@@ -1,228 +1,190 @@
-﻿@section Styles
-{
+﻿@section Styles{
     <style>
-        /*會員中心*/
-        .main-Membercenter {
-            /* height: 100vh; */
-            /* flex: 1; */
-            position: relative;
-            margin-top: 30px;
-            margin-bottom: 120px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
+        body{
+            background-color: #deeeff;
         }
-
-        .tabs-container {
-            /* border: 1px solid #E0E0E0; */
-            width: 70%;
+      .articleMC {
+        display: flex;
+        justify-content: center;
+        /*align-items: center;*/
+        /*height: 100vh; 確認分頁高度再調*/
+        padding: 50px 0;
+      }
+      .containerMC {
+        width: 1000px;
+        background-color: #fff;
+        padding: 10px 30px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
         }
-            /* tabs欄 */
-            .tabs-container .tabs {
-                display: flex;
-                /*border-bottom: 1px solid #E0E0E0;*/
-               
-            }
+      .tabMC_box {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-bottom: 2px solid rgba(229, 229, 229);
+        font-size: 18px;
+        font-weight: 600;
+        position: relative;
+      }
+      .tabMC_box .tab_btn {
+        font-size: 18px;
+        font-weight: 600;
+        color: #919191;
+        background: none;
+        border: none;
+        padding: 18px;
+        cursor: pointer;
+      }
+      .tabMC_box .tab_btn.active {
+        color: #7360ff;
+      }
 
-                .tabs-container .tabs .item {
-                    /* width: 140px; */
-                    width: calc(20%);
-                    height: 60px;
-                    border: 1px solid #E0E0E0;
-                    border-right: none;
-                    border-bottom: 1px solid #E0E0E0;
-                    border-radius: 40% 40% 0 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    cursor: pointer;
-                    position: relative;
-                    /* 溢出隱藏 */
-                    overflow: hidden;
-                }
+      .contentMC_box {
+        padding: 10px;
+      }
+      .contentMC_box .contentMC {
+        display: none;
+        animation: moving 0.5s ease;
+      }
 
-                    .tabs-container .tabs .item:last-child {
-                        border-right: 1px solid #E0E0E0;
-                    }
-                    /* tabs背景圆 */
-                    .tabs-container .tabs .item::before {
-                        content: "";
-                        width: 80px;
-                        height: 30px;
-                        background-color: #E0E0E0;
-                        border-radius: 30%;
-                        position: absolute;
-                        transition: 0.2s;
-                    }
-
-                .tabs-container .tabs p {
-                    font-size: 18px;
-                    color: #000000;
-                    font-weight: bold;
-                    position: relative;
-                }
-                /* 標籤選中狀態 */
-                .tabs-container .tabs .active-item::before {
-                    width: 150%;
-                    height: 150%;
-                }
-        /* 内容區 */
-        /* .content-mc{
-            width: 70%;
-            height: 500px;
-            position: relative;
-            border: 1px solid black;
-        } */
-        .content-mc .hidden-visible-box {
-            width: 70%;
-            border: 1px solid #E0E0E0;
-            border-top: none;
-            /* height: 100%; */
-            /* display: flex;
-            justify-content: center;
-            align-items: center; */
-            position: absolute;
-            /* 內容區預設為隱藏 */
-            opacity: 0;
-            /* display: none; */
-            /* visibility:hidden; */
-            /* 不透明度改變時的過渡效果 */
-            transition: opacity 0.4s;
+      @@keyframes moving {
+        from {
+          transform: translateX(50px);
+          opacity: 0;
         }
-
-        .content-mc .profile-mc {
-            padding-top: 50px;
+        to {
+          transform: translateX(0px);
+          opacity: 1;
         }
+      }
 
-            .content-mc .profile-mc .form-mc label {
-                display: inline-block;
-                width: 100px;
-                font-size: 18px;
-                /* font-weight: bold; */
-                /* text-align: center; */
-                color: #000000;
-                margin-left: 5px;
-                margin-right: 50px;
-            }
+      .contentMC_box .contentMC.active {
+        display: block;
+      }
+      .contentMC_box .contentMC h2 {
+        margin-bottom: 10px;
+      }
+      .line {
+        position: absolute;
+        top: 66px;
+        left: 21px;
+        width: 108px;
+        height: 5px;
+        background-color: #7360ff;
+        border-radius: 10px;
+        transition: all 0.3s ease-in-out;
+      }
+
+      /*個人資料*/
+        .profile-mc .form-mc label {
+            display: inline-block;
+            width: 100px;
+            font-size: 18px;
+            /* font-weight: bold; */
+            /* text-align: center; */
+            color: #000000;
+            margin-left: 5px;
+            margin-right: 50px;
+        }
 
         .profile-mc .form-mc .span-mc {
             display: inline-block;
             width: 120px;
             font-size: 20px;
             font-weight: bold;
-            /* text-align: center; */
             color: #000000;
             margin-left: 5px;
         }
-        /* .profile-mc .form-mc select{
 
-        } */
 
-        /* 内容區選中狀態樣式 */
-        .content-mc .active {
-            opacity: 1;
-            /* display: block; */
-            /* visibility:visible; */
-        }
 
         .profile-mc .form-mc {
             width: 600px;
-            height: 50px;
-            /* border-bottom: 2px solid#fff; */
+            height: 40px;
             margin: 20px auto;
             position: relative;
-            /* background-color: #8c8c8c9f; */
         }
 
-            .profile-mc .form-mc input, .profile-mc .form-mc select {
-                height: 70%;
-                width: 50%;
-                /* color: #000000; */
-                /* background: transparent; */
-                /* border: none;
-            outline: none; */
-                border: 1px solid #ddd;
-                font-size: 18px;
-                padding-right: 20px;
-            }
+        .profile-mc .form-mc input, .profile-mc .form-mc select {
+            height: 90%;
+            width: 50%;
+            border: 1px solid #ddd;
+            font-size: 18px;
+            padding-right: 20px;
+        }
 
-            .profile-mc .form-mc a {
-                color: #1961af;
-                text-decoration: none;
-            }
+        .profile-mc .form-mc select, .profile-mc .birthMC {
+            text-align:center;
+        }
 
-                .profile-mc .form-mc a:hover {
-                    color: rgb(34, 46, 69);
-                    text-decoration: underline;
-                }
+        .profile-mc .form-mc a {
+            color: #1961af;
+            text-decoration: none;
+            font-size: 18px;
+        }
 
-            .profile-mc .form-mc .btn-mc {
-                position: absolute;
-                right: 10%;
-                bottom: 10px;
-            }
+        .profile-mc .form-mc a:hover {
+            color: rgb(34, 46, 69);
+            text-decoration: underline;
+        }
 
-                .profile-mc .form-mc .btn-mc button {
-                    display: inline-block;
-                    width: 120px;
-                    border-radius: 4px;
-                    margin-left: 12px;
-                    text-align: center;
-                    padding: 6px 12px;
-                    border: none;
-                    cursor: pointer;
-                    font-size: 14px;
-                }
+        .profile-mc .form-mc .btn-mc {
+            position: absolute;
+            right: 0;
+            bottom: 10px;
+        }
 
-                .profile-mc .form-mc .btn-mc .cancelBtn {
-                    background-color: #fff;
-                    color: #000000;
-                    border: 1px solid #d3d3d3b3;
-                }
+        .profile-mc .form-mc .btn-mc button {
+            display: inline-block;
+            width: 120px;
+            border-radius: 4px;
+            margin-left: 12px;
+            text-align: center;
+            padding: 6px 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
 
-                    .profile-mc .form-mc .btn-mc .cancelBtn:hover {
-                        border: 1px solid #000000;
-                    }
+        .profile-mc .form-mc .btn-mc .cancelBtn {
+            background-color: #fff;
+            color: #000000;
+            border: 1px solid #d3d3d3b3;
+        }
 
-                .profile-mc .form-mc .btn-mc .saveBtn {
-                    background-color: #4F9D9D;
-                    color: #fff;
-                }
+        .profile-mc .form-mc .btn-mc .cancelBtn:hover {
+            border: 1px solid #000000;
+        }
 
-                    .profile-mc .form-mc .btn-mc .saveBtn:hover {
-                        background-color: #fff;
-                        color: #4F9D9D;
-                        border: 1px solid #4F9D9D;
-                    }
+        .profile-mc .form-mc .btn-mc .saveBtn {
+            background-color: #4F9D9D;
+            color: #fff;
+        }
+
+        .profile-mc .form-mc .btn-mc .saveBtn:hover {
+            background-color: #fff;
+            color: #4F9D9D;
+            border: 1px solid #4F9D9D;
+        }
+
     </style>
 }
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-        rel="stylesheet" />
-<link rel="stylesheet" href="/fonts/css/font-awesome.css" />
 
-    <!-- MemberCenter -->
-    <div class="main-Membercenter container">
-        <div class="tabs-container row">
-            <div class="tabs col-md-10">
-                <div class="item active-item">
-                    <p>個人資料</p>
-                </div>
-                <div class="item">
-                    <p>點數查詢</p>
-                </div>
-                <div class="item">
-                    <p>訂單查詢</p>
-                </div>
-                <div class="item">
-                    <p>占卜紀錄</p>
-                </div>
-                <div class="item">
-                    <p>客服中心</p>
-                </div>
-            </div>
-            <div class="content-mc content col-md-10">
-                <div class="hidden-visible-box profile-mc active">
+    <div class="articleMC">
+      <div class="containerMC">
+        <div class="tabMC_box">
+          <button class="tab_btn active">個人資料</button>
+          <button class="tab_btn">點數查詢</button>
+          <button class="tab_btn">訂單查詢</button>
+          <button class="tab_btn">客服中心</button>
+          <div class="line"></div>
+        </div>
+
+        <div class="contentMC_box">
+          <div class="contentMC active">
+            @*<h2>個人資料</h2>*@
+                <div class="profile-mc">
                     <div class="form-mc">
                         <i class="fa-sharp fa-regular fa-pen-to-square"></i>
                         <span class="span-mc">編輯會員資料</span>
@@ -258,6 +220,7 @@
                         <i class="fa-solid fa-cake-candles"></i>
                         <label>出生年月日</label>
                         <input type="date"
+                            class="birthMC"
                                id="birth_date"
                                name="birth_date"
                                placeholder=" "
@@ -279,47 +242,64 @@
                             <button class="saveBtn">儲存變更</button>
                         </div>
                     </div>
-                </div>
-                <div class="hidden-visible-box"><p>13531352</p></div>
-                <div class="hidden-visible-box"><p>3</p></div>
-                <div class="hidden-visible-box"><p>4</p></div>
-                <div class="hidden-visible-box"><p>5</p></div>
-            </div>
+                   
+                </div>      
+          </div>
+
+          <div class="contentMC">
+            <h2>點數查詢</h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi sed
+              iure perferendis deleniti possimus consequatur ducimus officia
+              sunt minima amet!
+            </p>
+          </div>
+
+          <div class="contentMC">
+            <h2>訂單查詢</h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis
+              deserunt consequuntur unde aperiam deleniti amet.
+            </p>
+          </div>
+
+          <div class="contentMC">
+            <h2>客服中心</h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi sed
+              iure perferendis deleniti possimus consequatur ducimus officia
+              sunt minima amet!
+            </p>
+          </div>
         </div>
+      </div>
     </div>
 
-@section Scripts
-{
+
+@section Scripts{
     <script>
-        $(function () {
-            $(".content").tabs();
+      const tabs = document.querySelectorAll(".tab_btn");
+      const all_content = document.querySelectorAll(".contentMC");
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", (e) => {
+          tab.classList.toggle("active");
+
+          tabs.forEach((otherTab) => {
+            if (otherTab !== tab) {
+              otherTab.classList.remove("active");
+            }
+          });
+
+          var line = document.querySelector(".line");
+          line.style.width = e.target.offsetWidth + "px"; // 設定線條的寬度，根據被點擊的 tab 的寬度來設定
+          line.style.left = e.target.offsetLeft + "px"; // 設定線條的左側位置，根據被點擊的 tab 的左側位置來設定
+
+          all_content.forEach((content) => {
+            content.classList.remove("active");
+          });
+          all_content[index].classList.add("active");
         });
+      });
     </script>
-    <script>
-        const items = document.querySelectorAll('.item');
-        const contents = document.querySelectorAll('.hidden-visible-box');
-
-        function removeActive() {
-            items.forEach(item => {
-                item.classList.remove('active-item');
-            });
-            contents.forEach(item => {
-                item.classList.remove('active');
-            });
-        }
-
-        items.forEach((item, index) => {
-            item.addEventListener('click', function () {
-                removeActive();
-                item.classList.add('active-item');
-                contents[index].classList.add('active');
-            })
-        })
-    </script>
-    @*<script src="~/js/tab.js"></script>*@
-    <script src="https://kit.fontawesome.com/9e5ba2e3f5.js"
-            crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.js"
-            integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
-            crossorigin="anonymous"></script>
 }
