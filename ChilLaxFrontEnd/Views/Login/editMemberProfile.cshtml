@@ -106,16 +106,20 @@
             position: relative;
         }
 
-        .profile-mc .form-mc input, .profile-mc .form-mc select {
+        .profile-mc .form-mc input, .profile-mc .form-mc .genderMC {
             height: 90%;
             width: 50%;
             border: 1px solid #ddd;
             font-size: 18px;
             padding-right: 20px;
+            transition: border-color 0.3s;
+            text-align: center;
         }
 
-        .profile-mc .form-mc select, .profile-mc .birthMC {
-            text-align:center;
+        .profile-mc .form-mc input:focus, .profile-mc .form-mc .genderMC:focus{
+            border-color: #5CADAD;
+            outline: none;
+            box-shadow: 0 0 5px #5CADAD;
         }
 
         .profile-mc .form-mc a {
@@ -168,9 +172,18 @@
             border: 1px solid #4F9D9D;
         }
 
+        .validation-error-message {
+            color: red;
+            font-size: 12px;
+        }
+
+        .hidden{
+            visibility:hidden;
+        }
+
     </style>
 }
-
+@model ChilLaxFrontEnd.ViewModels.LoginViewModel
     <div class="articleMC">
       <div class="containerMC">
         <div class="tabMC_box">
@@ -183,53 +196,57 @@
 
         <div class="contentMC_box">
           <div class="contentMC active">
-            @*<h2>個人資料</h2>*@
+            @using (Html.BeginForm())
+                {
                 <div class="profile-mc">
                     <div class="form-mc">
                         <i class="fa-sharp fa-regular fa-pen-to-square"></i>
-                        <span class="span-mc">編輯會員資料</span>
+                        <span class="span-mc">編輯會員資料</span>                  
+                            @Html.TextBoxFor(model => model.Id, new { @class = "hidden" })
                     </div>
                     <div class="form-mc">
                         <i class="fas fa-user"></i>
                         <label>姓名</label>
-                        <input type="text" id="f-name" name="user_name" required />
+                            @Html.EditorFor(model => model.memberName, new {autocomplete = "off", required = "required"})
+                            @Html.ValidationMessageFor(model => model.memberName,null,new { @class = "validation-error-message" })
                     </div>
                     <div class="form-mc">
                         <i class="fa-solid fa-phone"></i>
                         <label>手機號碼</label>
-                        <input type="tel"
-                               id="phone_number"
-                               name="phone_number"
-                               required />
+                            @Html.EditorFor(model => model.memberPhone, new { type = "tel", autocomplete = "off",required = "required" } )
+                            @Html.ValidationMessageFor(model => model.memberPhone,null,new { @class = "validation-error-message" })
                     </div>
                     <div class="form-mc">
                         <i class="fa-solid fa-envelope"></i>
                         <label>信箱</label>
-                        <input type="email" id="email" name="user_email" required />
+                            @Html.EditorFor(model => model.memberEmail, new { type="email",autocomplete = "off",required = "required" })
+                            @Html.ValidationMessageFor(model => model.memberEmail,null,new { @class = "validation-error-message" })
                     </div>
                     <div class="form-mc">
                         <i class="fa-solid fa-children"></i>
                         <label>性別</label>
-                        <select name="user_gender" required="required">
-                            <option selected="selected" disabled>請選擇</option>
-                            <option label="男" value="0">男</option>
-                            <option label="女" value="1">女</option>
-                        </select>
+                            @{
+                                var genderList = new[]
+                                {
+                                    new { Text = "男性", Value = true },
+                                    new { Text = "女性", Value = false }
+                                };
+                            }
+
+                            @Html.DropDownListFor(m => m.memberGender, new SelectList(genderList, "Value", "Text"), "-- 請選擇 --", new { @class = "genderMC" })
+                            
                     </div>
                     <div class="form-mc">
                         <i class="fa-solid fa-cake-candles"></i>
                         <label>出生年月日</label>
-                        <input type="date"
-                            class="birthMC"
-                               id="birth_date"
-                               name="birth_date"
-                               placeholder=" "
-                               required />
+                            @Html.EditorFor(model => model.memberBirth, new { type = "date",required = "required"})
+                            @Html.ValidationMessageFor(model => model.memberBirth,null,new { @class = "validation-error-message" })
+ 
                     </div>
                     <div class="form-mc">
                         <i class="fa-solid fa-map-location-dot"></i>
                         <label>通訊地址</label>
-                        <input type="text" id="address" name="user_address" required />
+                            @Html.EditorFor(model => model.memberAddress, new { autocomplete = "off"})
                     </div>
                     <div class="form-mc">
                         <i class="fa-solid fa-lock"></i>
@@ -239,13 +256,14 @@
                     <div class="form-mc col-md-12">
                         <div class="btn-mc">
                             <button class="cancelBtn">取消</button>
-                            <button class="saveBtn">儲存變更</button>
+                                <button class="saveBtn" type="submit">儲存變更</button>
                         </div>
                     </div>
                    
                 </div>      
-          </div>
-
+                }
+          </div>  
+          
           <div class="contentMC">
             <h2>點數查詢</h2>
             <p>

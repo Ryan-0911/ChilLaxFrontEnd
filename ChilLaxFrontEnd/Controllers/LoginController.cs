@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.Encodings.Web;
 using Microsoft.CodeAnalysis.Scripting;
 
+
 namespace ChilLaxFrontEnd.Controllers
 {
     public class LoginController : Controller
@@ -42,7 +43,6 @@ namespace ChilLaxFrontEnd.Controllers
         {
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
                 t => t.MemberAccount.Equals(vm.txtAccount));
-            //bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
 
             Member member = (new ChilLaxContext()).Members.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
@@ -76,10 +76,8 @@ namespace ChilLaxFrontEnd.Controllers
 t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
-            //MemberCredential membercredential=new MemberCredential();
-            //Member member = new Member();
             
-            string password = vm.txtRegisterPassword;  // 假設這是使用者輸入的密碼
+            string password = vm.txtRegisterPassword;  
             string salt = BCrypt.Net.BCrypt.GenerateSalt();// 產生隨機的鹽值
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);// 將密碼和鹽值一起加密
 
@@ -119,11 +117,6 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 Available = true
             };
 
-            //if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail!= null && vm.memberBirth != null && HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
-
-            //string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
-            //MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm
-            //Console.WriteLine(mc);
 
             if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail != null && vm.memberBirth != null)
             {
@@ -239,13 +232,9 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 db.SaveChanges();
 
                 string Memjson = JsonSerializer.Serialize(member);
-                //Console.WriteLine(json);
                 HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, Memjson);
                 return RedirectToAction("Index", "Home");
-
-                //return RedirectToAction("Index", "Home");
-                //return RedirectToAction("Login");
-
+              
             }
             return View();
         }
@@ -325,13 +314,45 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
         public IActionResult editMemberProfile()
         {
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            Member member = JsonSerializer.Deserialize<Member>(json);
+           
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOINGED_USER)) 
+            {
+                return RedirectToAction("Login");
+            }
+            LoginViewModel vm = new LoginViewModel();
+            vm.Id = member.MemberId;
+            vm.memberName = member.MemberName;
+            vm.memberPhone = member.MemberTel;
+            vm.memberBirth = member.MemberBirthday;
+            vm.memberEmail = member.MemberEmail;
+            vm.memberGender = (bool)member.MemberSex;
+            vm.memberAddress = member.MemberAddress;
 
-            return View();
+            return View(vm);
         }
         [HttpPost]
         public IActionResult editMemberProfile(LoginViewModel vm)
         {
-
+            Member member = (new ChilLaxContext()).Members.FirstOrDefault(
+               t => t.MemberId.Equals(vm.Id));
+            if (member != null)
+            {
+                if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail != null && vm.memberBirth != null)
+                {
+                    member.MemberName = vm.memberName;
+                    member.MemberTel = vm.memberPhone;
+                    member.MemberEmail = vm.memberEmail;
+                    member.MemberSex = vm.memberGender;
+                    member.MemberBirthday = vm.memberBirth;
+                    member.MemberAddress = vm.memberAddress;
+                   
+                    db.Entry(member).State = EntityState.Modified;  //以防更新未被檢測到
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                }
+            }
             return View();
         }
 
