@@ -65,6 +65,8 @@ $('#sendButton').on('click', function () {
         if (inputCount >= maxInputCount) {
             messageInput.setAttribute("readonly", "readonly");
             document.getElementById("sendButton").style.display = "none";
+
+            messageInput.setAttribute("placeholder", "您本次的占卜之旅已結束，我們期待再次與您相遇!");
         }
 
         intervalId = setInterval(checkInputCount, 500);
