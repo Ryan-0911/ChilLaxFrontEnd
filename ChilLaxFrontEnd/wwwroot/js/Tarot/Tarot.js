@@ -16,22 +16,22 @@ $('#sendButton').on('click', function () {
         alert('傳送錯誤: ' + err.toString());
     });
 });
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/chatHub")
-    .build();
+//const connection = new signalR.HubConnectionBuilder()
+//    .withUrl("/chatHub")
+//    .build();
 
-// 啟動連接
-connection.start().then(function () {
-    console.log("SignalR 連接已啟動。");
-}).catch(function (err) {
-    console.error("啟動SignalR連接時出錯：" + err);
-});
+//// 啟動連接
+//connection.start().then(function () {
+//    console.log("SignalR 連接已啟動。");
+//}).catch(function (err) {
+//    console.error("啟動SignalR連接時出錯：" + err);
+//});
 
 // 處理從伺服器接收到的"SendMessage"方法呼叫
-connection.on("SendMessage", function (gptResponse) {
-    // 在這裡處理從伺服器接收到的GPT機器人的回應
-    console.log("從伺服器接收到的GPT回應：", gptResponse);
-});
+//connection.on("SendMessage", function (gptResponse) {
+//    // 在這裡處理從伺服器接收到的GPT機器人的回應
+//    console.log("從伺服器接收到的GPT回應：", gptResponse);
+//});
     const tarotCards = [
         "愚者", "魔術師", "女祭司", "皇后", "皇帝", "教皇", "戀愛", "戰車", "力量", "隱士",
         "命運之輪", "正義", "倒吊人", "死神", "節制", "惡魔", "高塔", "星星", "月亮", "太陽", "審判", "世界"
@@ -165,10 +165,10 @@ connection.on("SendMessage", function (gptResponse) {
         
 //}
 function showNextCard() {
-    connection.on("SendMessage", function (gptResponse) {
-        // 在這裡處理從伺服器接收到的GPT機器人的回應
-        console.log("從伺服器接收到的GPT回應：", gptResponse);
-    });
+    //connection.on("SendMessage", function (gptResponse) {
+    //    // 在這裡處理從伺服器接收到的GPT機器人的回應
+    //    console.log("從伺服器接收到的GPT回應：", gptResponse);
+    //});
 
     if (currentIndex <= 3) {
         const cardIndex = currentIndex - 1;
