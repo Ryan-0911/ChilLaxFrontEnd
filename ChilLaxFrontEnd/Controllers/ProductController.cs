@@ -32,7 +32,8 @@ namespace ChilLaxFrontEnd.Controllers
             return View();
         }
 
-        public IActionResult List(CKeywordViewModel ckvm)
+
+        public IActionResult List(CKeywordViewModel ckvm, int? nowpage, int? _pageCount)
         {
             // 關鍵字搜尋
             string keyword = ckvm.txtKeyword;
@@ -47,12 +48,37 @@ namespace ChilLaxFrontEnd.Controllers
                 datas = db.Products.Where(p => p.ProductName.Contains(keyword));
             }
 
-            return View(datas);
+            //return View(datas);
 
+            // 頁數
+            if(nowpage == null)
+            {
+                nowpage = 1;
+            }
+            int? pageCount = _pageCount;
+
+            if (_pageCount == null)
+            {
+                int dataCount = db.Products.Count();
+                pageCount = dataCount / 8;
+                if (dataCount % 8 != 0) pageCount++;
+            }
+
+            var prod = db.Products
+                                .OrderByDescending(p => p.ProductName)
+                                .Skip(8*((int)nowpage)-1)
+                                .Take(8)
+                                .ToList();
+            ProductsPagingDTO productsPagingDTO = new ProductsPagingDTO();
+            productsPagingDTO.ProductsResult = prod;
+            productsPagingDTO.pageCount = pageCount;
+            productsPagingDTO.nowpage = nowpage;
+
+            return View(productsPagingDTO);
 
         }
 
-       
+
 
         [HttpGet]
         public async Task<ActionResult<ProductsPagingDTO>> GetProductsByCategory(string category, int page = 1)
