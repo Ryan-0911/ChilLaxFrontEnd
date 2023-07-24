@@ -24,13 +24,14 @@ namespace ChilLaxFrontEnd.Controllers
             //產生隨機亂數
             string guid_num = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 13);
             string this_products = string.Empty;
-            string orderId = "ChilLax" + $"{guid_num}";
+            //string orderId = "ChilLax" + $"{guid_num}";
             string msg = "備註欄";
             //需填入你的網址
             string website = $"https://localhost:7189";
 
             //取得最新一筆訂單
             string maxOrderId = await db.ProductOrders.MaxAsync(p => p.OrderId);
+            string orderId = "ChilLax" + $"{maxOrderId}";
             //ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
             List<ProductOrderDetailDTO> productOrderDetails = await db.ProductOrders
                .Where(o => o.OrderId == maxOrderId)
@@ -66,7 +67,7 @@ namespace ChilLaxFrontEnd.Controllers
                 //付款完成通知回傳網址
                 { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
                 //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                { "OrderResultURL", $"{website}/Checkout/UpdatePayment/{maxOrderId}"},
+                { "OrderResultURL", $"http://20.89.169.61:5000/api/Checkout/UpdatePaymentAsync"},
                 //Client端返回特店的按鈕連結
                 { "ClientRedirectURL",  $"{website}"},
                 //特店編號(綠界提供測試商店編號)
