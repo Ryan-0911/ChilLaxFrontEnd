@@ -40,20 +40,28 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel vm)
         {
+            // 確認使用者登入的帳密是否存在，並取出該資料列
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
                 t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
-            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
 
+            // 確認使用者登入的帳密是否存在，回傳布林值
+            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
+            
+            // 利用id關聯到Member資料表，取出登入的會員資料
             Member member = (new ChilLaxContext()).Members.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
 
+            // 只有在會員帳密跟會員基本資料都存在的話，才會執行下列程式碼
             if (membercredential != null && member != null)
             {
-                member.MemberPoint = _context.PointHistories.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
                 if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)
                 {
+                    // 計算會員點數，並存入member物件
+                    member.MemberPoint = _context.PointHistories.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
+                    // 將member物件傳換成JSON字串
                     string json = JsonSerializer.Serialize(member);
                     Console.WriteLine(json);
+                    // 以key(SK_LOINGED_USER)儲存該JSON字串
                     HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
                     return RedirectToAction("Index", "Home");
                 }
