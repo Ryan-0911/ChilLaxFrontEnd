@@ -48,7 +48,7 @@ namespace ChilLaxFrontEnd.Controllers
 
             //return View(datas);
 
-            var datas = from p in db.Products
+            var datas = from p in db.Product
                         select p;
             return View(datas);
         }

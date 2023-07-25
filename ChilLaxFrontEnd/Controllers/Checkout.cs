@@ -30,13 +30,13 @@ namespace ChilLaxFrontEnd.Controllers
             string website = $"https://localhost:7189";
 
             //取得最新一筆訂單
-            string maxOrderId = await db.ProductOrders.MaxAsync(p => p.OrderId);
+            int maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
             string orderId = "ChilLax" + $"{maxOrderId}";
             //ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
-            List<ProductOrderDetailDTO> productOrderDetails = await db.ProductOrders
+            List<ProductOrderDetailDTO> productOrderDetails = await db.ProductOrder
                .Where(o => o.OrderId == maxOrderId)
-               .Join(db.OrderDetails, po => po.OrderId, od => od.OrderId, (po, od) => new { ProductOrder = po, OrderDetail = od })
-               .Join(db.Products, od => od.OrderDetail.ProductId, p => p.ProductId, (od, p) => new ProductOrderDetailDTO
+               .Join(db.OrderDetail, po => po.OrderId, od => od.OrderId, (po, od) => new { ProductOrder = po, OrderDetail = od })
+               .Join(db.Product, od => od.OrderDetail.ProductId, p => p.ProductId, (od, p) => new ProductOrderDetailDTO
                {
                    ProductOrder = od.ProductOrder,
                    OrderDetail = od.OrderDetail,
@@ -92,30 +92,30 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpGet]
         public async Task<string> UpdatePaymentAsync(int? id)
         {
-            if (id == null || _context.ProductOrders == null)
+            if (id == null || _context.ProductOrder == null)
                 return "付款失敗";
 
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    ProductOrder productOrder = await _context.ProductOrders.FirstOrDefaultAsync(po => po.OrderId == id.ToString());
+                    ProductOrder productOrder = await _context.ProductOrder.FirstOrDefaultAsync(po => po.OrderId == id);
 
                     if (productOrder == null)
                         return "找不到該訂單";
 
                     //修改付款狀態
                     productOrder.OrderPayment = true;
-                    _context.ProductOrders.Update(productOrder);
+                    _context.ProductOrder.Update(productOrder);
                     await _context.SaveChangesAsync();
 
                     //新增點數回饋
                     PointHistory pointHistory = new PointHistory();
                     pointHistory.ModifiedSource = "product";
                     pointHistory.MemberId = productOrder.MemberId;
-                    pointHistory.PointDetailId = productOrder.OrderId;
+                    pointHistory.PointDetailId = productOrder.OrderId.ToString();
                     pointHistory.ModifiedAmount =(int)Math.Floor(productOrder.OrderTotalPrice / 10.0);
-                    _context.PointHistories.Add(pointHistory);
+                    _context.PointHistory.Add(pointHistory);
                     await _context.SaveChangesAsync();
 
                     // 提交交易

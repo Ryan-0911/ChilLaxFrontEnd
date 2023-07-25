@@ -37,11 +37,11 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel vm)
         {
-            MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
+            MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
                 t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
 
-            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
-            Member member = (new ChilLaxContext()).Members.FirstOrDefault(
+            bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
+            Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
             LoginViewModel user = new LoginViewModel
             {
@@ -66,10 +66,10 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public IActionResult Register(LoginViewModel vm)
         {
-            MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
+            MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
 t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
-            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
+            bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
             //MemberCredential membercredential=new MemberCredential();
             //Member member = new Member();
             MemberCredential mc = new MemberCredential
@@ -116,8 +116,8 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             {
 
                 ChilLaxContext db = new ChilLaxContext();
-                db.Members.Add(member);
-                db.MemberCredentials.Add(mc);
+                db.Member.Add(member);
+                db.MemberCredential.Add(mc);
                 db.SaveChanges();
 
                 return RedirectToAction("Index", "Home");
@@ -146,7 +146,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             {
                 PropertyInfo[] properties = payload.GetType().GetProperties();
                 //Member member = new Member();
-                bool emailExists = _context.Members.Any(m => m.MemberEmail.Equals(payload.Email));
+                bool emailExists = _context.Member.Any(m => m.MemberEmail.Equals(payload.Email));
                 var memberData = new
                 {
                     MemberEmail = payload.Email,
