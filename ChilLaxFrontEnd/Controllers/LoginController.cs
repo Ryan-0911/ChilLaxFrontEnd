@@ -53,37 +53,29 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel vm)
         {
-            // 確認使用者登入的帳密是否存在，並取出該資料列
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
-                t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
+                t => t.MemberAccount.Equals(vm.txtAccount));
 
-            // 確認使用者登入的帳密是否存在，回傳布林值
-            bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
-            
-            // 利用id關聯到Member資料表，取出登入的會員資料
             Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
 
             bool isPwdMatch = BCrypt.Net.BCrypt.Verify(vm.txtPassword, membercredential.MemberPassword);
             Console.WriteLine("驗證結果：" + isPwdMatch); // 印出 true
 
+            //測試變更
 
 
             if (membercredential != null && member != null && isPwdMatch == true)
             {
-                if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)
-                {
-                    // 計算會員點數，並存入member物件
-                    member.MemberPoint = _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
-                    // 將member物件傳換成JSON字串
-                    string json = JsonSerializer.Serialize(member);
-                    Console.WriteLine(json);
-                    // 以key(SK_LOINGED_USER)儲存該JSON字串
-                    HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
-                    return RedirectToAction("Index", "Home");
-                }
+                member.MemberPoint = _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
+
+                string json = JsonSerializer.Serialize(member);
+                Console.WriteLine(json);
+                HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
+                return RedirectToAction("Index", "Home");
+
             }
-            
+
             return View();
         }
 
