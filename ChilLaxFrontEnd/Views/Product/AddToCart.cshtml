@@ -1,4 +1,4 @@
-﻿@*@model ChilLaxFrontEnd.Models.Product*@
+﻿@model ChilLaxFrontEnd.Models.Product
 
 @{
     ViewData["Title"] = "商品詳細介紹";
@@ -101,10 +101,10 @@
 				<div class="row">
                       @* <!-- Product thumb imgs --> *@
                       <div class="col-md-2  col-md-pull-5">
-                        <div id="product-imgs">
-                          <div class="product-preview">
-                            @*<img src="~/assets/images/(@Model.ProductImg)"/>*@
-                          </div>
+                        <div id="product-imgs"  style="border: 2px solid #000; padding: 10px;">
+                            <div class="product-preview" >
+                                <img src="~/assets/images/@Model.ProductImg" />
+                            </div>
                         </div>
                       </div>
                      @*  <!-- /Product thumb imgs --> *@
@@ -112,20 +112,21 @@
                  @*  <!-- Product details --> *@
 			        <div class="col-md-5">
 				        <div class="product-details">
-					        <h2 class="product-name">@Model?.ProductName</h2>
+					        <h2 class="product-name"> @Model.ProductName</h2>
 					        <div>
-						        <h3 class="product-price">@Model?.ProductPrice</h3>
-						        <span class="product-available">@Model?.ProductQuantity</span>
+						        <h3 class="product-price">$ @Model.ProductPrice 元</h3>
 					        </div>
+
                             <div class="add-to-cart">
-						        <div class="qty-label">
+						        <div style="font-size: 16px; font-weight: bold" class="qty-label">
 							        數量
-                                <span class="qty-down">-</span>
-                                <input type="text" name="txtCount" value="1" class="form-control input-number" />
-                                <span class="qty-up">+</span>
-                                
-                                <button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-						        </div>					        
+                                <input type="number" name="txtCount" value="1" min="1" style="width:150px ; height:30px; margin-left: 20px" />
+                                </div>
+
+                                <div class="button-container">
+                                    <button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add To Cart</button>
+                                </div>
+						        					        
 					        </div>
                         </div>
 					</div>
@@ -146,7 +147,7 @@
                               <div id="tab1" class="tab-pane fade in active">
                                 <div class="row">
                                   <div class="col-md-12">
-                                    <p> @Model?.ProductDesc </p>
+                                    <p> @Model.ProductDesc </p>
                                   </div>
                                 </div>
                               </div>
@@ -162,10 +163,10 @@
          @*  <!-- /container --> *@
         </div>
         @* <!-- /SECTION --> *@
-       
 
-    <div>
-        @Html.ActionLink("取消", "List")
+
+    <div style="margin-bottom: 350px;" class="PageBottom">
+        @Html.ActionLink("返回上一頁", "List")
     </div>
 }
 

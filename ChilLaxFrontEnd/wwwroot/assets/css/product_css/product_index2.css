@@ -386,12 +386,23 @@
   }
 
 
+.PageBottom {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 100px;
+    text-align: center;
+    /* 若要使內容垂直置中，可以使用 line-height 屬性 */
+    line-height: 100px;
+/*    margin-top: auto;*/
+}
+
+
+
 /* 商品呈現 over */
 
 
-.qty-up .qty-down{
-    font-size: 50px;
-}
 
 /* 喜愛商品 start */
 

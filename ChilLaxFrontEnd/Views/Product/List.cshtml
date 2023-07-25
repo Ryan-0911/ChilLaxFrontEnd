@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ChilLaxFrontEnd.Models.Product>
+﻿@model IEnumerable<ChilLaxFrontEnd.Models.DTO.ProductsPagingDTO>
 
 @{
     ViewData["Title"] = "List";
@@ -72,7 +72,7 @@
                         </div>
                     </li>
                     <li class="cart">
-                        <a href="#">
+                        <a href="">
                             <img src="~/assets/images/icons8-cart.gif" />
                             <i>購物車（0）</i>
                         </a>
@@ -161,11 +161,12 @@
                             <li class="active">
                                 <a data-toggle="tab" href="#tab1" class="no-underline">所有商品</a>
                             </li>
-                            </li>
-                            @foreach (var category in Model.Select(p => p.ProductCategory).Distinct())
+
+                            @foreach (var category in Model.SelectMany(p => p.ProdCategory)
+                            .Distinct())
                             {
                                 <li>
-                                    <a data-toggle="tab" href="#tab1" class="no-underline" onclick="showCategoryProducts('@category')" data-category="@category">@category</a>
+                                    <a data-toggle="tab" href="#tab1" class="no-underline" onclick="showCategoryProducts('@category')" name="@category">@category</a>
                                 </li>
                             }
                         </ul>
@@ -174,20 +175,24 @@
             </div>
             <!-- 類別分類 -->
             <!-- 商品呈現 start-->
-@*@using (Html.BeginForm("AddToCart", "Product", FormMethod.Post))*@
+@*  @using (Html.BeginForm("AddToCart", "Product", FormMethod.Post))  *@
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
+
         int count = 0;
-        foreach (var item in Model) 
+        foreach (var item in Model.SelectMany(p => p.ProductsResult))
         {
             count++;
          
+            <input type="hidden" name="txtFId" value="@item.ProductId" />
+
             <div id="productListContainer" class="col-md-3 mb-4">
                 <div class="thumbnail" style="height: 450px;">
                             <img src="~/assets/images/@Html.DisplayFor(modelItem => item.ProductImg)" class="card-img-top img-fluid  mx-auto d-block" style="width: 230px;height: 260px;">
                     <div class="card-body">
-                        <h4 class="card-title text-center">
-                            <a href="#" class="no-underline">@Html.DisplayFor(modelItem => item.ProductName)</a>
+                        <h4 class="card-title text-center" style="margin-top: 5px;">
+                            @Html.ActionLink(item.ProductName, "AddToCart", new { id = item.ProductId }, new { @class = "no-underline stretched-link text-dark" })
                         </h4>
                         <div class="row">
                             <div class="col-md-6">
@@ -200,15 +205,25 @@
                             </div>
                         </div>
 
-                        @*<!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> --> *@
                         <div class="button-container">
 
-                            <form action="@Url.Action("AddToCart", "Product", new { id = item.ProductId })" method="post">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="txtFId" value="@item.ProductId" />
+                        <form id="addToCartForm" action="@Url.Action("AddToCart", "Product", new { id = item.ProductId })" method="post" onsubmit="return validateForm()">
+
+                            <div style="font-size: 16px; font-weight: bold" class="qty-label">
+                                數量
+
+
                                 <input type="number" name="txtCount" value="1" min="1" style="width:150px ; height:30px" />
-                                @Html.ActionLink("加入購物車", "AddToCart", new { id = item.ProductId }, new { @class = "no-underline stretched-link text-dark" })
-                            </form>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-0 col-md-10">
+                                    <input type="submit" value="購買" class="btn btn-default" />
+                                </div>
+                            </div>
+
+                                @*@Html.ActionLink("加入購物車", "AddToCart", new { id = item.ProductId }, new { @class = "no-underline stretched-link text-dark" })*@
+                        </form>
 
 
                 @*                    <input type="hidden" name="cvm.txtFId" value="1" />
@@ -220,10 +235,12 @@
                 </div>
             </div>
         }
-}
-
+} 
 
             @* <!-- 商品呈現 over --> *@
+
+
+            
 
         </div>
        @* <!-- row Over --> *@
@@ -231,6 +248,35 @@
     @* <!-- container Over --> *@
 </div>
 @* <!-- SECTION Over --> *@
+
+<!-- 頁碼 -->
+<div style="margin-bottom: 250px;" class="PageBottom">
+    <nav aria-label="Page navigation">
+        <ul  class="pagination">
+            <li>
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            @{
+                int? pageCount = Model.FirstOrDefault().pageCount;
+                int? Value = Model.FirstOrDefault().nowpage;
+            }
+            @for (int i = 1; i <= (Model.FirstOrDefault()?.pageCount ?? 0); i++)
+            {
+                <li class="@(Model.FirstOrDefault().nowpage == i )">
+                    @Html.ActionLink(i.ToString(), "List", "Product", new { nowpage = i, pageCount = pageCount }, new { @class = "page-link" })
+                </li>
+
+            }
+            <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
 
 
 
@@ -304,8 +350,12 @@
             // 使用AJAX向後端發送請求
             $.ajax({
                 type: "GET",
-                url: "/Product/GetProductsByCategory", // 請將路由指向你的控制器方法
-                data: { category: category },
+                url: "/Product/List", // 請將路由指向你的控制器方法
+                data: { 
+                    nowpage:1,
+                    _pageCount:@Model.FirstOrDefault().pageCount,
+                    productcategory:onclick.name
+                },
                 success: function (result) {
                     // 根據回傳的商品數據更新商品列表
                     updateProductList(result);
@@ -356,6 +406,31 @@
                 }
             });
         });
+
+
+        // 表單提交時的處理函式
+        document.getElementById("addToCartForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // 阻止表單的預設提交行為
+
+            var formData = new FormData(this); // 獲取表單資料
+
+            // 使用 XMLHttpRequest 物件發送 POST 請求將資料存入 Session
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", this.action);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // 處理後端回傳的結果
+                        console.log(xhr.responseText);
+                    } else {
+                        // 處理錯誤情況
+                        console.log("Error:", xhr.statusText);
+                    }
+                }
+            };
+            xhr.send(formData);
+        });
+
 
     </script>
 

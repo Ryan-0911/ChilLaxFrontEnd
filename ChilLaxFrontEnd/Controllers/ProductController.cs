@@ -27,17 +27,20 @@ namespace ChilLaxFrontEnd.Controllers
             return View();
         }
 
-        public IActionResult Products()
-        {
-            return View();
-        }
-
-
-        public IActionResult List(CKeywordViewModel ckvm, int? nowpage, int? _pageCount)
+        [HttpGet]
+        public IActionResult List(CKeywordViewModel ckvm, int? nowpage, int? _pageCount, string? productcategory)
         {
             // 關鍵字搜尋
             string keyword = ckvm.txtKeyword;
             IEnumerable<Product> datas = null;
+
+            ProductsPagingDTO productsPagingDTO = new ProductsPagingDTO();
+            productsPagingDTO.ProdCategory = db.Products
+                .GroupBy(p => p.ProductCategory)
+                .Select(group => group.Key)
+                .ToList();
+
+
             if (string.IsNullOrEmpty(keyword))
             {
                 datas = from p in db.Products
@@ -64,18 +67,30 @@ namespace ChilLaxFrontEnd.Controllers
                 if (dataCount % 8 != 0) pageCount++;
             }
 
-            var prod = db.Products
-                                .OrderByDescending(p => p.ProductName)
+            // 處理類別之分頁
+
+            if(productcategory == null)
+            {
+                productsPagingDTO.ProductsResult = datas
+                    .Skip(8 * ((int)nowpage - 1))
+                    .Take(8)
+                    .ToList();
+                productsPagingDTO.pageCount = pageCount;
+                productsPagingDTO.nowpage = nowpage;    
+                return View(new List<ProductsPagingDTO> { productsPagingDTO });
+            }
+            var prod = db.Products.Where(p => p.ProductCategory == productcategory )
+                                .OrderByDescending(p => p.ProductCategory)
                                 .Skip(8*((int)nowpage)-1)
                                 .Take(8)
                                 .ToList();
-            ProductsPagingDTO productsPagingDTO = new ProductsPagingDTO();
+            
             productsPagingDTO.ProductsResult = prod;
             productsPagingDTO.pageCount = pageCount;
             productsPagingDTO.nowpage = nowpage;
 
-            return View(productsPagingDTO);
-
+            //return View(productsPagingDTO);
+            return View(new List<ProductsPagingDTO> { productsPagingDTO });
         }
 
 
@@ -112,12 +127,29 @@ namespace ChilLaxFrontEnd.Controllers
 
         public IActionResult AddToCart(int? id)
         {
-            if(id == null)
+            //if(id == null)
+            //{
+            //    return RedirectToAction("List");
+            //}
+            //ViewBag.product_id = id;
+            //return View();
+
+            //if (id == null)
+            //{
+            //    return RedirectToAction("List");
+            //}
+
+            // 假設您的資料庫內含有名為 "Products" 的資料表，並包含 ProductId 欄位用於查詢產品
+            Product product = db.Products.FirstOrDefault(p => p.ProductId == id);
+
+            if (product == null || id == null) 
             {
+                // 若找不到對應的產品，重新導向至產品列表頁面或顯示錯誤訊息
                 return RedirectToAction("List");
             }
-            ViewBag.product_id = id;
-            return View();
+
+            // 將查詢結果傳遞給檢視
+            return View(product);
         }
 
         [HttpPost]
@@ -146,6 +178,22 @@ namespace ChilLaxFrontEnd.Controllers
                 HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST, json);
             }
             return RedirectToAction("List");
+        }
+
+        // 檢視購物車
+        public IActionResult CartView()
+        {
+            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
+            {
+                return RedirectToAction("List");
+            }
+
+            string json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
+            List<CShoppingCartItem> cart = JsonSerializer.Deserialize<List<CShoppingCartItem>>(json);
+            if (cart == null) 
+                return RedirectToAction("List");
+            return View(cart);
+
         }
 
 
