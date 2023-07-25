@@ -247,11 +247,11 @@
                 <div class="sub-menu-wrap" id="subMenu">
                     <div class="sub-menu">
                         <div class="user-info">
-                            @{
+                            @*@{
                                 string json = Context.Session.GetString(CDictionary.SK_LOINGED_USER);
                                 Member member = JsonSerializer.Deserialize<Member>(json);
                                 <h3>@member.MemberName</h3>
-                            }
+                            }*@
                         </div>
                         <hr style="border: 0; height: 1px; width: 100%; background: #ccc; margin: 15px 0 10px" />
                         <a href="@Url.Action("editMemberProfile", "Login")" class="sub-menu-link">

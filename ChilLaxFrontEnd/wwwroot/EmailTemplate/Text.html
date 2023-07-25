@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>驗證帳號</title>
+    </head>
+    <body>
+        <h1>歡迎您，@ViewBag.UserName</h1>
+        <p>感謝您註冊成為我們的會員。</p>
+        <p>請點擊以下連結來驗證您的帳號：</p>
+        <a href="https://localhost:7189/api/Members/Verify/{regID}" onclick="verifyEmail()">點擊這裡</a>
+    </body>
+</html>
+<script>
+    function verifyEmail() {
+
+        alert("驗證成功");
+
+        //window.location.href = '@Url.Action("Login", "LoginController")';
+        window.location.href = "https://localhost:7189/Login/Login";
+    }
+</script>
