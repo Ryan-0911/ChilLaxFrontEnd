@@ -12,6 +12,6 @@ namespace ChilLaxFrontEnd.Models
         public string ModifiedSource { get; set; }
         public int ModifiedAmount { get; set; }
 
-        public virtual Member Member { get; set; }
+        internal virtual Member Member { get; set; } = null!;
     }
 }

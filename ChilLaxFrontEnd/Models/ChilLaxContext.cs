@@ -2,8 +2,11 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using BCrypt.Net;
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ChilLaxFrontEnd.Models
 {
