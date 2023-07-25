@@ -38,7 +38,6 @@ namespace ChilLaxFrontEnd.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.EnableSensitiveDataLogging();
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=ChilLax;Integrated Security=True;TrustServerCertificate=True;");
             }
@@ -257,7 +256,10 @@ namespace ChilLaxFrontEnd.Models
 
                 entity.ToTable("OrderDetail");
 
-                entity.Property(e => e.OrderId).HasColumnName("order_id");
+                entity.Property(e => e.OrderId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("order_id");
 
                 entity.Property(e => e.ProductId).HasColumnName("product_id");
 
