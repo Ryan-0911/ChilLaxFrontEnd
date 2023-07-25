@@ -70,7 +70,7 @@ namespace ChilLaxFrontEnd.Controllers
                 return "驗證失敗";
 
             }
-            Member Mem = await _context.Members.FindAsync(VE.MemberId);
+            Member Mem = await _context.Member.FindAsync(VE.MemberId);
             if (Mem != null)
             {
                 Mem.MemberId = VE.MemberId;
@@ -125,7 +125,7 @@ namespace ChilLaxFrontEnd.Controllers
             //            </body>
             //            </html>
             //        ";
-            var regInfo = db.Members.Where(x => x.MemberId == regID).FirstOrDefault();
+            var regInfo = db.Member.Where(x => x.MemberId == regID).FirstOrDefault();
             var url = "https://localhost:7189/api/Members/Verify/" + regID;
             body = body.Replace("@ViewBag.ConfirmationLink", url);
             string UserName = regInfo.MemberName;
@@ -187,7 +187,7 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPut("Verify/{regID}")]
         public async Task<IActionResult> Verify(int regID)
         {
-            var user = db.Members.FirstOrDefault(x => x.MemberId == regID);
+            var user = db.Member.FirstOrDefault(x => x.MemberId == regID);
             if (user != null)
             {
                 user.IsValid = true;
@@ -290,17 +290,17 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMember(int id)
         {
-            if (_context.Members == null)
+            if (_context.Member == null)
             {
                 return NotFound();
             }
-            var member = await _context.Members.FindAsync(id);
+            var member = await _context.Member.FindAsync(id);
             if (member == null)
             {
                 return NotFound();
             }
 
-            _context.Members.Remove(member);
+            _context.Member.Remove(member);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -308,7 +308,7 @@ namespace ChilLaxFrontEnd.Controllers
 
         private bool MemberExists(int id)
         {
-            return (_context.Members?.Any(e => e.MemberId == id)).GetValueOrDefault();
+            return (_context.Member?.Any(e => e.MemberId == id)).GetValueOrDefault();
         }
     }
 }

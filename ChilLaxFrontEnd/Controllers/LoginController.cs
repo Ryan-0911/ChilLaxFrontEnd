@@ -54,9 +54,8 @@ namespace ChilLaxFrontEnd.Controllers
         public IActionResult Login(LoginViewModel vm)
         {
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
-                t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
+                t => t.MemberAccount.Equals(vm.txtAccount));
 
-            bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
             Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
 
@@ -147,10 +146,10 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                         MemberAccount = mc.MemberAccount,
                         MemberPassword = mc.MemberPassword
                     };
-                    db.MemberCredentials.Add(credential);
+                    db.MemberCredential.Add(credential);
                     db.SaveChanges();
 
-                    Member memberData = (new ChilLaxContext()).Members.FirstOrDefault(
+                    Member memberData = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberId.Equals(member.MemberId));
                     string toVerifyEmail = JsonSerializer.Serialize(memberData);
                     HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, toVerifyEmail);
@@ -494,7 +493,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
         }
         private bool MemberExists(int id)
         {
-            return _context.Members.Any(e => e.MemberId == id);
+            return _context.Member.Any(e => e.MemberId == id);
         }
 
 
