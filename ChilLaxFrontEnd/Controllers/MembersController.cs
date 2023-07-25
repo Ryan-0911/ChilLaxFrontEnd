@@ -17,6 +17,8 @@ using System.Web;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using Microsoft.Data.SqlClient.Server;
+using Microsoft.AspNetCore.Cors;
+
 
 
 namespace ChilLaxFrontEnd.Controllers
@@ -184,7 +186,7 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
 
-        [HttpPut("Verify/{regID}")]
+        [HttpPost("Verify/{regID}")]
         public async Task<IActionResult> Verify(int regID)
         {
             var user = db.Member.FirstOrDefault(x => x.MemberId == regID);
