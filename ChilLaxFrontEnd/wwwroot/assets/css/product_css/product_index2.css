@@ -158,6 +158,18 @@
 
 }
 
+.badge-notify {
+    background: red;
+    position: relative;
+    top: -20px;
+    right: 10px;
+}
+
+.my-cart-icon-affix {
+    position: fixed;
+    z-index: 999;
+}
+
 .cart img {
     position: relative; 
     top: 5px; 
@@ -374,6 +386,42 @@
   }
 
 
+.PageBottom {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 100px;
+    text-align: center;
+    /* 若要使內容垂直置中，可以使用 line-height 屬性 */
+    line-height: 100px;
+/*    margin-top: auto;*/
+}
+
+
+
 /* 商品呈現 over */
 
 
+
+/* 喜愛商品 start */
+
+.add-to-wishlist {
+    padding: 5px 10px; /* 設定上下左右的內邊距 */
+    font-size: 12px; /* 設定字體大小 */
+    color: #555; /* 設定字體顏色 */
+    background-color: transparent; /* 設定背景顏色為透明，使按鈕透明背景 */
+    border: 1px solid #555; /* 設定邊框為 1px 寬且 #555 顏色的實線 */
+    border-radius: 5px; /* 設定邊框的圓角 */
+    cursor: pointer; /* 設定游標為手型，表示這是一個可點擊的按鈕 */
+}
+
+/* 設定當滑鼠移動到按鈕上時的效果 */
+.add-to-wishlist:hover {
+    font-weight: bold;
+    color: #820041; /* 設定滑鼠懸停時的字體顏色為白色 */
+    background-color: #FFECEC; /* 設定滑鼠懸停時的背景顏色為 #555 */
+}
+
+
+/* 喜愛商品 over */

@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EmailTemplate\**" />
+    <Compile Remove="Views\NewFolder1\**" />
+    <Content Remove="EmailTemplate\**" />
+    <Content Remove="Views\NewFolder1\**" />
+    <EmbeddedResource Remove="EmailTemplate\**" />
+    <EmbeddedResource Remove="Views\NewFolder1\**" />
+    <None Remove="EmailTemplate\**" />
+    <None Remove="Views\NewFolder1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Google.Apis.Auth" Version="1.61.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.20" />

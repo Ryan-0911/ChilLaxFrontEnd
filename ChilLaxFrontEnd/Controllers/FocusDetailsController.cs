@@ -26,12 +26,12 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public async Task<string> PostFocusAndPoint([FromBody] FocusDetailWithPointHistoryDTO data)
         {
-          if (_context.FocusDetails == null || _context.PointHistories == null)
+          if (_context.FocusDetail == null || _context.PointHistory == null)
           {
               return "領取失敗";
           }
-            _context.FocusDetails.Add(data.FocusDetail);
-            _context.PointHistories.Add(data.PointHistory);
+            _context.FocusDetail.Add(data.FocusDetail);
+            _context.PointHistory.Add(data.PointHistory);
             try
             {
                 await _context.SaveChangesAsync();
@@ -75,12 +75,12 @@ namespace ChilLaxFrontEnd.Controllers
 
         private bool FocusDetailExists(string id)
         {
-            return (_context.FocusDetails?.Any(e => e.FocusDetailId == id)).GetValueOrDefault();
+            return (_context.FocusDetail?.Any(e => e.FocusDetailId == id)).GetValueOrDefault();
         }
 
         private bool PointHistoryExists(string id)
         {
-            return (_context.PointHistories?.Any(e => e.PointDetailId == id)).GetValueOrDefault();
+            return (_context.PointHistory?.Any(e => e.PointDetailId == id)).GetValueOrDefault();
         }
     }
 }

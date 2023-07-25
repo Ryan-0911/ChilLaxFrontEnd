@@ -43,6 +43,7 @@ namespace ChilLaxFrontEnd.ViewModels
         public bool memberGender { get; set; }
 
         [Required(ErrorMessage = "請輸入生日")]
+        [DataType(DataType.Date)]
         [Range(typeof(DateTime), "1/1/1900", "1/1/2024", ErrorMessage = "日期區間，只能在1950年以後~2025年之前")]
         public DateTime memberBirth { get; set; }
         public string memberAddress { get; set; }
