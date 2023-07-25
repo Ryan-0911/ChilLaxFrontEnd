@@ -176,6 +176,10 @@ namespace ChilLaxFrontEnd.Controllers
                 cart.Add(item);
                 json = JsonSerializer.Serialize(cart);
                 HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST, json);
+
+                //string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+                //Member member = JsonSerializer.Deserialize<Member>(json);
+                //member.MemberId 
             }
             return RedirectToAction("List");
         }
