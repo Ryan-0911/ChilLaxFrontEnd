@@ -25,22 +25,22 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FocusDetail>>> GetFocusDetails()
         {
-          if (_context.FocusDetails == null)
+          if (_context.FocusDetail == null)
           {
               return NotFound();
           }
-            return await _context.FocusDetails.ToListAsync();
+            return await _context.FocusDetail.ToListAsync();
         }
 
         // GET: api/FocusDetails/5
         [HttpGet("{id}")]
         public async Task<ActionResult<FocusDetail>> GetFocusDetail(string id)
         {
-          if (_context.FocusDetails == null)
+          if (_context.FocusDetail == null)
           {
               return NotFound();
           }
-            var focusDetail = await _context.FocusDetails.FindAsync(id);
+            var focusDetail = await _context.FocusDetail.FindAsync(id);
 
             if (focusDetail == null)
             {
@@ -86,12 +86,12 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public async Task<string> PostFocusDetail([FromBody] FocusDetailWithPointHistoryDTO data)
         {
-          if (_context.FocusDetails == null || _context.PointHistories == null)
+          if (_context.FocusDetail == null || _context.PointHistory == null)
           {
               return "領取失敗";
           }
-            _context.FocusDetails.Add(data.FocusDetail);
-            _context.PointHistories.Add(data.PointHistory);
+            _context.FocusDetail.Add(data.FocusDetail);
+            _context.PointHistory.Add(data.PointHistory);
             try
             {
                 await _context.SaveChangesAsync();
@@ -114,17 +114,17 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFocusDetail(string id)
         {
-            if (_context.FocusDetails == null)
+            if (_context.FocusDetail == null)
             {
                 return NotFound();
             }
-            var focusDetail = await _context.FocusDetails.FindAsync(id);
+            var focusDetail = await _context.FocusDetail.FindAsync(id);
             if (focusDetail == null)
             {
                 return NotFound();
             }
 
-            _context.FocusDetails.Remove(focusDetail);
+            _context.FocusDetail.Remove(focusDetail);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -132,12 +132,12 @@ namespace ChilLaxFrontEnd.Controllers
 
         private bool FocusDetailExists(string id)
         {
-            return (_context.FocusDetails?.Any(e => e.FocusDetailId == id)).GetValueOrDefault();
+            return (_context.FocusDetail?.Any(e => e.FocusDetailId == id)).GetValueOrDefault();
         }
 
         private bool PointHistoryExists(string id)
         {
-            return (_context.PointHistories?.Any(e => e.PointDetailId == id)).GetValueOrDefault();
+            return (_context.PointHistory?.Any(e => e.PointDetailId == id)).GetValueOrDefault();
         }
     }
 }

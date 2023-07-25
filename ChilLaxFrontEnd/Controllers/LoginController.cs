@@ -53,7 +53,7 @@ namespace ChilLaxFrontEnd.Controllers
 
             if (membercredential != null && member != null && isPwdMatch == true)
             {
-                member.MemberPoint = _context.PointHistories.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
+                member.MemberPoint = _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
                 
                 string json = JsonSerializer.Serialize(member);
                 Console.WriteLine(json);
@@ -76,7 +76,7 @@ namespace ChilLaxFrontEnd.Controllers
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
 t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
-            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
+            bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
             
             string password = vm.txtRegisterPassword;  
             string salt = BCrypt.Net.BCrypt.GenerateSalt();// 產生隨機的鹽值
@@ -121,23 +121,33 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail != null && vm.memberBirth != null)
             {
-                db.Members.Add(member);
-                db.SaveChanges();
 
                 string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
                 MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm 
-                MemberCredential credential = new MemberCredential 
+                if (mc != null)
                 {
-                    MemberId = member.MemberId,
-                    MemberAccount = mc.MemberAccount,
-                    MemberPassword = mc.MemberPassword
-                };
-                db.MemberCredentials.Add(credential);
-                db.SaveChanges();
+                    db.Member.Add(member);
+                    db.SaveChanges();
 
-                
+                    MemberCredential credential = new MemberCredential
+                    {
+                        MemberId = member.MemberId,
+                        MemberAccount = mc.MemberAccount,
+                        MemberPassword = mc.MemberPassword
+                    };
+                    db.MemberCredential.Add(credential);
+                    db.SaveChanges();
 
-                return RedirectToAction("Login");
+                //    Member memberData = (new ChilLaxContext()).Member.FirstOrDefault(
+                //t => t.MemberId.Equals(member.MemberId));
+                    //string toVerifyEmail = JsonSerializer.Serialize(memberData);
+                    //HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, toVerifyEmail);
+                    if (!HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
+                    {
+                        return View();
+                    }
+                    return RedirectToAction("Login");
+                }
 
             }
             return View();
@@ -153,7 +163,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             // 驗證 Google Token
             GoogleJsonWebSignature.Payload? payload = VerifyGoogleToken(formCredential, formToken, cookiesToken).Result;
-            Member member = (new ChilLaxContext()).Members.FirstOrDefault(
+            Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberEmail.Equals(payload.Email) && t.Available == true);
 
             if (payload == null)
@@ -194,7 +204,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 }
                 else 
                 {
-                    member.MemberPoint = _context.PointHistories.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
+                    member.MemberPoint = _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
                         
                     string json = JsonSerializer.Serialize(member);
                     //Console.WriteLine(json);
@@ -229,7 +239,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             if (member.MemberName != null && member.MemberTel != null && member.MemberEmail != null && member.MemberBirthday != null && member.Provider != null && member.ProviderUserId != null)
             {
-                db.Members.Add(member);
+                db.Member.Add(member);
                 db.SaveChanges();
 
                 string Memjson = JsonSerializer.Serialize(member);
@@ -336,7 +346,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
         [HttpPost]
         public IActionResult editMemberProfile(LoginViewModel vm)
         {
-            Member member = (new ChilLaxContext()).Members.FirstOrDefault(
+            Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                t => t.MemberId.Equals(vm.Id));
             if (member != null)
             {

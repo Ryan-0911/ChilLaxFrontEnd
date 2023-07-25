@@ -35,7 +35,7 @@ namespace ChilLaxFrontEnd.Controllers
             IEnumerable<Product> datas = null;
 
             ProductsPagingDTO productsPagingDTO = new ProductsPagingDTO();
-            productsPagingDTO.ProdCategory = db.Products
+            productsPagingDTO.ProdCategory = db.Product
                 .GroupBy(p => p.ProductCategory)
                 .Select(group => group.Key)
                 .ToList();
@@ -43,12 +43,12 @@ namespace ChilLaxFrontEnd.Controllers
 
             if (string.IsNullOrEmpty(keyword))
             {
-                datas = from p in db.Products
+                datas = from p in db.Product
                         select p;
             }
             else
             {
-                datas = db.Products.Where(p => p.ProductName.Contains(keyword));
+                datas = db.Product.Where(p => p.ProductName.Contains(keyword));
             }
 
             //return View(datas);
@@ -62,7 +62,7 @@ namespace ChilLaxFrontEnd.Controllers
 
             if (_pageCount == null)
             {
-                int dataCount = db.Products.Count();
+                int dataCount = db.Product.Count();
                 pageCount = dataCount / 8;
                 if (dataCount % 8 != 0) pageCount++;
             }
@@ -79,7 +79,7 @@ namespace ChilLaxFrontEnd.Controllers
                 productsPagingDTO.nowpage = nowpage;    
                 return View(new List<ProductsPagingDTO> { productsPagingDTO });
             }
-            var prod = db.Products.Where(p => p.ProductCategory == productcategory )
+            var prod = db.Product.Where(p => p.ProductCategory == productcategory )
                                 .OrderByDescending(p => p.ProductCategory)
                                 .Skip(8*((int)nowpage)-1)
                                 .Take(8)
@@ -98,7 +98,7 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpGet]
         public async Task<ActionResult<ProductsPagingDTO>> GetProductsByCategory(string category, int page = 1)
         {
-            var productsInCategory = _context.Products.Where(p => p.ProductCategory == category).ToList();
+            var productsInCategory = _context.Product.Where(p => p.ProductCategory == category).ToList();
             //return Json(productsInCategory);
 
             
@@ -140,7 +140,7 @@ namespace ChilLaxFrontEnd.Controllers
             //}
 
             // 假設您的資料庫內含有名為 "Products" 的資料表，並包含 ProductId 欄位用於查詢產品
-            Product product = db.Products.FirstOrDefault(p => p.ProductId == id);
+            Product product = db.Product.FirstOrDefault(p => p.ProductId == id);
 
             if (product == null || id == null) 
             {
@@ -156,7 +156,7 @@ namespace ChilLaxFrontEnd.Controllers
         public IActionResult AddToCart(CAddToCartViewModel cvm)
         {
             ChilLaxContext db = new ChilLaxContext();
-            Product prod = db.Products.FirstOrDefault(t => t.ProductId == cvm.txtFId);
+            Product prod = db.Product.FirstOrDefault(t => t.ProductId == cvm.txtFId);
             if (prod != null)
             {
                 string json = "";
