@@ -41,10 +41,11 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel vm)
         {
-            MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
-                t => t.MemberAccount.Equals(vm.txtAccount));
+            MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
+                t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
 
-            Member member = (new ChilLaxContext()).Members.FirstOrDefault(
+            bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
+            Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
 
             bool isPwdMatch = BCrypt.Net.BCrypt.Verify(vm.txtPassword, membercredential.MemberPassword);
@@ -72,7 +73,7 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public IActionResult Register(LoginViewModel vm)
         {
-            MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
+            MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
 t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
@@ -164,8 +165,8 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             else
             {
                 PropertyInfo[] properties = payload.GetType().GetProperties();
-                
-                bool emailExists = _context.Members.Any(m => m.MemberEmail.Equals(payload.Email));
+                //Member member = new Member();
+                bool emailExists = _context.Member.Any(m => m.MemberEmail.Equals(payload.Email));
                 var memberData = new
                 {
                     Provider = "Google",

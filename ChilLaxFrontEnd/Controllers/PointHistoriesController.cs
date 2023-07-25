@@ -24,11 +24,11 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PointHistory>>> GetPointHistories()
         {
-            if (_context.PointHistories == null)
+            if (_context.PointHistory == null)
             {
                 return NotFound();
             }
-            return await _context.PointHistories.ToListAsync();
+            return await _context.PointHistory.ToListAsync();
         }
 
     }
