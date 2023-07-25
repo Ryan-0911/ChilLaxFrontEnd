@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ChilLaxFrontEnd.Models;
 using ChilLaxFrontEnd.Models.DTO;
-
+using System.Text.Json;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -29,9 +29,13 @@ namespace ChilLaxFrontEnd.Controllers
             return View(await chilLaxContext.ToListAsync());
         }
 
-        // GET: Carts/Details/5
-        public async Task<ActionResult<List<CartDTO>>> Details(int? id)
+        // GET: Carts/Details
+        public async Task<ActionResult<List<CartDTO>>> Details()
         {
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            Console.WriteLine(json);
+            Member member = JsonSerializer.Deserialize<Member>(json);
+            int id =  member.MemberId ;
 
             if (id == null || _context.Cart == null) return NotFound();
    
@@ -51,13 +55,7 @@ namespace ChilLaxFrontEnd.Controllers
             return View(cart);
         }
 
-        // GET: Carts/Create
-        public IActionResult Create()
-        {
-            ViewData["MemberId"] = new SelectList(_context.Member, "MemberId", "MemberId");
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "ProductId");
-            return View();
-        }
+
 
         // POST: Carts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
