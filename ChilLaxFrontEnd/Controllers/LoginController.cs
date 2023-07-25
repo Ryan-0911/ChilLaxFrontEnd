@@ -64,8 +64,6 @@ namespace ChilLaxFrontEnd.Controllers
             bool isPwdMatch = BCrypt.Net.BCrypt.Verify(vm.txtPassword, membercredential.MemberPassword);
             Console.WriteLine("驗證結果：" + isPwdMatch); // 印出 true
 
-            //測試變更
-
 
             if (membercredential != null && member != null && isPwdMatch == true)
             {

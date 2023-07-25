@@ -186,7 +186,7 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
 
-        [HttpPut("Verify/{regID}")]
+        [HttpPost("Verify/{regID}")]
         public async Task<IActionResult> Verify(int regID)
         {
             var user = db.Member.FirstOrDefault(x => x.MemberId == regID);
