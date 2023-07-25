@@ -157,31 +157,37 @@ namespace ChilLaxFrontEnd.Controllers
         {
             ChilLaxContext db = new ChilLaxContext();
             Product prod = db.Product.FirstOrDefault(t => t.ProductId == cvm.txtFId);
-            if (prod != null)
-            {
-                string json = "";
-                List<CShoppingCartItem> cart = null;
-                if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
-                {
-                    json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
-                    cart = JsonSerializer.Deserialize<List<CShoppingCartItem>>(json);
-                }
-                else
-                    cart = new List<CShoppingCartItem>();
-                CShoppingCartItem item = new CShoppingCartItem();
-                item.price = (decimal)prod.ProductPrice;
-                item.productId = cvm.txtFId;
-                item.count = cvm.txtCount;
-                item.product = prod;
-                cart.Add(item);
-                json = JsonSerializer.Serialize(cart);
-                HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST, json);
+            //if (prod != null)
+            //{
+            //    string json = "";
+            //    List<CShoppingCartItem> cart = null;
+            //    if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
+            //    {
+            //        json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
+            //        cart = JsonSerializer.Deserialize<List<CShoppingCartItem>>(json);
+            //    }
+            //    else
+            //        cart = new List<CShoppingCartItem>();
+            //    CShoppingCartItem item = new CShoppingCartItem();
+            //    item.price = (decimal)prod.ProductPrice;
+            //    item.productId = cvm.txtFId;
+            //    item.count = cvm.txtCount;
+            //    item.product = prod;
+            //    cart.Add(item);
+            //    json = JsonSerializer.Serialize(cart);
+            //    HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST, json);
 
-                //string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
-                //Member member = JsonSerializer.Deserialize<Member>(json);
-                //member.MemberId 
-            }
+
+
+            //}
             return RedirectToAction("List");
+
+            //string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            //Member member = JsonSerializer.Deserialize<Member>(json);
+            //member.MemberId 
+
+            Cart cart = new Cart();
+
         }
 
         // 檢視購物車
