@@ -64,8 +64,12 @@ namespace ChilLaxFrontEnd.Controllers
             Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
 
-            // 只有在會員帳密跟會員基本資料都存在的話，才會執行下列程式碼
-            if (membercredential != null && member != null)
+            bool isPwdMatch = BCrypt.Net.BCrypt.Verify(vm.txtPassword, membercredential.MemberPassword);
+            Console.WriteLine("驗證結果：" + isPwdMatch); // 印出 true
+
+
+
+            if (membercredential != null && member != null && isPwdMatch == true)
             {
                 if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)
                 {
