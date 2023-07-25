@@ -139,7 +139,7 @@
                     //分頁功能
                     const pagingHandler = page => {
                         thePage.value = page
-                        loadPointRecords
+                        loadPointRecords()
                     }
 
                     //排序功能
@@ -148,7 +148,7 @@
                         sortType.value = sortType.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
                         //console.log(sortBy.value , sortType.value)
                         thePage.value = 1
-                        loadPointRecords
+                        loadPointRecords()
                     }
 
                     //透過watch監看keyword有沒有改變
@@ -156,10 +156,11 @@
                         //console.log(newKeyword)
                         //console.log(oldKeyword)
                         thePage.value = 1
-                        loadPointRecords
+                        loadPointRecords()
                     })
 
-                    loadProducts()
+                    loadPointRecords()
+
                     return {
                         pointRecords,
                         keyword,

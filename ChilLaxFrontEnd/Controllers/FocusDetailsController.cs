@@ -58,9 +58,9 @@ namespace ChilLaxFrontEnd.Controllers
             DateTime today = DateTime.Today;
 
             // 查詢該會員今天的專注時間總和
-            int totalDurationToday = _context.PointHistories
+            int totalDurationToday = _context.PointHistory
                 .Where(p => p.MemberId == memberId && p.ModifiedSource == "Focus")
-                .Join(_context.FocusDetails,
+                .Join(_context.FocusDetail,
                     pointHistory => pointHistory.PointDetailId,
                     focusDetail => focusDetail.FocusDetailId,
                     (pointHistory, focusDetail) => new { PointHistory = pointHistory, FocusDetail = focusDetail })

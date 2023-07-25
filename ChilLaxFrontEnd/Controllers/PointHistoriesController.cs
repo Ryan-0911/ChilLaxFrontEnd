@@ -34,31 +34,34 @@ namespace ChilLaxFrontEnd.Controllers
             Console.WriteLine(json);
             Member member = JsonSerializer.Deserialize<Member>(json);
 
-            return await _context.PointHistories.Where(ph => ph.MemberId == member.MemberId).ToListAsync();
+            return await _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).ToListAsync();
         }
 
-        [HttpPost]
-        [Route("search")]
-        public async Task<ActionResult<PointRecordDTO>> GetPointRecords([FromBody] SearchDTO searchDTO) // string? keyword, string? sortBy, string? sortType, int page = 1
-        {
-            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
-            Console.WriteLine(json);
-            Member member = JsonSerializer.Deserialize<Member>(json);
+        //[HttpPost]
+        //[Route("search")]
+        //public async Task<ActionResult<PointRecordDTO>> GetPointRecords([FromBody] SearchDTO searchDTO) // string? keyword, string? sortBy, string? sortType, int page = 1
+        //{
+        //    string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+        //    Console.WriteLine(json);
+        //    Member member = JsonSerializer.Deserialize<Member>(json);
 
-            string? keyword = searchDTO.keyword; //下拉式選單- Focus、Tarot、Product
-            int? page = searchDTO.page ?? 1;
-            string? sortBy = searchDTO.sortBy;
-            string? sortType = searchDTO.sortType ?? "asc";
+        //    string? keyword = searchDTO.keyword; //下拉式選單- Focus、Tarot、Product
+        //    int? page = searchDTO.page ?? 1;
+        //    string? sortBy = searchDTO.sortBy;
+        //    string? sortType = searchDTO.sortType ?? "asc";
 
-            // FocusDetail + PointHistory = PointRecordDTO
-            var query = from pointHistory in _context.PointHistories
-                        join focusDetail in _context.FocusDetails
-                        on pointHistory.PointDetailId equals focusDetail.FocusDetailId
-                        where pointHistory.MemberId == member.MemberId
-                            select new PointRecordDTO
-                        {
-    
-                        };
+        //    // FocusDetail + PointHistory = PointRecordDTO
+        //    var query = from pointHistory in _context.PointHistories
+        //                join focusDetail in _context.FocusDetails
+        //                on pointHistory.PointDetailId equals focusDetail.FocusDetailId
+        //                where pointHistory.MemberId == member.MemberId
+        //                select new 
+        //                {
+        //                   ModifiedSource = pointHistory.ModifiedSource,
+        //                   ModifiedAmount  = pointHistory.ModifiedAmount,
+        //                   ModifiedContent = focusDetail.Duration,
+        //                   ModifiedTime = focusDetail.EndDatetime,
+        //                };
 
             // TarotOrder + PointHistory = PointRecordDTO
             // ProductOrder + PointHistory = PointRecordDTO
@@ -113,4 +116,3 @@ namespace ChilLaxFrontEnd.Controllers
             //return prodDTO;
         }
     }
-}
