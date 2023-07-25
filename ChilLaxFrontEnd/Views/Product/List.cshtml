@@ -218,7 +218,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-0 col-md-10">
-                                    <button onclick="deleteCart(this.value)" value="@item.ProductId" class="btn btn-default">購買</button>
+                                     <button onclick="CreateCart(this.value)" value="@item.ProductId" class="btn btn-default">購買</button>
                                 </div>
                             </div>
 
@@ -287,12 +287,12 @@
     <script>
         const baseAddress = "https://localhost:5000"
 
-        function deleteCart(productId) {
+        function CreateCart(productId) {
             $.ajax({
                 type: "GET",
-                url: `${baseAddress}/api/CartsAPI/Delete/${productId}`
+                url: `${baseAddress}/api/CartsAPI/Create/${productId}`
             }).done(data => {
-                alert("刪除成功");
+                alert("新增成功");
             }).fail(err => {
                 alert(err.statusText);
             });
