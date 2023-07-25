@@ -10,6 +10,32 @@
         height: 150px;
         line-height: 100px;
     }
+    /* 隱藏原本的 checkbox */
+    .custom-checkbox {
+        opacity: 0;
+        position: absolute;
+    }
+
+        /* 自訂 checkbox 的樣式 */
+        .custom-checkbox::before {
+            content: '';
+            display: inline-block;
+            width: 20px; /* 設定您希望的 checkbox 寬度 */
+            height: 20px; /* 設定您希望的 checkbox 高度 */
+            border: 2px solid #ccc;
+            background-color: #fff;
+            border-radius: 4px; /* 設定您希望的圓角大小 */
+            position: relative;
+            top: 3px;
+            margin-right: 10px;
+        }
+
+        /* 當 checkbox 被選取時的樣式 */
+        .custom-checkbox:checked::before {
+            background-color: #007bff; /* 設定您希望的選取時的顏色 */
+            border-color: #007bff;
+        }
+
 </style>
 
 
@@ -19,6 +45,10 @@
     <table class="table table-dark table-hover">
         <thead>
             <tr>
+                <th>
+                    <input type="checkbox" id="checkall" name="checkall" value="Bike" onclick="check_all(this,'c')">
+                    <label for="checkall">全選</label>
+                </th>
                 <th>商品圖片</th>
                 <th>商品名稱</th>
                 <th>商品價格</th>
@@ -30,6 +60,9 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>
+                        <input type="checkbox" id="@item.Product?.ProductId" name="@item.Product?.ProductId" value="Bike">
+                    </td>
                     <td>
                         <img class="productimg" src="https://localhost:44385/assets/images/@item.Product?.ProductImg">
                     </td>
@@ -67,6 +100,8 @@
 @section Scripts{
 
 <script>
+
+    //刪除購物車內商品
     const baseAddress = "https://localhost:5000"
     
         function deleteCart(productId) {
@@ -79,6 +114,21 @@
             alert(err.statusText);
         });
     };
+
+    // 全選框的 change 事件處理函式
+    function selectAll() {
+        var checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+        var checkall = document.getElementById('checkall');
+
+        // 將所有商品選取框的勾選狀態設置成全選框的勾選狀態
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = checkall.checked;
+        }
+    }
+
+    // 監聽全選框的 change 事件
+    document.getElementById('checkall').addEventListener('change', selectAll);
+
 
 </script>
 }
