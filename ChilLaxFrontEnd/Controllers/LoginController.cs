@@ -10,7 +10,18 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Encodings.Web;
 using Microsoft.CodeAnalysis.Scripting;
-
+//以下為新增的
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
+using System.Web;
+using System.Xml.Linq;
+using Microsoft.Extensions.Hosting.Internal;
+using Newtonsoft.Json.Linq;
+using Microsoft.Data.SqlClient.Server;
+using System.Diagnostics.Metrics;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -23,15 +34,16 @@ namespace ChilLaxFrontEnd.Controllers
         //{
         //    _logger = logger;
         //}
-        ChilLaxContext db = new ChilLaxContext();
-
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ChilLaxContext _context;
 
-        public LoginController(ChilLaxContext context)
+        public LoginController(IWebHostEnvironment hostingEnvironment, ChilLaxContext context)
         {
+            _hostingEnvironment = hostingEnvironment;
             _context = context;
         }
 
+        ChilLaxContext db = new ChilLaxContext();
 
         public IActionResult Login()
         {
@@ -121,27 +133,151 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail != null && vm.memberBirth != null)
             {
-                db.Members.Add(member);
-                db.SaveChanges();
 
                 string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
                 MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm 
-                MemberCredential credential = new MemberCredential 
+                if (mc != null)
                 {
-                    MemberId = member.MemberId,
-                    MemberAccount = mc.MemberAccount,
-                    MemberPassword = mc.MemberPassword
-                };
-                db.MemberCredentials.Add(credential);
-                db.SaveChanges();
+                    db.Members.Add(member);
+                    db.SaveChanges();
 
-                
+                    MemberCredential credential = new MemberCredential
+                    {
+                        MemberId = member.MemberId,
+                        MemberAccount = mc.MemberAccount,
+                        MemberPassword = mc.MemberPassword
+                    };
+                    db.MemberCredentials.Add(credential);
+                    db.SaveChanges();
 
-                return RedirectToAction("Login");
+                    Member memberData = (new ChilLaxContext()).Members.FirstOrDefault(
+                t => t.MemberId.Equals(member.MemberId));
+                    string toVerifyEmail = JsonSerializer.Serialize(memberData);
+                    HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, toVerifyEmail);
+                    if (!HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER)) 
+                    {
+                        return View();
+                    }
+                    return RedirectToAction("verifyEmail");
+                }
 
             }
             return View();
         }
+
+        //驗證信箱及註冊
+        public IActionResult verifyEmail()
+        {
+            string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);
+            Member mc = JsonSerializer.Deserialize<Member>(json);
+            VerifyEmailViewModel VE = new VerifyEmailViewModel();
+            VE.MemberId = mc.MemberId;
+            VE.MemberEmail = mc.MemberEmail;
+            return View(VE);
+        }
+
+        //[HttpPut("{id}")]
+        //public async Task<string> SaveData(int id,LoginViewModel MemberVM)
+        //{
+        //    Member Mem = await _context.Members.FindAsync(id);
+        //    if (Mem != null)
+        //    {
+        //        Mem.MemberId = MemberVM.Id;
+        //        Mem.MemberEmail = MemberVM.memberEmail;
+        //        Mem.IsValid = false;
+        
+        //        _context.Entry(Mem).State = EntityState.Modified;
+        //        db.SaveChanges();
+                
+
+        //        try
+        //        {
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {//DbUpdateConcurrencyException資料庫因為是可以多人同時操作，如果有多個人同時作業或是有人搶先修改過了，就會做更新失敗。
+        //            if (!MemberExists(id))
+        //            {
+        //                return "修改失敗";
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        BuildEmailTemplate(Mem.MemberId);
+
+        //        return "修改成功";
+
+        //    }
+        //    else
+        //    {
+        //        return "修改失敗";
+        //    }
+                        
+        //}
+
+
+        //public void BuildEmailTemplate(int regID)
+        //{
+        //    string templatePath = Path.Combine(_hostingEnvironment.WebRootPath, "EmailTemplate", "Text.cshtml");
+        //    string body = System.IO.File.ReadAllText(templatePath);
+        //    var regInfo = db.Members.Where(x => x.MemberId == regID).FirstOrDefault();
+        //    string UserName = regInfo.MemberName;
+        //    body = body.Replace("@ViewBag.UserName", UserName);
+        //    body = body.ToString();
+        //    BuildEmailTemplate("驗證帳號", body, regInfo.MemberEmail);
+        //}
+
+        //public static void BuildEmailTemplate(string subjectText, string bodyText, string sendTo)
+        //{
+        //    string GoogleID = "chillax20230808@gmail.com"; //Google 發信帳號
+        //    string TempPwd = "gzwmfcbpepypgikf"; //應用程式密碼
+
+        //    string to, body, bcc, cc;
+        //    to = sendTo.Trim();
+        //    bcc = "";
+        //    cc = "";
+
+        //    StringBuilder sb = new StringBuilder();
+        //    sb.Append(bodyText);
+        //    body = sb.ToString();
+        //    MailMessage mail = new MailMessage();
+        //    mail.From = new MailAddress(GoogleID);//發件人
+        //    mail.To.Add(new MailAddress(to));//收件人
+        //    if (!string.IsNullOrEmpty(bcc))
+        //    {
+        //        mail.Bcc.Add(new MailAddress(bcc));
+        //    }
+        //    if (!string.IsNullOrEmpty(cc))
+        //    {
+        //        mail.CC.Add(new MailAddress(cc));
+        //    }
+        //    mail.Subject = subjectText;//郵件主題
+        //    mail.Body = body;//郵件內文
+        //    mail.IsBodyHtml = true;
+        //    mail.SubjectEncoding = Encoding.UTF8;
+
+        //    string SmtpServer = "smtp.gmail.com";
+        //    int SmtpPort = 587;
+        //    using (SmtpClient client = new SmtpClient(SmtpServer, SmtpPort))//使用郵件伺服器來發送這個郵件
+        //    {
+        //        client.EnableSsl = true;
+        //        client.Credentials = new NetworkCredential(GoogleID, TempPwd);//寄信帳密 
+        //        try
+        //        {
+        //            client.Send(mail);//寄出信件
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw ex;
+        //        }
+        //    }
+
+        //}
+
+
+
 
         //Google第三方登入
 
@@ -356,8 +492,10 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             }
             return View();
         }
-
-
+        private bool MemberExists(int id)
+        {
+            return _context.Members.Any(e => e.MemberId == id);
+        }
 
 
 

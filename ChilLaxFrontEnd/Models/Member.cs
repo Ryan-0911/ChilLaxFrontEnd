@@ -26,8 +26,8 @@ namespace ChilLaxFrontEnd.Models
         public int? MemberPoint { get; set; }
         public DateTime MemberJoinTime { get; set; }
         public bool Available { get; set; }
-        public string Provider { get; set; }
-        public string ProviderUserId { get; set; }
+        public string? Provider { get; set; }
+        public string? ProviderUserId { get; set; }
         public bool? IsValid { get; set; }
 
         public virtual MemberCredential MemberCredential { get; set; }
