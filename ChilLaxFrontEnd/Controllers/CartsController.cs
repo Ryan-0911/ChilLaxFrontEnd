@@ -32,6 +32,7 @@ namespace ChilLaxFrontEnd.Controllers
         // GET: Carts/Details/5
         public async Task<ActionResult<List<CartDTO>>> Details(int? id)
         {
+
             if (id == null || _context.Cart == null) return NotFound();
    
             var cart = await _context.Cart
