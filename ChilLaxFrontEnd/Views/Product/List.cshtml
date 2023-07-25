@@ -72,7 +72,7 @@
                         </div>
                     </li>
                     <li class="cart">
-                        <a href="">
+                        <a asp-action="Details" asp-controller="Carts">
                             <img src="~/assets/images/icons8-cart.gif" />
                             <i>購物車（0）</i>
                         </a>
@@ -218,7 +218,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-0 col-md-10">
-                                    <input type="submit" value="購買" class="btn btn-default" />
+                                    <button onclick="deleteCart(this.value)" value="@item.ProductId" class="btn btn-default">購買</button>
                                 </div>
                             </div>
 
@@ -285,6 +285,19 @@
 @section Scripts{
 
     <script>
+        const baseAddress = "https://localhost:5000"
+
+        function deleteCart(productId) {
+            $.ajax({
+                type: "GET",
+                url: `${baseAddress}/api/CartsAPI/Delete/${productId}`
+            }).done(data => {
+                alert("刪除成功");
+            }).fail(err => {
+                alert(err.statusText);
+            });
+        };
+
 
         function ShowMessage() {
             toastr["success"]("商品已加入購物車！");
