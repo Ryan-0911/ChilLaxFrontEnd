@@ -130,7 +130,7 @@ textarea.input {
 
 /*-- Number input --*/
 
-.input-number {
+/*.input-number {
   position: relative;
 }
 
@@ -148,20 +148,24 @@ textarea.input {
   padding: 0px 35px 0px 15px;
 }
 
-.input-number .qty-up, .input-number .qty-down {
-  position: absolute;
-  display: block;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #E4E7ED;
-  background-color: #FFF;
-  text-align: center;
-  font-weight: 700;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+
+
+.input-number .qty-up, .input-number .qty-down .add-to-cart {
+    position: absolute;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #E4E7ED;
+    background-color: #FFF;
+    text-align: center;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 50px;
+    font-weight: bold;
 }
 
 .input-number .qty-up {
@@ -178,7 +182,7 @@ textarea.input {
 .input-number .qty-up:hover, .input-number .qty-down:hover {
   background-color: #E4E7ED;
   color: #D10024;
-}
+}*/
 
 /*-- Select input --*/
 
@@ -1571,16 +1575,35 @@ textarea.input {
   visibility: visible;
 }
 
-.product-details .add-to-cart .qty-label {
-  display: inline-block;
-  font-weight: 500;
-  font-size: 12px;
-  text-transform: uppercase;
-  margin-right: 15px;
-  margin-bottom: 0px;
+.qty-label {
+    display: inline-block;
+    width: 90px;
+    font-weight: 500;
+    font-size: 20px;
+    text-transform: uppercase;
+    margin-right: 15px;
+    margin-bottom: 0px;
 }
 
-.product-details .add-to-cart .qty-label .input-number {
+.qty-label span{
+    cursor: pointer;
+}
+
+.button-container {
+    margin-top: 10px;
+}
+
+
+.product-details .add-to-cart {
+    display: inline-block;
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-right: 15px;
+    margin-bottom: 0px;
+}
+
+.product-details .add-to-cart .input-number {
   width: 90px;
   display: inline-block;
 }

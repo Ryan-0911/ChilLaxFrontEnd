@@ -21,77 +21,17 @@ namespace ChilLaxFrontEnd.Controllers
             _context = context;
         }
 
-        // GET: api/FocusDetails
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<FocusDetail>>> GetFocusDetails()
-        {
-          if (_context.FocusDetails == null)
-          {
-              return NotFound();
-          }
-            return await _context.FocusDetails.ToListAsync();
-        }
-
-        // GET: api/FocusDetails/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<FocusDetail>> GetFocusDetail(string id)
-        {
-          if (_context.FocusDetails == null)
-          {
-              return NotFound();
-          }
-            var focusDetail = await _context.FocusDetails.FindAsync(id);
-
-            if (focusDetail == null)
-            {
-                return NotFound();
-            }
-
-            return focusDetail;
-        }
-
-        // PUT: api/FocusDetails/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFocusDetail(string id, FocusDetail focusDetail)
-        {
-            if (id != focusDetail.FocusDetailId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(focusDetail).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FocusDetailExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/FocusDetails
         // 新增資料至 FocusDetail 與 PointHistory 資料表
         [HttpPost]
-        public async Task<string> PostFocusDetail([FromBody] FocusDetailWithPointHistoryDTO data)
+        public async Task<string> PostFocusAndPoint([FromBody] FocusDetailWithPointHistoryDTO data)
         {
-          if (_context.FocusDetails == null || _context.PointHistories == null)
+          if (_context.FocusDetail == null || _context.PointHistory == null)
           {
               return "領取失敗";
           }
-            _context.FocusDetails.Add(data.FocusDetail);
-            _context.PointHistories.Add(data.PointHistory);
+            _context.FocusDetail.Add(data.FocusDetail);
+            _context.PointHistory.Add(data.PointHistory);
             try
             {
                 await _context.SaveChangesAsync();
@@ -110,34 +50,37 @@ namespace ChilLaxFrontEnd.Controllers
             return "領取成功";
         }
 
-        // DELETE: api/FocusDetails/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFocusDetail(string id)
+
+        [HttpGet("{memberId}")]
+        public async Task<Boolean> SearchFocusToday(int memberId)
         {
-            if (_context.FocusDetails == null)
-            {
-                return NotFound();
-            }
-            var focusDetail = await _context.FocusDetails.FindAsync(id);
-            if (focusDetail == null)
-            {
-                return NotFound();
-            }
+            // 取得今天的日期
+            DateTime today = DateTime.Today;
 
-            _context.FocusDetails.Remove(focusDetail);
-            await _context.SaveChangesAsync();
+            // 查詢該會員今天的專注時間總和
+            int totalDurationToday = _context.PointHistory
+                .Where(p => p.MemberId == memberId && p.ModifiedSource == "Focus")
+                .Join(_context.FocusDetail,
+                    pointHistory => pointHistory.PointDetailId,
+                    focusDetail => focusDetail.FocusDetailId,
+                    (pointHistory, focusDetail) => new { PointHistory = pointHistory, FocusDetail = focusDetail })
+                .Where(joined => joined.FocusDetail.StartDatetime.Date == today)
+                .Sum(joined => joined.FocusDetail.Duration);
 
-            return NoContent();
+            // 檢查專注時間是否大於 60 分鐘
+            bool isFocusGreaterThan60 = totalDurationToday >= 60;
+
+            return isFocusGreaterThan60;
         }
 
         private bool FocusDetailExists(string id)
         {
-            return (_context.FocusDetails?.Any(e => e.FocusDetailId == id)).GetValueOrDefault();
+            return (_context.FocusDetail?.Any(e => e.FocusDetailId == id)).GetValueOrDefault();
         }
 
         private bool PointHistoryExists(string id)
         {
-            return (_context.PointHistories?.Any(e => e.PointDetailId == id)).GetValueOrDefault();
+            return (_context.PointHistory?.Any(e => e.PointDetailId == id)).GetValueOrDefault();
         }
     }
 }

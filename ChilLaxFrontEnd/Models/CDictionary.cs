@@ -7,5 +7,7 @@
         public static readonly string SK_EXTERNALLOGIN_USER = "SK_EXTERNALLOGIN_USER";
 
 
+        // 亭新增
+        public static readonly string SK_PURCHASED_PRODUCTS_LIST = "SK_PURCHASED_PRODUCTS_LIST";
     }
 }

@@ -55,26 +55,29 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel vm)
         {
-            MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
+            MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
                 t => t.MemberAccount.Equals(vm.txtAccount));
 
-            Member member = (new ChilLaxContext()).Members.FirstOrDefault(
+            Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
 
             bool isPwdMatch = BCrypt.Net.BCrypt.Verify(vm.txtPassword, membercredential.MemberPassword);
             Console.WriteLine("驗證結果：" + isPwdMatch); // 印出 true
 
+            //測試變更
+
+
             if (membercredential != null && member != null && isPwdMatch == true)
             {
-                member.MemberPoint = _context.PointHistories.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
-                
+                member.MemberPoint = _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
+
                 string json = JsonSerializer.Serialize(member);
                 Console.WriteLine(json);
                 HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
                 return RedirectToAction("Index", "Home");
-                
+
             }
-            
+
             return View();
         }
 
@@ -86,10 +89,10 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public IActionResult Register(LoginViewModel vm)
         {
-            MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
+            MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
 t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
-            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
+            bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
             
             string password = vm.txtRegisterPassword;  
             string salt = BCrypt.Net.BCrypt.GenerateSalt();// 產生隨機的鹽值
@@ -139,7 +142,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm 
                 if (mc != null)
                 {
-                    db.Members.Add(member);
+                    db.Member.Add(member);
                     db.SaveChanges();
 
                     MemberCredential credential = new MemberCredential
@@ -148,10 +151,10 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                         MemberAccount = mc.MemberAccount,
                         MemberPassword = mc.MemberPassword
                     };
-                    db.MemberCredentials.Add(credential);
+                    db.MemberCredential.Add(credential);
                     db.SaveChanges();
 
-                    Member memberData = (new ChilLaxContext()).Members.FirstOrDefault(
+                    Member memberData = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberId.Equals(member.MemberId));
                     string toVerifyEmail = JsonSerializer.Serialize(memberData);
                     HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, toVerifyEmail);
@@ -290,7 +293,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             // 驗證 Google Token
             GoogleJsonWebSignature.Payload? payload = VerifyGoogleToken(formCredential, formToken, cookiesToken).Result;
-            Member member = (new ChilLaxContext()).Members.FirstOrDefault(
+            Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberEmail.Equals(payload.Email) && t.Available == true);
 
             if (payload == null)
@@ -302,8 +305,8 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             else
             {
                 PropertyInfo[] properties = payload.GetType().GetProperties();
-                
-                bool emailExists = _context.Members.Any(m => m.MemberEmail.Equals(payload.Email));
+                //Member member = new Member();
+                bool emailExists = _context.Member.Any(m => m.MemberEmail.Equals(payload.Email));
                 var memberData = new
                 {
                     Provider = "Google",
@@ -331,7 +334,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 }
                 else 
                 {
-                    member.MemberPoint = _context.PointHistories.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
+                    member.MemberPoint = _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
                         
                     string json = JsonSerializer.Serialize(member);
                     //Console.WriteLine(json);
@@ -366,7 +369,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             if (member.MemberName != null && member.MemberTel != null && member.MemberEmail != null && member.MemberBirthday != null && member.Provider != null && member.ProviderUserId != null)
             {
-                db.Members.Add(member);
+                db.Member.Add(member);
                 db.SaveChanges();
 
                 string Memjson = JsonSerializer.Serialize(member);
@@ -473,7 +476,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
         [HttpPost]
         public IActionResult editMemberProfile(LoginViewModel vm)
         {
-            Member member = (new ChilLaxContext()).Members.FirstOrDefault(
+            Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                t => t.MemberId.Equals(vm.Id));
             if (member != null)
             {
@@ -495,7 +498,7 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
         }
         private bool MemberExists(int id)
         {
-            return _context.Members.Any(e => e.MemberId == id);
+            return _context.Member.Any(e => e.MemberId == id);
         }
 
 
