@@ -112,7 +112,7 @@ namespace ChilLaxFrontEnd.Controllers
                     await _context.SaveChangesAsync();
 
                     //新增點數回饋
-                    PointHistory pointHistory = new PointHistory();
+                    Models.PointHistory pointHistory = new Models.PointHistory();
                     pointHistory.ModifiedSource = "product";
                     pointHistory.MemberId = productOrder.MemberId;
                     pointHistory.PointDetailId = (productOrder.OrderId).ToString();
