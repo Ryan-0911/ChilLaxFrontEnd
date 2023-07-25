@@ -37,6 +37,11 @@ namespace ChilLaxFrontEnd.Controllers
             return await _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).ToListAsync();
         }
 
+        //public async Task<ActionResult<PointRecordDTO>> GetDetail() 
+        //{
+
+        //}
+
         //[HttpPost]
         //[Route("search")]
         //public async Task<ActionResult<PointRecordDTO>> GetPointRecords([FromBody] SearchDTO searchDTO) // string? keyword, string? sortBy, string? sortType, int page = 1
@@ -51,24 +56,24 @@ namespace ChilLaxFrontEnd.Controllers
         //    string? sortType = searchDTO.sortType ?? "asc";
 
         //    // FocusDetail + PointHistory = PointRecordDTO
-        //    var query = from pointHistory in _context.PointHistories
-        //                join focusDetail in _context.FocusDetails
+        //    var query = from pointHistory in _context.PointHistory
+        //                join focusDetail in _context.FocusDetail
         //                on pointHistory.PointDetailId equals focusDetail.FocusDetailId
         //                where pointHistory.MemberId == member.MemberId
-        //                select new 
+        //                select new
         //                {
-        //                   ModifiedSource = pointHistory.ModifiedSource,
-        //                   ModifiedAmount  = pointHistory.ModifiedAmount,
-        //                   ModifiedContent = focusDetail.Duration,
-        //                   ModifiedTime = focusDetail.EndDatetime,
+        //                    ModifiedSource = pointHistory.ModifiedSource,
+        //                    ModifiedAmount = pointHistory.ModifiedAmount,
+        //                    ModifiedContent = focusDetail.Duration,
+        //                    ModifiedTime = focusDetail.EndDatetime,
         //                };
 
-            // TarotOrder + PointHistory = PointRecordDTO
+            //TarotOrder + PointHistory = PointRecordDTO
             // ProductOrder + PointHistory = PointRecordDTO
 
 
 
-            // 將上面三個 PointRecordDTO 加在同一個 PointRecordDTO
+            //將上面三個 PointRecordDTO 加在同一個 PointRecordDTO
 
 
 
@@ -116,3 +121,4 @@ namespace ChilLaxFrontEnd.Controllers
             //return prodDTO;
         }
     }
+
