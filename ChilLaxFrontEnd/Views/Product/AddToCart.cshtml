@@ -86,7 +86,9 @@
         <!-- row over -->
     </div>
     <!-- container over -->
-@using (Html.BeginForm("AddToCart", "Product", FormMethod.Post))
+@*@using (Html.BeginForm("AddToCart", "Product", FormMethod.Post))*@
+@using (Html.BeginForm())
+
 {
     @Html.AntiForgeryToken()
     <hr />
