@@ -10,6 +10,8 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Encodings.Web;
 using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.AspNetCore.Cors;
+
 //以下為新增的
 using System.Collections.Generic;
 using System.Linq;

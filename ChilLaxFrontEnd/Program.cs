@@ -13,6 +13,14 @@ builder.Services.AddDbContext<ChilLaxContext>(
       builder.Configuration.GetConnectionString("ChilLax")));
 
 builder.Services.AddSession();
+
+string MyAllowOrign = "AllowAny";
+builder.Services.AddCors(options => {
+    options.AddPolicy(
+    name: MyAllowOrign,
+    policy => policy.WithOrigins("*").WithHeaders("*").WithMethods("*")
+    );
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,6 +31,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseCors();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

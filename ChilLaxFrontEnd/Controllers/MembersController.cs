@@ -17,6 +17,8 @@ using System.Web;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using Microsoft.Data.SqlClient.Server;
+using Microsoft.AspNetCore.Cors;
+
 
 
 namespace ChilLaxFrontEnd.Controllers
