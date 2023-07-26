@@ -167,11 +167,11 @@
                         <div>
                             <div class="form-verify">
                                 <i class="fa-solid fa-envelope"></i>
-                            @*<input type="email" id="email" name="user_email" class="user_input"  readonly>*@
-                            @Html.TextBox("MemberEmail", Model.MemberEmail, new { type = "email",name="MemberEmail", @class = "user_input", id = "email", @readonly = "readonly" })
+                                @*<input type="email" id="email" name="user_email" class="user_input"  readonly>*@
+                                @Html.TextBox("MemberEmail", Model.MemberEmail, new { type = "email",name="MemberEmail", @class = "user_input", id = "email", @readonly = "readonly" })
                             </div>
                         </div>
-                    <button class="resendBtn" id="resendButton" onclick="startCountdownAndSaveForm(60)">重發發送驗證信</button>
+                            <button class="resendBtn" id="resendButton" onclick="startCountdownAndSaveForm(60)">重發發送驗證信</button>
                     </div>
                 </div>
             </div>
@@ -218,7 +218,7 @@
             button.classList.remove("clicked");
         }
 
-        let baseAddress = "https://localhost:7189";
+        let baseAddress = "https://localhost:5000";
 
         function SaveForm() {
             console.log('SaveForm');

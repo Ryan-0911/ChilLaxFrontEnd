@@ -37,32 +37,7 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         ChilLaxContext db = new ChilLaxContext();
-        //public async Task<IActionResult> PutMember(int id, Member member)
-        // if (id != member.MemberId)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    _context.Entry(member).State = EntityState.Modified;
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!MemberExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
 
-        //    return NoContent();
-
-
-        //[HttpPatch("{id}")]
         // PUT: api/Members/5
         [HttpPut("{id}")]
         public async Task<string> PutMember(int id, VerifyEmailViewModel VE)
@@ -128,7 +103,7 @@ namespace ChilLaxFrontEnd.Controllers
             //            </html>
             //        ";
             var regInfo = db.Member.Where(x => x.MemberId == regID).FirstOrDefault();
-            var url = "https://localhost:7189/api/Members/Verify/" + regID;
+            var url = "https://localhost:5000/Login/Verify?regID="+ regID;
             body = body.Replace("@ViewBag.ConfirmationLink", url);
             string UserName = regInfo.MemberName;
             body = body.Replace("@ViewBag.UserName", UserName);
@@ -139,7 +114,7 @@ namespace ChilLaxFrontEnd.Controllers
             await BuildEmailAsync("驗證帳號", body, regInfo.MemberEmail);
         }
 
-        public static async Task BuildEmailAsync(string subjectText, string bodyText, string sendTo)
+        public async Task BuildEmailAsync(string subjectText, string bodyText, string sendTo)
         {
             string GoogleID = "chillax20230808@gmail.com"; //Google 發信帳號
             string TempPwd = "gzwmfcbpepypgikf"; //應用程式密碼
@@ -172,7 +147,7 @@ namespace ChilLaxFrontEnd.Controllers
             int SmtpPort = 587;
             using (SmtpClient client = new SmtpClient(SmtpServer, SmtpPort))//使用郵件伺服器來發送這個郵件
             {
-                client.EnableSsl = true;
+                client.EnableSsl = true; //啟用安全連線（SSL/TLS）
                 client.Credentials = new NetworkCredential(GoogleID, TempPwd);//寄信帳密 
                 try
                 {
@@ -184,32 +159,6 @@ namespace ChilLaxFrontEnd.Controllers
                 }
             }
         }
-
-
-        [HttpPost("Verify/{regID}")]
-        public async Task<IActionResult> Verify(int regID)
-        {
-            var user = db.Member.FirstOrDefault(x => x.MemberId == regID);
-            if (user != null)
-            {
-                user.IsValid = true;
-                await db.SaveChangesAsync();
-
-                var response = new 
-                { 
-                    message = "驗證成功，請登入！" ,
-                    closePageUrl = "https://localhost:7189/Login/verifyEmail"
-                };
-                return Ok(response);
-                //return RedirectToAction("Login", "Login");
-            }
-
-            var errorResponse = new { message = "驗證失敗！" };
-            return NotFound(errorResponse);
-        }
-
-
-
 
 
         // GET: api/Members
