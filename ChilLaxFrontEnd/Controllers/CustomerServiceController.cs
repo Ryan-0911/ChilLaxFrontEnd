@@ -6,7 +6,7 @@ namespace ChilLaxFrontEnd.Controllers
     public class CustomerServiceController : Controller
     {
         ChilLaxContext db = new ChilLaxContext();
-        public IActionResult Create()
+        public IActionResult Index()
         {
             var data = db.CustomerServices.ToList();
             return View(data);
