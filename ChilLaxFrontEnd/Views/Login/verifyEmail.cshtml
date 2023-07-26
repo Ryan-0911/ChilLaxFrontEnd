@@ -171,7 +171,7 @@
                                 @Html.TextBox("MemberEmail", Model.MemberEmail, new { type = "email",name="MemberEmail", @class = "user_input", id = "email", @readonly = "readonly" })
                             </div>
                         </div>
-                            <button class="resendBtn" id="resendButton" onclick="startCountdownAndSaveForm(60)">重發發送驗證信</button>
+                    <button class="resendBtn" id="resendButton" onclick="startCountdown(60)">重發發送驗證信</button>
                     </div>
                 </div>
             </div>
@@ -179,73 +179,58 @@
     </article>
 
 
+<script>
+    function startCountdown(seconds) {
+        SaveForm();
+        let button = document.getElementById("resendButton");
+        button.disabled = true;
+        button.classList.add("clicked");
+        button.innerHTML = seconds + ' 秒後可再次發送';
 
-    <script>
+        function countdown() {
+            seconds--;
 
-        function startCountdownAndSaveForm(seconds) {
-            SaveForm();
-            startCountdown(seconds, function () {
-                console.log('startCountdown called');
-                SaveForm();
-            });
-        }
-
-        function startCountdown(seconds, callback) {
-            let button = document.getElementById("resendButton");
-            button.disabled = true;
-            button.classList.add("clicked");
-            button.innerHTML = seconds + ' 秒後可再次發送';
-
-            function countdown() {
-                seconds--;
-
-                if (seconds <= 0) {
-                    resetButton();
-                    callback(); // 在倒數計時結束後，調用回調函數
-                } else {
-                    button.innerHTML = seconds + ' 秒後可再次發送';
-                    setTimeout(countdown, 1000);
-                }
+            if (seconds <= 0) {
+                resetButton();
+                SaveForm(); // 在倒數計時結束後，調用 SaveForm 函數
+            } else {
+                button.innerHTML = seconds + ' 秒後可再次發送';
+                setTimeout(countdown, 1000);
             }
-
-            setTimeout(countdown, 1000);
         }
 
-        function resetButton() {
-            let button = document.getElementById("resendButton");
-            button.innerHTML = '重發送驗證信';
-            button.disabled = false;
-            button.classList.remove("clicked");
-        }
+        setTimeout(countdown, 1000);
+    }
 
-        let baseAddress = "https://localhost:5000";
+    function resetButton() {
+        let button = document.getElementById("resendButton");
+        button.innerHTML = '重發送驗證信';
+        button.disabled = false;
+        button.classList.remove("clicked");
+    }
 
-        function SaveForm() {
-            console.log('SaveForm');
+    function SaveForm() {
+        console.log('SaveForm');
 
-            let memberId = document.getElementById("memberId").value;
-            let memberEmail = document.getElementById("email").value;
+        let memberId = document.getElementById("memberId").value;
+        let memberEmail = document.getElementById("email").value;
 
-            const memberData = {
-                memberId: memberId,
-                memberEmail: memberEmail
-            };
-            console.log(JSON.stringify(memberData));
+        const memberData = {
+            memberId: memberId,
+            memberEmail: memberEmail
+        };
+        console.log(JSON.stringify(memberData));
 
-            $.ajax({
-                type: "PUT",
-                url: `/api/Members/${memberId}`,
-                data: JSON.stringify(memberData),
-                contentType: "application/json"
-            }).done(data => {
-                alert(data);
-            }).fail(err => {
-                alert("ajax呼叫失敗：" + err.responseText);
-                console.log(err.responseText);
-            });
-        }
-
-
-
-    
-    </script>
+        $.ajax({
+            type: "PUT",
+            url: `/api/Members/${memberId}`,
+            data: JSON.stringify(memberData),
+            contentType: "application/json"
+        }).done(data => {
+            alert(data);
+        }).fail(err => {
+            alert("ajax呼叫失敗：" + err.responseText);
+            console.log(err.responseText);
+        });
+    }
+</script>

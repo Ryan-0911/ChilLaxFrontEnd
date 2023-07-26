@@ -41,7 +41,7 @@ namespace ChilLaxFrontEnd.Controllers
         // PUT: api/Members/5
         [HttpPut("{id}")]
         public async Task<string> PutMember(int id, VerifyEmailViewModel VE)
-        {   //public async Task<string> SaveData([FromBody] VerifyEmailViewModel VE)
+        {   
             if (id != VE.MemberId)
             {
                 return "驗證失敗";
@@ -50,14 +50,9 @@ namespace ChilLaxFrontEnd.Controllers
             Member Mem = await _context.Member.FindAsync(VE.MemberId);
             if (Mem != null)
             {
-                Mem.MemberId = VE.MemberId;
-                Mem.MemberEmail = VE.MemberEmail;
-                Mem.IsValid = false;
-
-                _context.Entry(Mem).State = EntityState.Modified;
+                
                 try
                 {
-                    await _context.SaveChangesAsync();
                     await BuildEmailTemplate(VE.MemberId);
                     
                     return "已發送驗證信，請前往Email查看!";
@@ -98,7 +93,7 @@ namespace ChilLaxFrontEnd.Controllers
             //                <h1>歡迎您，@ViewBag.UserName</h1>
             //                <p>感謝您註冊成為我們的會員。</p>
             //                <p>請點擊以下連結來驗證您的帳號：</p>
-            //                <a href=""https://localhost:7189/api/Members/Verify/{regID}"">點擊這裡</a>
+            //                <a href=""https://localhost:5000/api/Members/Verify/{regID}"">點擊這裡</a>
             //            </body>
             //            </html>
             //        ";

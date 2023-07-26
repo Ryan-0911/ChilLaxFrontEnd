@@ -79,7 +79,7 @@ namespace ChilLaxFrontEnd.Controllers
             MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
 t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
-            bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
+            bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(vm.txtRegisterAccount));
             
             string password = vm.txtRegisterPassword;  
             string salt = BCrypt.Net.BCrypt.GenerateSalt();// 產生隨機的鹽值
@@ -118,7 +118,8 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 MemberAddress = vm.memberAddress,
                 MemberPoint = 0,
                 MemberJoinTime = DateTime.Now,
-                Available = true
+                Available = true,
+                IsValid = false
             };
 
 
