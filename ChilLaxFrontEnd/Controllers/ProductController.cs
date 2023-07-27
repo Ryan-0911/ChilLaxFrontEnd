@@ -1,4 +1,4 @@
-using ChilLaxFrontEnd.Models;
+﻿using ChilLaxFrontEnd.Models;
 using ChilLaxFrontEnd.Models.DTO;
 using ChilLaxFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +28,7 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         [HttpGet]
-        public IActionResult List(CKeywordViewModel ckvm, int? nowpage, int? _pageCount, string? productcategory)
+        public IActionResult List(CKeywordViewModel ckvm, CAddToCartViewModel cvm, int? nowpage, int? _pageCount, string? productcategory)
         {
             //取得會員ID
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
@@ -56,6 +56,7 @@ namespace ChilLaxFrontEnd.Controllers
                 datas = db.Product.Where(p => p.ProductName.Contains(keyword));
             }
 
+            //return View(datas);
 
 
             // 頁數
@@ -106,7 +107,21 @@ namespace ChilLaxFrontEnd.Controllers
 
             //return View(productsPagingDTO);
             //return View(new List<ProductsPagingDTO> { productsPagingDTO });
-            return PartialView("_ProductListPartialView", new List<ProductsPagingDTO> { productsPagingDTO });
+
+
+            Cart cart = new Cart
+            {
+                MemberId = member.MemberId,
+                ProductId = cvm.ProductId,
+                CartProductQuantity = cvm.txtCount
+            };
+
+
+            db.Cart.Add(cart);
+            db.SaveChanges();
+
+
+            return View(productsPagingDTO);
 
 
         }
@@ -143,7 +158,7 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToCart(CAddToCartViewModel cvm, int ProductId, int MemberId )
+        public IActionResult AddToCart(CAddToCartViewModel cvm, int ProductId, int MemberId, int CartProductQuantity)
         {
             ChilLaxContext db = new ChilLaxContext();
 
