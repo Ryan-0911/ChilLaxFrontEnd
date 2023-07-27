@@ -46,12 +46,19 @@
         color: #666
     }
 
+    .cart-style{
+        margin: 0 auto;
+        width: 60%;
+        min-width: 800px;
+    }
+
 </style>
 
 
-<div>
+<div class="cart-style">
     <h4>購物車</h4>
     <hr />
+@*    <div class="alert alert-success" role="alert">刪除成功</div>*@
     <table class="table table-dark table-hover">
         <thead>
             <tr>
@@ -106,10 +113,7 @@
     </table>
 <button onclick="Checkout()">結帳</button>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts{
 
@@ -123,7 +127,7 @@
             type:"GET",
                 url: `${baseAddress}/api/CartsAPI/Delete/${productId}`
         }).done(data =>{
-            alert("刪除成功");
+            window.location.reload();
         }).fail(err => {
             alert(err.statusText);
         });
