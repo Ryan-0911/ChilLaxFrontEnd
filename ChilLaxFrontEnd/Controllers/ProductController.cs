@@ -40,7 +40,6 @@ namespace ChilLaxFrontEnd.Controllers
                 .Select(group => group.Key)
                 .ToList();
 
-
             if (string.IsNullOrEmpty(keyword))
             {
                 datas = from p in db.Product
@@ -51,10 +50,10 @@ namespace ChilLaxFrontEnd.Controllers
                 datas = db.Product.Where(p => p.ProductName.Contains(keyword));
             }
 
-            //return View(datas);
+
 
             // 頁數
-            if(nowpage == null)
+            if (nowpage == null)
             {
                 nowpage = 1;
             }
@@ -79,6 +78,7 @@ namespace ChilLaxFrontEnd.Controllers
                 productsPagingDTO.nowpage = nowpage;    
                 return View(new List<ProductsPagingDTO> { productsPagingDTO });
             }
+
             var prod = db.Product.Where(p => p.ProductCategory == productcategory )
                                 .OrderByDescending(p => p.ProductCategory)
                                 .Skip(8*((int)nowpage)-1)
@@ -89,40 +89,24 @@ namespace ChilLaxFrontEnd.Controllers
             productsPagingDTO.pageCount = pageCount;
             productsPagingDTO.nowpage = nowpage;
 
-            //return View(productsPagingDTO);
-            return View(new List<ProductsPagingDTO> { productsPagingDTO });
-        }
-
-
-
-        [HttpGet]
-        public async Task<ActionResult<ProductsPagingDTO>> GetProductsByCategory(string category, int page = 1)
-        {
-            var productsInCategory = _context.Product.Where(p => p.ProductCategory == category).ToList();
-            //return Json(productsInCategory);
-
-            
-
-            int PageSize = 8;
-
-            // 計算商品總數量和總頁數
-            int totalProducts = productsInCategory.Count();
-            int totalPages = (int)Math.Ceiling((double)totalProducts / PageSize);
-
-            // 取得當前頁面的商品資料
-            var currentPageProducts = productsInCategory
-                .Skip((page - 1) * PageSize)
-                .Take(PageSize)
+            // 取得產品的分類群組資料
+            var productCategories = db.Product
+                .GroupBy(p => p.ProductCategory)
+                .Select(group => group.Key)
                 .ToList();
 
-            // 回傳商品資料和分頁相關資訊
-            ProductsPagingDTO prodDTO = new ProductsPagingDTO();
-            prodDTO.TotalPages = totalPages;
-            prodDTO.ProductsResult = currentPageProducts;
+            // 傳遞產品分類群組資料到View
+            productsPagingDTO.ProdCategory = productCategories;
 
-            return prodDTO;
+            //return View(productsPagingDTO);
+            //return View(new List<ProductsPagingDTO> { productsPagingDTO });
+            return PartialView("_ProductListPartialView", new List<ProductsPagingDTO> { productsPagingDTO });
+
 
         }
+
+
+
 
 
         public IActionResult AddToCart(int? id)
@@ -153,42 +137,56 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToCart(CAddToCartViewModel cvm)
+        public IActionResult AddToCart(CAddToCartViewModel cvm, int ProductId, int MemberId )
         {
             ChilLaxContext db = new ChilLaxContext();
-            Product prod = db.Product.FirstOrDefault(t => t.ProductId == cvm.txtFId);
-            //if (prod != null)
-            //{
-            //    string json = "";
-            //    List<CShoppingCartItem> cart = null;
-            //    if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
-            //    {
-            //        json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
-            //        cart = JsonSerializer.Deserialize<List<CShoppingCartItem>>(json);
-            //    }
-            //    else
-            //        cart = new List<CShoppingCartItem>();
-            //    CShoppingCartItem item = new CShoppingCartItem();
-            //    item.price = (decimal)prod.ProductPrice;
-            //    item.productId = cvm.txtFId;
-            //    item.count = cvm.txtCount;
-            //    item.product = prod;
-            //    cart.Add(item);
-            //    json = JsonSerializer.Serialize(cart);
-            //    HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST, json);
 
 
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER); // 抓會員id登入的session
+            Console.WriteLine(json);
+            Member member = JsonSerializer.Deserialize<Member>(json);
 
-            //}
-            return RedirectToAction("List");
+            Cart cart = new Cart
+            {
+                MemberId = member.MemberId,
+                ProductId = cvm.ProductId,
+                CartProductQuantity = cvm.txtCount
+            };
 
-            //string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
-            //Member member = JsonSerializer.Deserialize<Member>(json);
-            //member.MemberId 
 
-            Cart cart = new Cart();
+            db.Cart.Add(cart);
+            db.SaveChanges();
+
+            return View();
+            //return RedirectToAction("AddToCart");
+
 
         }
+
+        //[HttpPost]
+        //public IActionResult ProductToCart(CAddToCartViewModel cvm)
+        //{
+        //    ChilLaxContext db = new ChilLaxContext();
+
+
+        //    string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER); // 抓會員id登入的session
+        //    Console.WriteLine(json);
+        //    Member member = JsonSerializer.Deserialize<Member>(json);
+
+        //    Cart cart = new Cart();
+
+        //    cart.MemberId = member.MemberId;
+        //    cart.ProductId = cvm.ProductId;
+        //    cart.CartProductQuantity = cvm.txtCount;
+
+        //    _context.Cart.Add(cart);
+        //    _context.SaveChanges();
+        //    //  await _context.SaveChangesAsync();   將暫存的異動儲存到資料庫，確保資料庫中的資料與內存中的資料保持同步。
+
+
+        //    return RedirectToAction("List");
+
+        //}
 
         // 檢視購物車
         public IActionResult CartView()

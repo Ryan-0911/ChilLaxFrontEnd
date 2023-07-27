@@ -1,47 +1,47 @@
 ﻿@{
     Layout = null;
 }
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "poppins",sans-serif;
-        }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "poppins",sans-serif;
+    }
 
-        .background {
-            /* 最下層背景 */
-            background: url('@Url.Content("~/images/login.jpg")');
-            /* background-color: #98979783; */
-            background-position: center;
-            background-size: cover;
-            height: 100vh;
-            width: 100%;
-            /* margin-top:50px; */
-            filter: blur(2px);
-        }
+    .background {
+        /* 最下層背景 */
+        background: url('@Url.Content("~/images/login.jpg")');
+        /* background-color: #98979783; */
+        background-position: center;
+        background-size: cover;
+        height: 100vh;
+        width: 100%;
+        /* margin-top:50px; */
+        filter: blur(2px);
+    }
 
-        .main {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%,-50%);
-            width: 75%;
-            height: 700px;
-            /* margin-top: 50px; */
+    .main {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        width: 75%;
+        height: 700px;
+        /* margin-top: 50px; */
 
-            background: url('@Url.Content("~/images/login.jpg")');
-            /* background-image: linear-gradient(to right bottom, rgb(40, 42, 55) 0%, rgb(40, 42, 55) 20%, rgba(40, 42, 55, 0.9) 60%, rgba(17, 22, 50, 0.4) 100%),url(../images/login.jpg); */
-            background-position: center;
-            background-size: cover;
-            border-radius: 20px;
-            overflow: hidden;
-        }
+        background: url('@Url.Content("~/images/login.jpg")');
+        /* background-image: linear-gradient(to right bottom, rgb(40, 42, 55) 0%, rgb(40, 42, 55) 20%, rgba(40, 42, 55, 0.9) 60%, rgba(17, 22, 50, 0.4) 100%),url(../images/login.jpg); */
+        background-position: center;
+        background-size: cover;
+        border-radius: 20px;
+        overflow: hidden;
+    }
 
 
-            /*中間白色透明背景*/
-        .main .register-section{
+        /*中間白色透明背景*/
+        .main .register-section {
             position: absolute;
             left: 50%;
             transform: translate(-50%,0);
@@ -54,161 +54,160 @@
             /* backdrop-filter: blur(4px); */
         }
 
-        .register-section .form-box{
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
+    .register-section .form-box {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* 登入註冊版面上下切換*/
+
+    .register-section .register {
+        margin-bottom: 50px;
+        transform: translateY(100%);
+        transition: transform .6s ease;
+        transition-delay: 0s;
+    }
+
+
+    .register-section.active .register { /*按註冊連結(在登入畫面)，將註冊section往上*/
+        transform: translateY(0px);
+        transition-delay: .7s;
+    }
+
+    .register-section .register {
+        margin-bottom: 50px;
+        transform: translateY(0px);
+        transition: transform .6s ease;
+        transition-delay: 0.7s;
+    }
+
+    .login-section.active .login { /*按登入連結(在註冊畫面)，將登入section往上*/
+        transform: translateY(100%);
+        transition-delay: 0s;
+    }
+
+
+
+    .register h2 {
+        text-align: center;
+        font-size: 30px;
+        margin: 20px 0 5px 0;
+    }
+
+
+    .register h5 {
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .form-box .input-box {
+        width: 400px;
+        height: 50px;
+        border-bottom: 2px solid#fff;
+        margin: 26px 0;
+        position: relative;
+    }
+
+    .input-box input {
+        height: 100%;
+        color: #fff;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 18px;
+        position: absolute;
+        top: 50%;
+        /* left: 0; */
+        transform: translateY(-40%);
+        width: 350px;
+        padding-left: 80px;
+        text-transform: none;
+    }
+
+    .input-chkpassword input {
+        padding-left: 80px;
+    }
+
+
+    .input-box label {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-30%);
+        font-size: 16px;
+        pointer-events: none;
+        transition: .5s ease;
+    }
+
+    .input-box .icon {
+        position: absolute;
+        top: 13px;
+        right: 0;
+        font-size: 19px;
+    }
+    /*文字向上漂浮*/
+    .input-box input:focus ~ label {
+        top: -5px;
+    }
+
+    .register .btn {
+        /* background: #fff; */
+        width: 100%;
+        height: 45px;
+        outline: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background: #4F9D9D;
+        font-size: 16px;
+        color: #fff;
+        box-shadow: rgba(0,0,0,0.4);
+    }
+
+
+        .register .btn:hover {
+            background-color: #D1E9E9;
+            color: black;
         }
 
-        /* 登入註冊版面上下切換*/
-                
-        .register-section .register {
-            margin-bottom: 50px;
-            transform: translateY(100%);
-            transition: transform .6s ease;
-            transition-delay: 0s;
+
+    .create-account {
+        margin-top: 50px;
+        background-color: rgba(248, 248, 248, 0.1);
+    }
+
+        .create-account p {
+            font-size: 14.5px;
+            text-align: center;
+            line-height: 2.5;
         }
 
-                
-        .register-section.active .register { /*按註冊連結(在登入畫面)，將註冊section往上*/
-            transform: translateY(0px);
-            transition-delay: .7s;
+        .create-account a {
+            color: #fff;
+            font-weight: bolder;
+            text-decoration: none;
         }
-
-        .register-section .register {
-            margin-bottom: 50px;
-            transform: translateY(0px);
-            transition: transform .6s ease;
-            transition-delay: 0.7s;
-        }
-        
-        .login-section.active .login { /*按登入連結(在註冊畫面)，將登入section往上*/
-            transform: translateY(100%);
-            transition-delay: 0s;
-        }
-
-
-
-            .register h2{
-                text-align: center;
-                font-size: 30px;
-                margin: 20px 0 5px 0;
-            }
-
-
-            .register h5{
-                text-align: center;
-                font-size: 16px;
-            }
-           
-            .form-box .input-box{
-                width: 400px;
-                height: 50px;
-                border-bottom: 2px solid#fff;
-                margin: 26px 0;
-                position: relative;
-            }
-
-            .input-box input{
-                height: 100%;
-                color: #fff;
-                background: transparent;
-                border: none;
-                outline: none;
-                font-size: 18px;
-                position: absolute;
-                top: 50%;
-                /* left: 0; */
-                transform: translateY(-40%);
-                width: 350px;
-                padding-left: 80px;
-                text-transform: none;
-            }
-
-            .input-chkpassword input {
-                padding-left: 80px;
-            }
-           
-
-            .input-box label{
-                position: absolute;
-                top: 50%;
-                left: 0;
-                transform: translateY(-30%);
-                font-size: 16px;
-                pointer-events: none;
-                transition: .5s ease;
-            }
-
-            .input-box .icon{
-                position: absolute;
-                top: 13px;
-                right: 0;
-                font-size: 19px;
-            }
-            /*文字向上漂浮*/
-            .input-box input:focus ~ label
-            {
-                top: -5px;
-            }
-           
-            .register .btn {
-                /* background: #fff; */
-                width: 100%;
-                height: 45px;
-                outline: none;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                background: #4F9D9D;
-                font-size: 16px;
-                color: #fff;
-                box-shadow: rgba(0,0,0,0.4);
-            }
-
- 
-            .register .btn:hover{
-                background-color: #D1E9E9;
-                color: black;
-            }
-
-
-            .create-account {
-                margin-top: 50px;
-                background-color: rgba(248, 248, 248, 0.1);
-            }
-
-            .create-account p {
-                font-size: 14.5px;
-                text-align: center;
-                line-height:2.5;
-            }
-
-            .create-account a {
-                color: #fff;
-                font-weight: bolder;
-                text-decoration: none;
-            }
 
             .create-account a:hover {
                 text-decoration: underline;
             }
 
-            .other-login {
-                transform: translate(0, -60%);
-            }
+    .other-login {
+        transform: translate(0, -60%);
+    }
 
-            .other-login .divider {
-                width: 100%;
-                margin: 80px 0 30px 0;
-                text-align: center;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
+        .other-login .divider {
+            width: 100%;
+            margin: 80px 0 30px 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
             .other-login .divider .line {
                 display: inline-block;
@@ -226,15 +225,15 @@
                 display: inline-block;
                 width: 100px;
                 color: #fff;
-                font-size:15px;
+                font-size: 15px;
             }
 
-            .other-login .other-login-wrapper {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
+        .other-login .other-login-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
             .other-login .other-login-wrapper .other-login-item {
                 border: 1px solid #fff;
@@ -247,26 +246,26 @@
                 margin: 0 10px;
             }
 
-            .other-login .other-login-wrapper .other-login-item:hover {
-                border: 1px solid #4F9D9D;
-                background-color: #E0E0E0;
-            }
+                .other-login .other-login-wrapper .other-login-item:hover {
+                    border: 1px solid #4F9D9D;
+                    background-color: #E0E0E0;
+                }
 
-            .other-login .other-login-wrapper .other-login-item img {
-                width: 30px;
-                height: 30px;
-                vertical-align: middle;
-            }
+                .other-login .other-login-wrapper .other-login-item img {
+                    width: 30px;
+                    height: 30px;
+                    vertical-align: middle;
+                }
 
-            .pwdVisibility {
-                color: white;
-                font-size: 16px;
-                background-color: transparent;
-                border: none;
-                margin-right: 12px;
-            }
+    .pwdVisibility {
+        color: white;
+        font-size: 16px;
+        background-color: transparent;
+        border: none;
+        margin-right: 12px;
+    }
 
-    </style>
+</style>
 
 @{
     ViewData["Title"] = "Register";
@@ -276,30 +275,30 @@
 <div id="app">
     <div class="background"></div>
     <article>
-    <div class="main container">
-        <div class="row register-section">
-            <div class="form-box register col-md-12 ">
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-                    <h2>Sign Up</h2>
-                    <h5>會員註冊</h5>
-                    <div class="create-account">
-                        <p>
-                            已經有帳號?
-                            @Html.ActionLink("進入會員登入", "Login",null,new {  @class = "login-link"  })                      
-                        </p>
-                    </div>
-                    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+        <div class="main container">
+            <div class="row register-section">
+                <div class="form-box register col-md-12 ">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        <h2>Sign Up</h2>
+                        <h5>會員註冊</h5>
+                        <div class="create-account">
+                            <p>
+                                已經有帳號?
+                                @Html.ActionLink("進入會員登入", "Login",null,new {  @class = "login-link"  })
+                            </p>
+                        </div>
+                        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
 
-                    <div class="input-box">
+                        <div class="input-box">
                             <span class="icon"><i class="bi bi-person-circle"></i></span>
                             @Html.TextBox("txtRegisterAccount",null,new { @class = "form-control",autocomplete = "off",required = "required"})
                             @Html.ValidationMessageFor(model => model.txtRegisterAccount)
-                        @*<input type="text" required />*@
-                        <label>帳號</label>
-                    </div>
-                    <div class="input-box">
+                            @*<input type="text" required />*@
+                            <label>帳號</label>
+                        </div>
+                        <div class="input-box">
                             <span class="icon">
                                 <button type="button" class="pwdVisibility" id="togglePassword" onclick="togglePasswordVisibility()">
                                     <i class="bi bi-eye"></i>
@@ -307,11 +306,11 @@
                                 <i class="bi bi-lock-fill"></i>
                             </span>
                             @Html.TextBox("txtRegisterPassword", null, new { type = "password",@class = "form-control",id = "passwordInput",autocomplete = "off",required = "required" })
-                        @Html.ValidationMessageFor(model => model.txtRegisterPassword)
-                        @*<input type="password" required />*@
-                        <label>密碼</label>
-                    </div>
-                    <div class="input-box input-chkpassword">
+                            @Html.ValidationMessageFor(model => model.txtRegisterPassword)
+                            @*<input type="password" required />*@
+                            <label>密碼</label>
+                        </div>
+                        <div class="input-box input-chkpassword">
                             <span class="icon">
                                 <button type="button" class="pwdVisibility" id="toggleChkPassword" onclick="toggleChkPasswordVisibility()">
                                     <i class="bi bi-eye"></i>
@@ -319,18 +318,18 @@
                                 <i class="bi bi-lock-fill"></i>
                             </span>
                             @Html.TextBox("txtRegisterPasswordChk", null, new { type = "password",@class = "form-control chkpassword",id = "chkpasswordInput",autocomplete = "off",required = "required" })
-                        @Html.ValidationMessageFor(model => model.txtRegisterPasswordChk)
-                        @*<input type="password" required />*@
-                        <label>確認密碼</label>
-                    </div>
-                    <button class="btn">下一步</button>
-                    <div class="other-login">
-                        <div class="divider">
-                            <span class="line"></span>
-                            <span class="divider-text">其他註冊方式</span>
-                            <span class="line"></span>
+                            @Html.ValidationMessageFor(model => model.txtRegisterPasswordChk)
+                            @*<input type="password" required />*@
+                            <label>確認密碼</label>
                         </div>
-                        <div class="other-login-wrapper">
+                        <button class="btn">下一步</button>
+                        <div class="other-login">
+                            <div class="divider">
+                                <span class="line"></span>
+                                <span class="divider-text">其他註冊方式</span>
+                                <span class="line"></span>
+                            </div>
+                            <div class="other-login-wrapper">
                                 <script src="https://accounts.google.com/gsi/client" async defer></script>
                                 <div id="g_id_onload"
                                      data-client_id="24117042909-f73r9qksf4se9ka68pgdviie2ucsl4h4.apps.googleusercontent.com"
@@ -345,44 +344,44 @@
                                      data-shape="rectangular"
                                      data-logo_alignment="left">
                                 </div>
+                            </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         </div>
-    </div>
-</article>
+    </article>
 </div>
-<script src="~/js/login.js"></script>    
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script>
-        function togglePasswordVisibility() {
-            let passwordInput = document.getElementById("passwordInput");
-            let toggleButton = document.getElementById("togglePassword");
-            
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
-            } else {
-                passwordInput.type = "password";
-                toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
-            }
+<script src="~/js/login.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+    function togglePasswordVisibility() {
+        let passwordInput = document.getElementById("passwordInput");
+        let toggleButton = document.getElementById("togglePassword");
 
-            
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+        } else {
+            passwordInput.type = "password";
+            toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
         }
 
-        function toggleChkPasswordVisibility() {
-            let chkpasswordInput = document.getElementById("chkpasswordInput");
-            let toggleChkButton = document.getElementById("toggleChkPassword");
 
-            if (chkpasswordInput.type === "password") {
-                chkpasswordInput.type = "text";
-                toggleChkButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
-            } else {
-                chkpasswordInput.type = "password";
-                toggleChkButton.innerHTML = '<i class="bi bi-eye"></i>';
+    }
 
-            }
+    function toggleChkPasswordVisibility() {
+        let chkpasswordInput = document.getElementById("chkpasswordInput");
+        let toggleChkButton = document.getElementById("toggleChkPassword");
+
+        if (chkpasswordInput.type === "password") {
+            chkpasswordInput.type = "text";
+            toggleChkButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+        } else {
+            chkpasswordInput.type = "password";
+            toggleChkButton.innerHTML = '<i class="bi bi-eye"></i>';
+
         }
+    }
 
-    </script>
+</script>

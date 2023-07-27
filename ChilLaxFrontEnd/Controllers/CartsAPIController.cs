@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ChilLaxFrontEnd.Models;
 using System.Text.Json;
+using ChilLaxFrontEnd.ViewModels;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -50,23 +51,65 @@ namespace ChilLaxFrontEnd.Controllers
             return "刪除成功";
         }
 
+
+        // 郁霖原本
         // GET: api/CartsAPI/Create/4
-        [HttpGet("Create/{id}")]
-        public async Task<string> Create(int id)
+        //    [HttpGet("Create/{id}")]
+        //    public async Task<string> Create(int id)
+        //    {
+        //        if (_context.Cart == null)
+        //            return "新增失敗";
+
+        //        string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+        //        Console.WriteLine(json);
+        //        Member member = JsonSerializer.Deserialize<Member>(json);
+        //        int Mid = member.MemberId;
+        //        int Cartqty = 1;
+        //        List<Cart> thisCart = _context.Cart.Where(c => c.MemberId == Mid).ToList();
+
+        //        for (int i = 0; i < thisCart.Count; i++)
+        //        {
+        //            if (thisCart[i].ProductId == id) 
+        //            {
+        //                thisCart[i].CartProductQuantity += Cartqty;
+        //                _context.Cart.Update(thisCart[i]);
+        //                _context.SaveChanges();
+        //                return "已有此商品，數量更新成功";
+        //            }
+        //        }
+
+        //        Cart cart = new Cart();
+        //        cart.MemberId = Mid;
+        //        cart.ProductId = id;
+        //        cart.CartProductQuantity = Cartqty;
+
+        //        _context.Cart.Add(cart);
+        //        await _context.SaveChangesAsync();
+
+        //        return "新增成功";
+        //    }
+        //}
+
+
+        // 琬亭修改
+        [HttpPost("Create")]
+        public async Task<string> Create(CAddToCartViewModel cvm)
         {
+
+
             if (_context.Cart == null)
                 return "新增失敗";
-            
+
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
             Console.WriteLine(json);
             Member member = JsonSerializer.Deserialize<Member>(json);
             int Mid = member.MemberId;
-            int Cartqty = 1;
+            int Cartqty = cvm.txtCount;
             List<Cart> thisCart = _context.Cart.Where(c => c.MemberId == Mid).ToList();
 
             for (int i = 0; i < thisCart.Count; i++)
             {
-                if (thisCart[i].ProductId == id) 
+                if (thisCart[i].ProductId == cvm.ProductId)
                 {
                     thisCart[i].CartProductQuantity += Cartqty;
                     _context.Cart.Update(thisCart[i]);
@@ -77,7 +120,7 @@ namespace ChilLaxFrontEnd.Controllers
 
             Cart cart = new Cart();
             cart.MemberId = Mid;
-            cart.ProductId = id;
+            cart.ProductId = cvm.ProductId;
             cart.CartProductQuantity = Cartqty;
 
             _context.Cart.Add(cart);
@@ -86,6 +129,16 @@ namespace ChilLaxFrontEnd.Controllers
             return "新增成功";
         }
     }
+
+
+
+
+
+
+
+
+
+
 
     //    // GET: api/CartsAPI
     //    [HttpGet]

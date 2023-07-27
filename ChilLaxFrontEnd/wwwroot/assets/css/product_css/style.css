@@ -1431,10 +1431,11 @@ textarea.input {
   background-color: #FFF;
 }
 
-#product-imgs .product-preview {
-  margin: 0px 5px;
-  border: 1px solid #E4E7ED;
-}
+/*#product-imgs .product-preview {
+    margin: 0px 5px;
+    border: 2px solid #000;
+    padding: 10px;
+}*/
 
 #product-imgs .product-preview.slick-current {
   border-color: #D10024;
@@ -1465,8 +1466,19 @@ textarea.input {
 }
 
 .product-preview img {
-  width: 100%;
+    width: 100%; /* 讓圖片寬度占滿父div的寬度 */
+    height: auto; /* 讓圖片高度自動根據比例調整 */
 }
+
+.product-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 500px; /* 設定父div的高度 */
+    width: 80%; /* 設定父div的寬度，減少為80% */ 
+}
+
+
 
 /*----------------------------*\
 	Product details
