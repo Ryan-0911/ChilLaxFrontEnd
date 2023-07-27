@@ -1,4 +1,4 @@
-﻿using ChilLaxFrontEnd.Models;
+using ChilLaxFrontEnd.Models;
 using ChilLaxFrontEnd.Models.DTO;
 using ChilLaxFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +30,12 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpGet]
         public IActionResult List(CKeywordViewModel ckvm, int? nowpage, int? _pageCount, string? productcategory)
         {
+            //取得會員ID
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            Console.WriteLine(json);
+            Member member = JsonSerializer.Deserialize<Member>(json);
+            int id = member.MemberId;
+
             // 關鍵字搜尋
             string keyword = ckvm.txtKeyword;
             IEnumerable<Product> datas = null;

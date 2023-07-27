@@ -47,13 +47,7 @@
         }
     </style>
 
-        .conn2, .conn {
-            color:#FCFCFC;
-            background-color: #FCFCFC;
-        }
-
         
-    </style>
 }
 <div class="col-md fortuneTeller">
     <img src="~/assets/images/占卜師.png" />
@@ -145,7 +139,7 @@
             let message = $('#message').val();
             let sendToID = $('#sendToID').val();
             connection.invoke("SendMessage", selfID, message, sendToID).catch(function (err) {
-                alert('傳送錯誤: ' + err.toString());
+                
             });
         });
     </script>
