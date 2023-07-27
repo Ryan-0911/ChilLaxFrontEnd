@@ -71,7 +71,7 @@
                     <li class="cart">
                         <a asp-action="Details" asp-controller="Carts">
                             <img src="~/assets/images/icons8-cart.gif" />
-                            <i>購物車（@Model.FirstOrDefault().carts.Count()）</i>
+                            <i>購物車（0）</i>
                         </a>
                         <div class="cart-list">
                             購物車內還沒有東西，趕緊點選商品加入購物車吧！
@@ -354,23 +354,23 @@
             });
         });
 
-        // 顯示特定類別的商品
-        //function showCategoryProducts(category) {
-        //    $.ajax({
-        //        type: "GET",
-        //        url: "/Product/List",
-        //        data: { productcategory: category },
-        //        dataType: "html",
-        //        success: function (data) {
-        //            // 將取得的產品資料顯示在 productListContainer 元素中
-        //            $("#productListContainer").html(data);
-        //        },
-        //        error: function () {
-        //            alert("無法取得產品資料。");
-        //            console.log(category);
-        //        }
-        //    });
-        //}
+                // 顯示特定類別的商品
+                //function showCategoryProducts(category) {
+                //    $.ajax({
+                //        type: "GET",
+                //        url: "/Product/List",
+                //        data: { productcategory: category },
+                //        dataType: "html",
+                //        success: function (data) {
+                //            // 將取得的產品資料顯示在 productListContainer 元素中
+                //            $("#productListContainer").html(data);
+                //        },
+                //        error: function () {
+                //            alert("無法取得產品資料。");
+                //            console.log(category);
+                //        }
+                //    });
+                //}
 
 
     </script>
