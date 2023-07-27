@@ -1,65 +1,122 @@
-﻿@model IEnumerable<ChilLaxFrontEnd.Models.CustomerService>
+﻿@{
+    ViewData["Title"] = "會員意見反饋";
+}
+
+
+
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "會員意見反饋";
 }
+<div id="app" style="margin-top: 50px">
+    <div class="container">
+        <div class="row">
+            
 
-<h2>Index</h2>
+            <table class="table table-hover table-border" style="margin-top: 50px">
+                <thead>
+                    <tr>
+                        <th>回饋編號 <i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('CustomerServiceId')"></i></th>
+                        <th>會員編號<i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('MemberId')"></i></th>
+                        <th>回饋訊息<i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('Message')"></i></th>
+                        <th>回饋時間 <i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('MessageDatetime')"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="{ CustomerServiceId, MemberId, Message, MessageDatetime } in pointRecords" :key="CustomerServiceId">
+                        <td>{{ CustomerServiceId }}</td>
+                        <td>{{ MemberId }}</td>
+                        <td>{{ Message }}</td>
+                        <td>{{ MessageDatetime }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            @*            <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+            <li class="page-item" v-for="value in totalPages"><a class="page-link" href="#" @@click="pagingHandler(value)">{{ value }}</a></li>
+            </ul>
+            </nav>*@
+        </div>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerServiceId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MemberId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Message)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reply)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MessageDatetime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReplyDatetime)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerServiceId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MemberId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Message)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reply)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MessageDatetime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReplyDatetime)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+    @section Scripts{
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script>
+            const { createApp, ref, watch } = Vue
+            createApp({
+                setup() {
+                    const pointRecords = ref([])       // 顾客意见回馈数据
+                    const keyword = ref("")           // 搜索的内容
+                    const sortBy = ref("")            // 排序的字段
+                    const sortType = ref("asc")       // 升序或降序
+                    const totalPages = ref(0)         // 总页数
+                    const thePage = ref(1)            // 当前页数
+
+                    const loadCustomerService = async () => {
+                        const API_URL = `https://localhost:5000/api/CustomerService`; // 修改API URL
+                        const search = {
+                            "keyword": keyword.value,
+                            "sortBy": sortBy.value,
+                            "sortType": sortType.value,
+                            "page": thePage.value
+                        };
+
+                        const response = await fetch(API_URL, {
+                            method: "GET", // 修改请求方式为 GET
+                            headers: {
+                                "content-type": "application/json"
+                            },
+                             // 注意：GET 请求不应该有请求体，这里可以移除这一行
+                        });
+
+                        if (!response.ok) {
+                            // Handle error here if needed
+                            return;
+                        }
+
+                        const data = await response.json();
+                        pointRecords.value = data.pointRecords;
+                        totalPages.value = data.totalPages;
+                    }
+
+                    // 分页功能
+                    const pagingHandler = page => {
+                        thePage.value = page;
+                        loadCustomerService();
+                    }
+
+                    // 排序功能
+                    const sortHandler = type => {
+                        sortBy.value = type;
+                        sortType.value = sortType.value === "asc" ? "desc" : "asc";
+                        thePage.value = 1;
+                        loadCustomerService();
+                    }
+
+                    // 通过 watch 监听 keyword 是否发生变化
+                    watch(keyword, (newKeyword, oldKeyword) => {
+                        thePage.value = 1;
+                        loadCustomerService();
+                    })
+
+                    loadCustomerService();
+
+                    return {
+                        pointRecords,
+                        keyword,
+                        sortHandler,
+                        sortType,
+                        sortBy,
+                        totalPages,
+                        pagingHandler,
+                        thePage
+                    }
+                }
+            }).mount('#app')
+        </script>
+    }
+
+    @section Styles{
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    }
