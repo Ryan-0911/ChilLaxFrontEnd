@@ -8,7 +8,7 @@ namespace ChilLaxFrontEnd.Controllers
         ChilLaxContext db = new ChilLaxContext();
         public IActionResult Index()
         {
-            var data = db.CustomerServices.ToList();
+            var data = db.CustomerService.ToList();
             return View(data);
         }
     }
