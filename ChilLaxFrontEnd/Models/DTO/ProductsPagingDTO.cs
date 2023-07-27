@@ -12,7 +12,7 @@ namespace ChilLaxFrontEnd.Models.DTO
 
         public int TotalPages { get; set; }
         public List<Product> ProductsResult { get; set; }
-
+        public List<Cart> carts { get; set; } 
 
         //public string ProductCategory { get; set; } = null!;
         public int ProductId { get; set; }

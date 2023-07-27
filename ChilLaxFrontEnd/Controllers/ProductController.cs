@@ -30,6 +30,12 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpGet]
         public IActionResult List(CKeywordViewModel ckvm, int? nowpage, int? _pageCount, string? productcategory)
         {
+            //取得會員ID
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            Console.WriteLine(json);
+            Member member = JsonSerializer.Deserialize<Member>(json);
+            int id = member.MemberId;
+
             // 關鍵字搜尋
             string keyword = ckvm.txtKeyword;
             IEnumerable<Product> datas = null;
@@ -51,7 +57,9 @@ namespace ChilLaxFrontEnd.Controllers
                 datas = db.Product.Where(p => p.ProductName.Contains(keyword));
             }
 
-            //return View(datas);
+            //取的購物車商品
+            productsPagingDTO.carts = _context.Cart.Where(c => c.MemberId == id).ToList();
+
 
             // 頁數
             if(nowpage == null)
