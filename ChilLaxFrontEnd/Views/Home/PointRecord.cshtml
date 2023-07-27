@@ -2,58 +2,26 @@
     ViewData["Title"] = "點數紀錄";
 }
 
-@*@section Styles {
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
+
+@section Styles
+    {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
     <style>
-        thead {
-            background: #373F47;
-            color: white;
+        body {
+            caret-color: transparent;
+        }
+
+        th, td {
+            font-size: 1.3rem;
         }
     </style>
 }
 
-<div class="container" style="margin-top: 50px">
-    <table>
-        <thead>
-            <tr>
-                <td>交易號碼</td>
-                <td>修改來源</td>
-                <td>異動數量</td>
-            </tr>
-        </thead>
-    </table>
-</div>
-
-@section Scripts {
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js"></script>
-    <script src="//cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js" defer></script>
-    <script>
-        $(document).ready(function () {
-            $("table").dataTable({
-                ajax: {
-                    type: "GET",
-                    url: "https://localhost:7189/api/PointHistories",
-                    dataSrc: function (data) { return data; }
-                },
-                columns: [
-                    { "data": "pointDetailId", "width": "25%" },
-                    { "data": "modifiedSource", "width": "25%" },
-                    { "data": "modifiedAmount", "width": "25%" },
-                ],
-                fixedHeader: { header: true }
-            });
-        });
-    </script>
-}*@
-
-
-@{
-    ViewData["Title"] = "點數紀錄";
-}
 <div id="app" style="margin-top: 50px">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="border-radius: 10px">
                         交易來源
@@ -61,43 +29,40 @@
                     </button>
 
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Focus</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Tarot</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Product</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('All')">All</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Focus')">Focus</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Tarot')">Tarot</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Product')">Product</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <span>交易起始日</span>&nbsp
-                <input type="date" name="start" style="border-radius: 10px; padding: 5px" />&nbsp
+                <input type="date" name="start" v-model="startDate" style="border-radius: 10px; padding: 5px" /> ~
                 <span>交易終止日</span>&nbsp
-                <input type="date" name="end" style="border-radius: 10px; padding: 5px" />&nbsp&nbsp
-                <input type="submit" value="搜尋" class="btn btn-info" style="border-radius: 5px"/>
+                <input type="date" name="end" v-model="endDate" style="border-radius: 10px; padding: 5px" />
             </div>
 
             <table class="table table-hover table-border" style="margin-top: 50px">
                 <thead>
                     <tr>
-                        <th>交易來源 <i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('productId')"></i></th>
-                        <th>交易內容<i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('productName')"></i></th>
-                        <th>異動數量<i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('unitPrice')"></i></th>
-                        <th>交易時間 <i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('unitsInStock')"></i></th>
+                        <th>交易來源</th>
+                        <th>交易內容</th>
+                        <th>異動數量 <i :class="{'bi':true, 'bi-sort-up': sortTypeA==='asc', 'bi-sort-down':sortTypeA !== 'asc'}" @@click="sortHandler('modifiedAmount')"></i></th>
+                        <th>交易時間 <i :class="{'bi':true, 'bi-sort-up': sortTypeT==='asc', 'bi-sort-down':sortTypeT !== 'asc'}" @@click="sortHandler('modifiedTime')"></i></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="{ModifiedSource, ModifiedContent, ModifiedAmount, ModifiedTime} in pointRecords">
-                        <td>{{ModifiedSource}}</td>
-                        <td>{{ModifiedContent}}</td>
-                        <td>{{ModifiedAmount}}</td>
-                        <td>{{ModifiedTime}}</td>
+                    <tr v-for="{modifiedSource, content, modifiedAmount, modifiedTime} in pointRecords">
+                        <td>{{modifiedSource}}</td>
+                        <td>{{content}}</td>
+                        <td>{{modifiedAmount}}</td>
+                        <td>{{modifiedTime}}</td>
                     </tr>
                 </tbody>
             </table>
-@*            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" v-for="value in totalPages"><a class="page-link" href="#" @@click="pagingHandler(value)">{{ value }}</a></li>
-                </ul>
-            </nav>*@
+
+            {{pointRecords}}
         </div>
     </div>
 
@@ -108,74 +73,91 @@
             const { createApp, ref, watch } = Vue
             createApp({
                 setup() {
-                    const pointRecords = ref([])     //顯示在產品中的資料
-                    const keyword = ref("")      //搜尋的內容
+                    const pointRecords = ref([]) // 顯示在產品中的資料
+                    const selectedOption = ref("") // 下拉選單所選的內容
+                    const startDate = ref("") // 交易起始日的值
+                    const endDate = ref("") // 交易終止日的值
                     const sortBy = ref("")       //排序的欄位
-                    const sortType = ref("asc")  //升冪還是降冪
-                    const totalPages = ref(0)   //總共有幾頁
-                    const thePage = ref(1)       //目前是第幾頁
+                    const sortTypeA = ref("asc")  //升冪還是降冪
+                    const sortTypeT = ref("asc")  //升冪還是降冪
+                    //const totalPages = ref(0)   //總共有幾頁
+                    //const thePage = ref(1)       //目前是第幾頁
 
                     const loadPointRecords = async () => {
-                        //ajax XMLHttpRequest、fetch()、jQuery $.ajax()、axios
-                        //const API_URL = `https://localhost:7118/api/products/search?keyword=${keyword.value}&sortBy=${sortBy.value}&sortType=${sortType.value}&page=${thePage.value}`
-                        const API_URL = `https://localhost:7118/api/products/search`
-                        const search = { "keyword": keyword.value, "sortBy": sortBy.value, "sortType": sortType.value, "page": thePage.value };
+                        let API_URL = ''
+                        if (sortBy == "modifiedAmount") {
+                            API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}`
+                        }
+                        else {
+                            API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}`
 
-                        //const response = await fetch(API_URL)
+                        }
                         const response = await fetch(API_URL, {
                             method: "POST",
-                            headers: {
-                                "content-type": "application/json"
-                            },
-                            body: JSON.stringify(search)
                         })
                         const datas = await response.json()
-                        pointRecords.value = datas.pointRecords
-                        totalPages.value = datas.totalPages
+                        pointRecords.value = datas
+                        //totalPages.value = datas.totalPages
+                    }
+                    loadPointRecords()
+
+
+                    // 下拉選單功能---------------------------------------------------------------------------------------------
+                    // 按下選項就觸發方法
+                    const updateSelected = (option) => {
+                        selectedOption.value = option
+                        console.log(option)
                     }
 
-
-
-                    //分頁功能
-                    const pagingHandler = page => {
-                        thePage.value = page
-                        loadPointRecords()
-                    }
-
-                    //排序功能
-                    const sortHandler = type => {
-                        sortBy.value = type
-                        sortType.value = sortType.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
-                        //console.log(sortBy.value , sortType.value)
-                        thePage.value = 1
-                        loadPointRecords()
-                    }
-
-                    //透過watch監看keyword有沒有改變
-                    watch(keyword, (newKeyword, oldKeyword) => {
-                        //console.log(newKeyword)
-                        //console.log(oldKeyword)
-                        thePage.value = 1
+                    // 監看交易來源有沒有改變
+                    watch(selectedOption, () => {
                         loadPointRecords()
                     })
 
-                    loadPointRecords()
+                    // 日期區段功能---------------------------------------------------------------------------------------------
+                    // 監看起始日有沒有改變
+                    watch(startDate, (newValue) => {
+                        console.log(newValue)
+                        loadPointRecords()
+                    })
+                    // 監看終止日有沒有改變
+                    watch(endDate, (newValue) => {
+                        console.log(newValue)
+                        loadPointRecords()
+                    })
+
+                    // 排序功能---------------------------------------------------------------------------------------------
+                    // 按下異動數量欄位的排序icon就觸發方法
+                    const sortHandler = type => {
+                        sortBy.value = type
+                        if (type == "modifiedAmount") {
+                            sortTypeA.value = sortTypeA.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
+                        }
+                        else {
+                            sortTypeT.value = sortTypeT.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
+                        }
+
+                        console.log(sortBy.value, sortTypeA.value, sortTypeT.value)
+                        //thePage.value = 1
+                        loadPointRecords()
+
+                    }
+
 
                     return {
                         pointRecords,
-                        keyword,
+                        updateSelected,
+                        startDate,
+                        endDate,
                         sortHandler,
-                        sortType,
+                        sortTypeA,
+                        sortTypeT,
                         sortBy,
-                        totalPages,
-                        pagingHandler,
-                        thePage
+                        //totalPages,
+                        //pagingHandler,
+                        //thePage
                     }
                 }
             }).mount('#app')
         </script>
-    }
-
-    @section Styles{
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     }

@@ -8,6 +8,8 @@ using ChilLaxFrontEnd.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -22,103 +24,166 @@ namespace ChilLaxFrontEnd.Controllers
             _context = context;
         }
 
-        // GET: api/PointHistories
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.PointHistory>>> GetPointHistories()
+        public async Task<IEnumerable<PointRecordDTO>> GetPointFocus()
         {
-            if (_context.PointHistory == null)
-            {
-                return NotFound();
-            }
+            // 從 session 取出會員 ID
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
             Console.WriteLine(json);
             Member member = JsonSerializer.Deserialize<Member>(json);
 
-            return await _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).ToListAsync();
+            // Focus
+            var queryF = from pointHistory in _context.PointHistory
+                         join focusDetail in _context.FocusDetail
+                         on pointHistory.PointDetailId equals focusDetail.FocusDetailId
+                         where pointHistory.MemberId == member.MemberId
+                         select new PointRecordDTO
+                         {
+                             ModifiedSource = pointHistory.ModifiedSource,
+                             ModifiedAmount = pointHistory.ModifiedAmount,
+                             Content = $"專注時間: {(focusDetail.Duration).ToString()}分",
+                             ModifiedTime = focusDetail.EndDatetime,
+                         };
+
+            return queryF.OrderByDescending(f => f.ModifiedAmount);
         }
 
-        //public async Task<ActionResult<PointRecordDTO>> GetDetail() 
-        //{
 
-        //}
+        [HttpPost]
+        public async Task<IEnumerable<PointRecordDTO>> GetPointRecords(string? keyword, DateTime? startDate, DateTime? endDate, string? sortBy, string? sortType)
+        {
+            //string? keyword = searchDTO.keyword; //下拉式選單- Focus、Tarot、Product
+            //int? page = searchDTO.page ?? 1;
+            //string? sortBy = searchDTO.sortBy;
+            //string? sortType = searchDTO.sortType ?? "asc";
 
-        //[HttpPost]
-        //[Route("search")]
-        //public async Task<ActionResult<PointRecordDTO>> GetPointRecords([FromBody] SearchDTO searchDTO) // string? keyword, string? sortBy, string? sortType, int page = 1
-        //{
-        //    string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
-        //    Console.WriteLine(json);
-        //    Member member = JsonSerializer.Deserialize<Member>(json);
+            // 從 session 取出會員 ID
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            Console.WriteLine(json);
+            Member member = JsonSerializer.Deserialize<Member>(json);
 
-        //    string? keyword = searchDTO.keyword; //下拉式選單- Focus、Tarot、Product
-        //    int? page = searchDTO.page ?? 1;
-        //    string? sortBy = searchDTO.sortBy;
-        //    string? sortType = searchDTO.sortType ?? "asc";
+            // Focus
+            var queryF = from pointHistory in _context.PointHistory
+                         join focusDetail in _context.FocusDetail
+                         on pointHistory.PointDetailId equals focusDetail.FocusDetailId
+                         where pointHistory.MemberId == member.MemberId
+                         select new PointRecordDTO
+                         {
+                             ModifiedSource = pointHistory.ModifiedSource,
+                             ModifiedAmount = pointHistory.ModifiedAmount,
+                             Content = $"專注時間: {(focusDetail.Duration).ToString()}分",
+                             ModifiedTime = focusDetail.EndDatetime,
+                         };
 
-        //    // FocusDetail + PointHistory = PointRecordDTO
-        //    var query = from pointHistory in _context.PointHistory
-        //                join focusDetail in _context.FocusDetail
-        //                on pointHistory.PointDetailId equals focusDetail.FocusDetailId
-        //                where pointHistory.MemberId == member.MemberId
-        //                select new
-        //                {
-        //                    ModifiedSource = pointHistory.ModifiedSource,
-        //                    ModifiedAmount = pointHistory.ModifiedAmount,
-        //                    ModifiedContent = focusDetail.Duration,
-        //                    ModifiedTime = focusDetail.EndDatetime,
-        //                };
+            // 日期
+            if (startDate != null)
+            {
+                queryF = queryF.Where(f => f.ModifiedTime >= startDate);
+            }
+            if (endDate != null)
+            {
+                queryF = queryF.Where(f => f.ModifiedTime <= endDate);
+            }
 
-            //TarotOrder + PointHistory = PointRecordDTO
-            // ProductOrder + PointHistory = PointRecordDTO
+            Console.WriteLine(sortBy);
+            //排序
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "modifiedAmount":
+                        queryF = sortType == "asc" ? queryF.OrderBy(f => f.ModifiedAmount) : queryF.OrderByDescending(f => f.ModifiedAmount);
+                        break;
+                    case "modifiedTime":
+                        queryF = sortType == "asc" ? queryF.OrderBy(f => f.ModifiedTime) : queryF.OrderByDescending(f => f.ModifiedTime);
+                        break;
+                    default:
+                        return queryF;
+                }
+            }
 
 
 
-            //將上面三個 PointRecordDTO 加在同一個 PointRecordDTO
+            // Tarot
+            var queryT = from pointHistory in _context.PointHistory
+                         join TarotOrder in _context.TarotOrder
+                         on pointHistory.PointDetailId equals TarotOrder.TarotOrderId
+                         where pointHistory.MemberId == member.MemberId
+                         select new PointRecordDTO
+                         {
+                             ModifiedSource = pointHistory.ModifiedSource,
+                             ModifiedAmount = pointHistory.ModifiedAmount,
+                             Content = $"抽牌結果: {(TarotOrder.CardResult).ToString()}",
+                             ModifiedTime = TarotOrder.TarotTime,
+                         };
+
+            // 日期
+            if (startDate != null)
+            {
+                queryT = queryT.Where(t => t.ModifiedTime >= startDate);
+            }
+            if (endDate != null)
+            {
+                queryT = queryT.Where(t => t.ModifiedTime <= endDate);
+            }
+
+            // 排序
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "modifiedAmount":
+                        queryT = sortType == "asc" ? queryT.OrderBy(t => t.ModifiedAmount) : queryT.OrderByDescending(t => t.ModifiedAmount);
+                        break;
+                    case "modifiedTime":
+                        queryT = sortType == "asc" ? queryT.OrderBy(t => t.ModifiedTime) : queryT.OrderByDescending(t => t.ModifiedTime);
+                        break;
+                    default:
+                        return queryT;
+                }
+            }
+
+            //// Product
+            //var queryP = from pointHistory in _context.PointHistory.ToList()
+            //            join productOrder in _context.ProductOrder.ToList()
+            //            on pointHistory.PointDetailId equals productOrder.OrderId.ToString()
+            //            where pointHistory.MemberId == member.MemberId
+            //            select new PointRecordDTO
+            //            {
+            //                ModifiedSource = pointHistory.ModifiedSource,
+            //                ModifiedAmount = pointHistory.ModifiedAmount,
+            //                Content = $"消費總額: {(productOrder.OrderTotalPrice).ToString()}",
+            //                ModifiedTime = productOrder.OrderDate,
+            //            };
+
+            //Console.WriteLine(queryP);
 
 
 
+            // 將上面三個 PointRecordDTO 加在同一個 PointRecordDTO
+            // 從資料庫中分別獲取結果
+            var resultF = await queryF.ToListAsync();
+            var resultT = await queryT.ToListAsync();
 
-
-
-            //var pointRecord = _context.PointHistories.AsQueryable();
-
-            ////下拉式選單搜尋
-            //if (!string.IsNullOrEmpty(keyword))
-            //{
-            //    pointRecord = _context.PointHistories.Where(ph => ph.ModifiedSource.Contains(keyword));
-            //}
-
-            ////排序
-            //switch (sortBy)
-            //{
-            //    case "productName":
-            //        products = sortType == "asc" ? products.OrderBy(p => p.ProductName) : products.OrderByDescending(p => p.ProductName);
-            //        break;
-            //    case "unitPrice":
-            //        products = sortType == "asc" ? products.OrderBy(p => p.UnitPrice) : products.OrderByDescending(p => p.UnitPrice);
-            //        break;
-            //    case "unitsInStock":
-            //        products = sortType == "asc" ? products.OrderBy(p => p.UnitsInStock) : products.OrderByDescending(p => p.UnitsInStock);
-            //        break;
-            //    default:
-            //        products = sortType == "asc" ? products.OrderBy(p => p.ProductId) : products.OrderByDescending(p => p.ProductId);
-            //        break;
-            //}
-
-            //int TotalCount = products.Count(); //總共有多少筆資料
-            //int TotalPages = (int)Math.Ceiling((decimal)TotalCount / pageSize);  //計算總共有幾頁
-
-            //分頁
-            //page = 1, Skip(0)
-            //     page = 2, Skip(10)
-            //     page = 3 , Skie(20)
-            //     var pageProducts = await products.Skip((int)((page - 1) * pageSize)).Take(pageSize).ToListAsync();
-
-            //ProductsPagingDTO prodDTO = new ProductsPagingDTO();
-            //prodDTO.TotalPages = TotalPages;
-            //prodDTO.ProductsResult = pageProducts;
-
-            //return prodDTO;
+            switch (keyword)
+            {
+                case "All":
+                    return resultF.Concat(resultT).ToList();
+                    break;
+                case "Focus":
+                    return queryF.ToList();
+                    break;
+                case "Tarot":
+                    return queryT.ToList();
+                    break;
+                //case "Product":
+                //    return queryP.ToList();
+                //    break;
+                default:
+                    return resultF.Concat(resultT).ToList();
+            }
         }
     }
+}
 

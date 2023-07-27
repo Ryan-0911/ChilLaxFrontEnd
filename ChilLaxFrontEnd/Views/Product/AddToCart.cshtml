@@ -83,7 +83,6 @@
     <!-- black-nav -->
 </div>
 <!-- row over -->
-   
 <!-- container over -->
 <div class="container">
 
@@ -160,43 +159,36 @@
             </div>
             @*  <!-- /row --> *@
         </div>
-<<<<<<< Updated upstream
         @* <!-- /SECTION --> *@
- @*  <!-- /container --> *@
-=======
         @*  <!-- /container --> *@
-        <div>
-    </div>
-        @* <!-- /SECTION --> *@
->>>>>>> Stashed changes
 
-    <div style="margin-bottom: 1000px;" class="PageBottom">
+        <div style="margin-bottom: 1000px;" class="PageBottom">
             @Html.ActionLink("返回上一頁", "List")
-    </div>
+        </div>
     }
 
     @section Scripts{
-    <script>
-        $(document).ready(function () {
-            // 選擇增減按鈕和數量輸入框元素
-            var qtyUp = $(".qty-up");
-            var qtyDown = $(".qty-down");
-            var quantityInput = $(".input-number");
+        <script>
+            $(document).ready(function () {
+                // 選擇增減按鈕和數量輸入框元素
+                var qtyUp = $(".qty-up");
+                var qtyDown = $(".qty-down");
+                var quantityInput = $(".input-number");
 
-            // 設置增加數量的事件
-            qtyUp.click(function () {
-                var currentValue = parseInt(quantityInput.val());
-                quantityInput.val(currentValue + 1);
-            });
+                // 設置增加數量的事件
+                qtyUp.click(function () {
+                    var currentValue = parseInt(quantityInput.val());
+                    quantityInput.val(currentValue + 1);
+                });
 
-            // 設置減少數量的事件
-            qtyDown.click(function () {
-                var currentValue = parseInt(quantityInput.val());
-                if (currentValue > 1) {
-                    quantityInput.val(currentValue - 1);
-                }
+                // 設置減少數量的事件
+                qtyDown.click(function () {
+                    var currentValue = parseInt(quantityInput.val());
+                    if (currentValue > 1) {
+                        quantityInput.val(currentValue - 1);
+                    }
+                });
             });
-        });
-    </script>
-}
+        </script>
+    }
 

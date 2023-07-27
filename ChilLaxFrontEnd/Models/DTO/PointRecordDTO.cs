@@ -3,8 +3,8 @@
     public class PointRecordDTO
     {
         public string ModifiedSource { get; set; } = null!;
-        public string ModifiedContent { get; set; } = null!;
+        public string Content { get; set; } = null!;
         public int ModifiedAmount { get; set; }
-        public string ModifiedTime { get; set; } = null!;
+        public DateTime ModifiedTime { get; set; }
     }
 }
