@@ -51,12 +51,17 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpGet("{id}")]
         public async Task<List<CustomerServiceDTO>> GetCustomerService(int id)
         {
-          if (_context.CustomerService == null)
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            Console.WriteLine(json);
+            Member member = JsonSerializer.Deserialize<Member>(json);
+
+
+            if (_context.CustomerService == null)
           {
               return null;
           }
-            var customerService = _context.CustomerService.Where(cus=> cus.MemberId==id).Select(cus=> new CustomerServiceDTO {
-                CustomerServiceId = cus.CustomerServiceId,
+            var customerService = _context.CustomerService.Where(cus=> cus.MemberId== id).Select(cus=> new CustomerServiceDTO {
+                
                 MemberId = cus.MemberId,
                 Message = cus.Message,
                 MessageDatetime = cus.MessageDatetime,
@@ -105,16 +110,19 @@ namespace ChilLaxFrontEnd.Controllers
         // POST: api/CustomerServicesApi
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CustomerService>> PostCustomerService(CustomerService customerService)
+        public async Task<CustomerServiceDTO> PostCustomerService(CustomerServiceDTO cusDTO)
         {
-          if (_context.CustomerService == null)
-          {
-              return Problem("Entity set 'ChilLaxContext.CustomerService'  is null.");
-          }
-            _context.CustomerService.Add(customerService);
+          CustomerService cus = new CustomerService
+          { 
+            MemberId = cusDTO.MemberId,
+            MessageDatetime = DateTime.Now.ToString(),
+            Message = cusDTO.Message,
+          
+          };
+            _context.CustomerService.Add(cus);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCustomerService", new { id = customerService.CustomerServiceId }, customerService);
+            return cusDTO;
         }
 
         // DELETE: api/CustomerServicesApi/5
