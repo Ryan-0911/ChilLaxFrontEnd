@@ -10,31 +10,41 @@
         height: 150px;
         line-height: 100px;
     }
-    /* 隱藏原本的 checkbox */
-    .custom-checkbox {
-        opacity: 0;
-        position: absolute;
+
+    ul, li {
+        margin: 0;
+        padding: 0;
     }
 
-        /* 自訂 checkbox 的樣式 */
-        .custom-checkbox::before {
-            content: '';
-            display: inline-block;
-            width: 20px; /* 設定您希望的 checkbox 寬度 */
-            height: 20px; /* 設定您希望的 checkbox 高度 */
-            border: 2px solid #ccc;
-            background-color: #fff;
-            border-radius: 4px; /* 設定您希望的圓角大小 */
-            position: relative;
-            top: 3px;
-            margin-right: 10px;
+    .counter li {
+        float: left;
+        list-style-type: none;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border: #999 thin solid;
+        background-color: #fff
+    }
+
+        .counter li input {
+            font-size: 20px;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            -webkit-appearance: none;
+            background: none;
+            margin: 0;
+            padding: 0;
+            border: 1px solid transparent;
+            border-radius: 0;
         }
 
-        /* 當 checkbox 被選取時的樣式 */
-        .custom-checkbox:checked::before {
-            background-color: #007bff; /* 設定您希望的選取時的顏色 */
-            border-color: #007bff;
-        }
+    #countnum {
+        border-left: hidden;
+        border-right: hidden;
+        color: #666
+    }
 
 </style>
 
@@ -78,7 +88,11 @@
                     </td>
                     <td>
                         <div class="td_txt">
-                            @item.Cart?.CartProductQuantity
+                            <ul class="counter" onclick="counterClick(this)">
+                                <li><input type="button" onclick="changeAction(this)" value="-" /></li>
+                                <li id="countnum">@item.Cart?.CartProductQuantity</li>
+                                <li><input type="button" onclick="changeAction(this)" value="+" /></li>
+                            </ul>
                         </div>
                     </td>
                     <td>
@@ -129,6 +143,27 @@
     // 監聽全選框的 change 事件
     document.getElementById('checkall').addEventListener('change', selectAll);
 
+    let action = '';
+
+    //商品數量增減事件
+    function counterClick(el) {
+            console.log(el.childNodes);
+        if (action == '+') adder(el.childNodes[3]);
+        if (action == '-') minuser(el.childNodes[3]);
+    }
+
+    function changeAction(el) {
+        action = el.value;
+    }
+
+    function adder(el) {
+        el.innerHTML = parseInt(el.innerHTML) + 1;
+    }
+
+    function minuser(el) {
+        if (el.innerHTML <= 1) return;
+        el.innerHTML = parseInt(el.innerHTML) - 1;
+    }
 
 </script>
 }
