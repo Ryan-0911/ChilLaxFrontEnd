@@ -78,7 +78,8 @@
             {
                 <tr>
                     <td>
-                        <input type="checkbox" id="@item.Product?.ProductId" name="@item.Product?.ProductId" value="Bike">
+                        <input type="checkbox" name="@item.Product?.ProductId" value="@item.Product?.ProductId">
+                        <input value="@item.Product?.ProductId" hidden>
                     </td>
                     <td>
                         <img class="productimg" src="https://localhost:44385/assets/images/@item.Product?.ProductImg">
@@ -111,7 +112,7 @@
             }
         </tbody>
     </table>
-<button onclick="Checkout()">結帳</button>
+    <button onclick="checkout()">結帳</button>
 </div>
 
 
@@ -135,11 +136,11 @@
 
     // 全選框的 change 事件處理函式
     function selectAll() {
-        var checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-        var checkall = document.getElementById('checkall');
+        const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+        const checkall = document.getElementById('checkall');
 
         // 將所有商品選取框的勾選狀態設置成全選框的勾選狀態
-        for (var i = 0; i < checkboxes.length; i++) {
+        for (let i = 0; i < checkboxes.length; i++) {
             checkboxes[i].checked = checkall.checked;
         }
     }
@@ -167,6 +168,23 @@
     function minuser(el) {
         if (el.innerHTML <= 1) return;
         el.innerHTML = parseInt(el.innerHTML) - 1;
+    }
+
+    //選擇商品並結帳
+    function checkout() {
+        const checkboxes = document.querySelectorAll('tbody tr');
+            console.log(checkboxes);
+            const trueCheckboxs = [];
+            for (let i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].childNodes[1].childNodes[1].checked){
+                    trueCheckboxs.push({
+                        id: parseInt(checkboxes[i].children[0].children[1].value),
+                        qty: parseInt(checkboxes[i].children[4].children[0].innerText)
+                    });
+                };
+            }
+            console.log(trueCheckboxs);
+
     }
 
 </script>
