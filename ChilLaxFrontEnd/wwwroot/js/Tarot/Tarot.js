@@ -16,22 +16,7 @@ $('#sendButton').on('click', function () {
         alert('傳送錯誤: ' + err.toString());
     });
 });
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/chatHub")
-    .build();
 
-// 啟動連接
-connection.start().then(function () {
-    console.log("SignalR 連接已啟動。");
-}).catch(function (err) {
-    console.error("啟動SignalR連接時出錯：" + err);
-});
-
-// 處理從伺服器接收到的"SendMessage"方法呼叫
-connection.on("SendMessage", function (gptResponse) {
-    // 在這裡處理從伺服器接收到的GPT機器人的回應
-    console.log("從伺服器接收到的GPT回應：", gptResponse);
-});
     const tarotCards = [
         "愚者", "魔術師", "女祭司", "皇后", "皇帝", "教皇", "戀愛", "戰車", "力量", "隱士",
         "命運之輪", "正義", "倒吊人", "死神", "節制", "惡魔", "高塔", "星星", "月亮", "太陽", "審判", "世界"
@@ -67,13 +52,7 @@ connection.on("SendMessage", function (gptResponse) {
         const messageInput = document.getElementById("message");
         const message = messageInput.value;
     
-        // 在這裡處理訊息，例如傳送訊息給其他用戶等等...
-        // 這裡只是一個範例，您可以根據您的需求進行相應處理。
-
-        // 清除輸入欄位的值
-        //messageInput.value = '';
-
-        // 更新聊天內容
+        
         
     
 
@@ -86,6 +65,8 @@ connection.on("SendMessage", function (gptResponse) {
         if (inputCount >= maxInputCount) {
             messageInput.setAttribute("readonly", "readonly");
             document.getElementById("sendButton").style.display = "none";
+
+            messageInput.setAttribute("placeholder", "您本次的占卜之旅已結束，我們期待再次與您相遇!");
         }
 
         intervalId = setInterval(checkInputCount, 500);
@@ -140,35 +121,9 @@ connection.on("SendMessage", function (gptResponse) {
     }
     
 
-//    function showNextCard() {
-//        if (currentIndex <= 3) {
-//            const cardIndex = currentIndex - 1;
-//            const tarotCardElement = tarotCardElements[cardIndex];
-//            const imgElement = tarotCardElement.querySelector("img");
 
-//            // 更新塔羅牌圖片和名稱並移除動畫效果
-//            imgElement.src = tarotCardImages[shuffledIndexes[cardIndex]];
-
-//            const tarotNameElement = document.getElementById("cardName" + currentIndex);
-//            tarotNameElement.textContent = tarotCards[shuffledIndexes[cardIndex]];
-
-//            tarotCardElement.classList.remove("card-removed");
-//            tarotCardElement.classList.add("card-appeared");
-
-//            setTimeout(showNextCard, 1000);
-//            currentIndex++;
-//        } else{
-//            currentIndex = 0;
-//            shuffleBtn.classList.add("fadeOutButton");
-//            // 隱藏按鈕，使按鈕只需按一次後就會消失
-//        }
-        
-//}
 function showNextCard() {
-    connection.on("SendMessage", function (gptResponse) {
-        // 在這裡處理從伺服器接收到的GPT機器人的回應
-        console.log("從伺服器接收到的GPT回應：", gptResponse);
-    });
+   
 
     if (currentIndex <= 3) {
         const cardIndex = currentIndex - 1;
