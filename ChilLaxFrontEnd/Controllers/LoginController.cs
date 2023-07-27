@@ -10,6 +10,20 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Encodings.Web;
 using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.AspNetCore.Cors;
+
+//以下為新增的
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
+using System.Web;
+using System.Xml.Linq;
+using Microsoft.Extensions.Hosting.Internal;
+using Newtonsoft.Json.Linq;
+using Microsoft.Data.SqlClient.Server;
+using System.Diagnostics.Metrics;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -22,15 +36,16 @@ namespace ChilLaxFrontEnd.Controllers
         //{
         //    _logger = logger;
         //}
-        ChilLaxContext db = new ChilLaxContext();
-
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ChilLaxContext _context;
 
-        public LoginController(ChilLaxContext context)
+        public LoginController(IWebHostEnvironment hostingEnvironment, ChilLaxContext context)
         {
+            _hostingEnvironment = hostingEnvironment;
             _context = context;
         }
 
+        ChilLaxContext db = new ChilLaxContext();
 
         public IActionResult Login()
         {
@@ -40,33 +55,27 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel vm)
         {
-            MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
-                t => t.MemberAccount.Equals(vm.txtAccount) && t.MemberPassword.Equals(vm.txtPassword));
-            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount) && mc.MemberPassword.Equals(vm.txtPassword));
+            MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
+                t => t.MemberAccount.Equals(vm.txtAccount));
 
-            Member member = (new ChilLaxContext()).Members.FirstOrDefault(
+            Member member = (new ChilLaxContext()).Member.FirstOrDefault(
                 t => t.MemberId.Equals(membercredential.MemberId) && t.Available == true);
 
-            if (membercredential != null && member != null)
+            bool isPwdMatch = BCrypt.Net.BCrypt.Verify(vm.txtPassword, membercredential.MemberPassword);
+            Console.WriteLine("驗證結果：" + isPwdMatch); // 印出 true
+
+
+            if (membercredential != null && member != null && isPwdMatch == true)
             {
-                MemberViewModel user = new MemberViewModel
-                {
-                    txtAccount = membercredential.MemberAccount,
-                    txtPassword = membercredential.MemberPassword,
-                    memberName = member.MemberName,
-                    Id = member.MemberId,
-                    
-                };
-                Console.WriteLine(user);
-                if (accountExists == true && membercredential.MemberPassword.Equals(vm.txtPassword) && member.Available == true)
-                {
-                    string json = JsonSerializer.Serialize(member);
-                    Console.WriteLine(json);
-                    HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
-                    return RedirectToAction("Index", "Home");
-                }
+                member.MemberPoint = _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
+
+                string json = JsonSerializer.Serialize(member);
+                Console.WriteLine(json);
+                HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
+                return RedirectToAction("Index", "Home");
+
             }
-            
+
             return View();
         }
 
@@ -78,14 +87,12 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public IActionResult Register(LoginViewModel vm)
         {
-            MemberCredential membercredential = (new ChilLaxContext()).MemberCredentials.FirstOrDefault(
+            MemberCredential membercredential = (new ChilLaxContext()).MemberCredential.FirstOrDefault(
 t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
-            bool accountExists = _context.MemberCredentials.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
-            //MemberCredential membercredential=new MemberCredential();
-            //Member member = new Member();
+            bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(vm.txtAccount));
             
-            string password = vm.txtRegisterPassword;  // 假設這是使用者輸入的密碼
+            string password = vm.txtRegisterPassword;  
             string salt = BCrypt.Net.BCrypt.GenerateSalt();// 產生隨機的鹽值
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);// 將密碼和鹽值一起加密
 
@@ -125,32 +132,154 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                 Available = true
             };
 
-            //if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail!= null && vm.memberBirth != null && HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
-
-            //string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
-            //MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm
-            //Console.WriteLine(mc);
 
             if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail != null && vm.memberBirth != null)
             {
-                db.Members.Add(member);
-                db.SaveChanges();
 
                 string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
                 MemberCredential mc = JsonSerializer.Deserialize<MemberCredential>(json);  //將json字串轉成物件lvm 
-                MemberCredential credential = new MemberCredential 
+                if (mc != null)
                 {
-                    MemberId = member.MemberId,
-                    MemberAccount = mc.MemberAccount,
-                    MemberPassword = mc.MemberPassword
-                };
-                db.MemberCredentials.Add(credential);
-                db.SaveChanges();   
-                             
-                return RedirectToAction("Index", "Home");
+                    db.Member.Add(member);
+                    db.SaveChanges();
+
+                    MemberCredential credential = new MemberCredential
+                    {
+                        MemberId = member.MemberId,
+                        MemberAccount = mc.MemberAccount,
+                        MemberPassword = mc.MemberPassword
+                    };
+                    db.MemberCredential.Add(credential);
+                    db.SaveChanges();
+
+                    Member memberData = (new ChilLaxContext()).Member.FirstOrDefault(
+                t => t.MemberId.Equals(member.MemberId));
+                    string toVerifyEmail = JsonSerializer.Serialize(memberData);
+                    HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, toVerifyEmail);
+                    if (!HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER)) 
+                    {
+                        return View();
+                    }
+                    return RedirectToAction("verifyEmail");
+                }
+
             }
             return View();
         }
+
+        //驗證信箱及註冊
+        public IActionResult verifyEmail()
+        {
+            string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);
+            Member mc = JsonSerializer.Deserialize<Member>(json);
+            VerifyEmailViewModel VE = new VerifyEmailViewModel();
+            VE.MemberId = mc.MemberId;
+            VE.MemberEmail = mc.MemberEmail;
+            return View(VE);
+        }
+
+        //[HttpPut("{id}")]
+        //public async Task<string> SaveData(int id,LoginViewModel MemberVM)
+        //{
+        //    Member Mem = await _context.Members.FindAsync(id);
+        //    if (Mem != null)
+        //    {
+        //        Mem.MemberId = MemberVM.Id;
+        //        Mem.MemberEmail = MemberVM.memberEmail;
+        //        Mem.IsValid = false;
+        
+        //        _context.Entry(Mem).State = EntityState.Modified;
+        //        db.SaveChanges();
+                
+
+        //        try
+        //        {
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {//DbUpdateConcurrencyException資料庫因為是可以多人同時操作，如果有多個人同時作業或是有人搶先修改過了，就會做更新失敗。
+        //            if (!MemberExists(id))
+        //            {
+        //                return "修改失敗";
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        BuildEmailTemplate(Mem.MemberId);
+
+        //        return "修改成功";
+
+        //    }
+        //    else
+        //    {
+        //        return "修改失敗";
+        //    }
+                        
+        //}
+
+
+        //public void BuildEmailTemplate(int regID)
+        //{
+        //    string templatePath = Path.Combine(_hostingEnvironment.WebRootPath, "EmailTemplate", "Text.cshtml");
+        //    string body = System.IO.File.ReadAllText(templatePath);
+        //    var regInfo = db.Members.Where(x => x.MemberId == regID).FirstOrDefault();
+        //    string UserName = regInfo.MemberName;
+        //    body = body.Replace("@ViewBag.UserName", UserName);
+        //    body = body.ToString();
+        //    BuildEmailTemplate("驗證帳號", body, regInfo.MemberEmail);
+        //}
+
+        //public static void BuildEmailTemplate(string subjectText, string bodyText, string sendTo)
+        //{
+        //    string GoogleID = "chillax20230808@gmail.com"; //Google 發信帳號
+        //    string TempPwd = "gzwmfcbpepypgikf"; //應用程式密碼
+
+        //    string to, body, bcc, cc;
+        //    to = sendTo.Trim();
+        //    bcc = "";
+        //    cc = "";
+
+        //    StringBuilder sb = new StringBuilder();
+        //    sb.Append(bodyText);
+        //    body = sb.ToString();
+        //    MailMessage mail = new MailMessage();
+        //    mail.From = new MailAddress(GoogleID);//發件人
+        //    mail.To.Add(new MailAddress(to));//收件人
+        //    if (!string.IsNullOrEmpty(bcc))
+        //    {
+        //        mail.Bcc.Add(new MailAddress(bcc));
+        //    }
+        //    if (!string.IsNullOrEmpty(cc))
+        //    {
+        //        mail.CC.Add(new MailAddress(cc));
+        //    }
+        //    mail.Subject = subjectText;//郵件主題
+        //    mail.Body = body;//郵件內文
+        //    mail.IsBodyHtml = true;
+        //    mail.SubjectEncoding = Encoding.UTF8;
+
+        //    string SmtpServer = "smtp.gmail.com";
+        //    int SmtpPort = 587;
+        //    using (SmtpClient client = new SmtpClient(SmtpServer, SmtpPort))//使用郵件伺服器來發送這個郵件
+        //    {
+        //        client.EnableSsl = true;
+        //        client.Credentials = new NetworkCredential(GoogleID, TempPwd);//寄信帳密 
+        //        try
+        //        {
+        //            client.Send(mail);//寄出信件
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw ex;
+        //        }
+        //    }
+
+        //}
+
+
+
 
         //Google第三方登入
 
@@ -162,33 +291,32 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             // 驗證 Google Token
             GoogleJsonWebSignature.Payload? payload = VerifyGoogleToken(formCredential, formToken, cookiesToken).Result;
-
+            Member member = (new ChilLaxContext()).Member.FirstOrDefault(
+                t => t.MemberEmail.Equals(payload.Email) && t.Available == true);
 
             if (payload == null)
             {
                 // 驗證失敗
                 ViewData["Msg"] = "驗證 Google 授權失敗";
                 return RedirectToAction("Login");
-
             }
             else
             {
                 PropertyInfo[] properties = payload.GetType().GetProperties();
                 //Member member = new Member();
-                
-                bool emailExists = _context.Members.Any(m => m.MemberEmail.Equals(payload.Email));
+                bool emailExists = _context.Member.Any(m => m.MemberEmail.Equals(payload.Email));
                 var memberData = new
                 {
                     Provider = "Google",
                     ProviderUserId = payload.Subject
                 };
-                LoginViewModel lvm = new LoginViewModel
+                var view = new LoginViewModel
                 {
                     memberEmail = payload.Email,
                     memberName = payload.Name
                     
                 };
-                if (emailExists == false)
+                if (member == null)
                 {
 
                     string json = JsonSerializer.Serialize(memberData, new JsonSerializerOptions
@@ -198,21 +326,22 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
                     });
 
                     HttpContext.Session.SetString(CDictionary.SK_EXTERNALLOGIN_USER, json);
-                    //string test = HttpContext.Session.GetString(CDictionary.SK_EXTERNALLOGIN_USER);
-                    //Member mem = JsonSerializer.Deserialize<Member>(test);
-                    //Console.WriteLine(test);
-                    //return RedirectToAction("registerProfile");
 
-                    return View(lvm);
-                    //return RedirectToAction("registerProfile");
-
-
+                    return View(view);
+                   
+                }
+                else 
+                {
+                    member.MemberPoint = _context.PointHistory.Where(ph => ph.MemberId == member.MemberId).Sum(ph => ph.ModifiedAmount);
+                        
+                    string json = JsonSerializer.Serialize(member);
+                    //Console.WriteLine(json);
+                    HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
+                    return RedirectToAction("Index", "Home");
+                 
                 }
 
             }
-
-            //return View();
-            return RedirectToAction("Index", "Home");
         }
 
 
@@ -238,10 +367,13 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             if (member.MemberName != null && member.MemberTel != null && member.MemberEmail != null && member.MemberBirthday != null && member.Provider != null && member.ProviderUserId != null)
             {
-                db.Members.Add(member);
+                db.Member.Add(member);
                 db.SaveChanges();
 
+                string Memjson = JsonSerializer.Serialize(member);
+                HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, Memjson);
                 return RedirectToAction("Index", "Home");
+              
             }
             return View();
         }
@@ -318,6 +450,55 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
 
             return View();
         }
+
+        public IActionResult editMemberProfile()
+        {
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            Member member = JsonSerializer.Deserialize<Member>(json);
+           
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOINGED_USER)) 
+            {
+                return RedirectToAction("Login");
+            }
+            LoginViewModel vm = new LoginViewModel();
+            vm.Id = member.MemberId;
+            vm.memberName = member.MemberName;
+            vm.memberPhone = member.MemberTel;
+            vm.memberBirth = member.MemberBirthday;
+            vm.memberEmail = member.MemberEmail;
+            vm.memberGender = (bool)member.MemberSex;
+            vm.memberAddress = member.MemberAddress;
+
+            return View(vm);
+        }
+        [HttpPost]
+        public IActionResult editMemberProfile(LoginViewModel vm)
+        {
+            Member member = (new ChilLaxContext()).Member.FirstOrDefault(
+               t => t.MemberId.Equals(vm.Id));
+            if (member != null)
+            {
+                if (vm.memberName != null && vm.memberPhone != null && vm.memberEmail != null && vm.memberBirth != null)
+                {
+                    member.MemberName = vm.memberName;
+                    member.MemberTel = vm.memberPhone;
+                    member.MemberEmail = vm.memberEmail;
+                    member.MemberSex = vm.memberGender;
+                    member.MemberBirthday = vm.memberBirth;
+                    member.MemberAddress = vm.memberAddress;
+                   
+                    db.Entry(member).State = EntityState.Modified;  //以防更新未被檢測到
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            return View();
+        }
+        private bool MemberExists(int id)
+        {
+            return _context.Member.Any(e => e.MemberId == id);
+        }
+
 
 
     }

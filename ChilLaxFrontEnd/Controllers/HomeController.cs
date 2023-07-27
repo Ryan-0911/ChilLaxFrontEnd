@@ -16,7 +16,7 @@ namespace ChilLaxFrontEnd.Controllers
 
         public IActionResult Index()
         {
-            var data = _context.Announcements.Where(a => a.StartDate <= DateTime.Now && a.EndDate >= DateTime.Now);
+            var data = _context.Announcement.Where(a => a.StartDate <= DateTime.Now && a.EndDate >= DateTime.Now);
             return View(data);
         }
 

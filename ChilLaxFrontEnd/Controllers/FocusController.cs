@@ -8,7 +8,7 @@ namespace ChilLaxFrontEnd.Controllers
         ChilLaxContext db = new ChilLaxContext();
         public IActionResult Index()
         {
-            var data = db.FocusSlides.ToList();
+            var data = db.FocusSlide.ToList();
             return View(data);
         }
 

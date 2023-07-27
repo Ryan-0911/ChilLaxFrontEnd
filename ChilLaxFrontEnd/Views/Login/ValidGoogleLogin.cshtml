@@ -88,6 +88,7 @@
     }
 
 
+
     .form-group .memberBirth {
         height: 65%;
         /* padding: 10px; */
@@ -128,10 +129,11 @@
     }
 
     .form-group i {
-        position: absolute;
+        /*position: absolute;
         top: 13px;
-        right: 0;
+        right: 0;*/
         font-size: 19px;
+        color: white;
     }
     /*文字向上漂浮*/
     .form-group input:focus ~ label {
@@ -186,64 +188,56 @@
                     @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
                     <div class="form-group">
                         <div class="inner-input">
-                            <i class="fas fa-user"></i>
                             @*<input type="text" id="f-name" class="user_input" v-model="memberName"  required>*@
-                            @Html.TextBox("memberName",null, new { @class = "user_input",autocomplete = "off",id="memberName" })
+                            @Html.TextBox("memberName",Model.memberName, new { @class = "user_input",autocomplete = "off",id="memberName" })
                             @Html.ValidationMessageFor(model => model.memberName,null,new { @class = "validation-error-message" })
-                            <label>姓名</label>
+                            <label><i class="fas fa-user"></i>姓名</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="inner-input">
-                            <i class="fa-solid fa-phone"></i>
                             @*<input type="tel" id="phone_number" v-model="memberPhone" class="user_input" required>*@
                             @Html.TextBox("memberPhone", null,new { type = "tel", @class = "user_input",autocomplete = "off",id="memberPhone" } )
                             @Html.ValidationMessageFor(model => model.memberPhone,null,new { @class = "validation-error-message" })
-                            <label>手機號碼</label>
+                            <label><i class="fa-solid fa-phone"></i>手機號碼</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="inner-input">
-                            <i class="fa-solid fa-envelope"></i>
                             @*<input type="email" id="email" v-model="memberEmail" class="user_input" required>*@
-                            @Html.TextBox("memberEmail",null, new { type="email",@class = "user_input",autocomplete = "off",id="memberEmail" })
+                            @Html.TextBox("memberEmail",Model.memberEmail, new { type="email",@class = "user_input",autocomplete = "off",id="memberEmail" })
                             @Html.ValidationMessageFor(model => model.memberEmail,null,new { @class = "validation-error-message" })
-                            <label>信箱</label>
+                            <label><i class="fa-solid fa-envelope"></i>信箱</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="inner-input">
-                            <i class="fa-solid fa-cake-candles"></i>
                             @*<input type="date" id="birth_date" v-model="memberBirth" placeholder=" " required>*@
                             @*@Html.TextBox("memberBirth", new { htmlAttributes = new { type = "date",@class = "memberBirth", required = "required" } })*@
                             @Html.TextBox("memberBirth", null, new { type = "date", @class = "memberBirth",id="memberBirth"})<br />
-                            <label>生日</label>
+                            <label><i class="fa-solid fa-cake-candles"></i>生日</label>
                             @Html.ValidationMessageFor(model => model.memberBirth,null,new { @class = "validation-error-message" })
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="inner-input">
-                            <i class="fa-solid fa-children"></i>
-                            
                             @Html.DropDownList("memberGender", new SelectList(new[]
                         {
                         new { Text = "男", Value = "0" },
                         new { Text = "女", Value = "1" }
                             }, "Value", "Text"), "-- 請選擇 --", new { @class = "form-select",id="memberGender"})
 
-                            <label>性別</label>
+                            <label><i class="fa-solid fa-children"></i>性別(選填)</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="inner-input">
-                            <i class="fa-solid fa-map-location-dot"></i>
                             @*<input type="text" id="address" v-model="memberAddress" class="user_input" required>*@
                             @Html.TextBox("memberAddress",null, new { @class = "user_input",autocomplete = "off",id="memberAddress"})
-
-                            <label>通訊地址</label>
+                            <label><i class="fa-solid fa-map-location-dot"></i>通訊地址(選填)</label>
                         </div>
                     </div>
-                    <button class="btn" id="registerBtn">下一步</button>
+                    <button class="btn" id="registerBtn">註冊</button>
                 }
             </div>
         </div>

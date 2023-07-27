@@ -2,7 +2,7 @@
     ViewData["Title"] = "點數紀錄";
 }
 
-@section Styles {
+@*@section Styles {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
     <style>
         thead {
@@ -12,7 +12,7 @@
     </style>
 }
 
-<div class="container" style="margin-top: 100px">
+<div class="container" style="margin-top: 50px">
     <table>
         <thead>
             <tr>
@@ -44,4 +44,138 @@
             });
         });
     </script>
+}*@
+
+
+@{
+    ViewData["Title"] = "點數紀錄";
 }
+<div id="app" style="margin-top: 50px">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="border-radius: 10px">
+                        交易來源
+                        <span class="caret"></span>
+                    </button>
+
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Focus</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Tarot</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Product</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <span>交易起始日</span>&nbsp
+                <input type="date" name="start" style="border-radius: 10px; padding: 5px" />&nbsp
+                <span>交易終止日</span>&nbsp
+                <input type="date" name="end" style="border-radius: 10px; padding: 5px" />&nbsp&nbsp
+                <input type="submit" value="搜尋" class="btn btn-info" style="border-radius: 5px"/>
+            </div>
+
+            <table class="table table-hover table-border" style="margin-top: 50px">
+                <thead>
+                    <tr>
+                        <th>交易來源 <i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('productId')"></i></th>
+                        <th>交易內容<i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('productName')"></i></th>
+                        <th>異動數量<i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('unitPrice')"></i></th>
+                        <th>交易時間 <i :class="{'bi':true, 'bi-sort-up': sortType==='asc', 'bi-sort-down':sortType !== 'asc'}" @@click="sortHandler('unitsInStock')"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="{ModifiedSource, ModifiedContent, ModifiedAmount, ModifiedTime} in pointRecords">
+                        <td>{{ModifiedSource}}</td>
+                        <td>{{ModifiedContent}}</td>
+                        <td>{{ModifiedAmount}}</td>
+                        <td>{{ModifiedTime}}</td>
+                    </tr>
+                </tbody>
+            </table>
+@*            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" v-for="value in totalPages"><a class="page-link" href="#" @@click="pagingHandler(value)">{{ value }}</a></li>
+                </ul>
+            </nav>*@
+        </div>
+    </div>
+
+
+    @section Scripts{
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script>
+            const { createApp, ref, watch } = Vue
+            createApp({
+                setup() {
+                    const pointRecords = ref([])     //顯示在產品中的資料
+                    const keyword = ref("")      //搜尋的內容
+                    const sortBy = ref("")       //排序的欄位
+                    const sortType = ref("asc")  //升冪還是降冪
+                    const totalPages = ref(0)   //總共有幾頁
+                    const thePage = ref(1)       //目前是第幾頁
+
+                    const loadPointRecords = async () => {
+                        //ajax XMLHttpRequest、fetch()、jQuery $.ajax()、axios
+                        //const API_URL = `https://localhost:7118/api/products/search?keyword=${keyword.value}&sortBy=${sortBy.value}&sortType=${sortType.value}&page=${thePage.value}`
+                        const API_URL = `https://localhost:7118/api/products/search`
+                        const search = { "keyword": keyword.value, "sortBy": sortBy.value, "sortType": sortType.value, "page": thePage.value };
+
+                        //const response = await fetch(API_URL)
+                        const response = await fetch(API_URL, {
+                            method: "POST",
+                            headers: {
+                                "content-type": "application/json"
+                            },
+                            body: JSON.stringify(search)
+                        })
+                        const datas = await response.json()
+                        pointRecords.value = datas.pointRecords
+                        totalPages.value = datas.totalPages
+                    }
+
+
+
+                    //分頁功能
+                    const pagingHandler = page => {
+                        thePage.value = page
+                        loadPointRecords()
+                    }
+
+                    //排序功能
+                    const sortHandler = type => {
+                        sortBy.value = type
+                        sortType.value = sortType.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
+                        //console.log(sortBy.value , sortType.value)
+                        thePage.value = 1
+                        loadPointRecords()
+                    }
+
+                    //透過watch監看keyword有沒有改變
+                    watch(keyword, (newKeyword, oldKeyword) => {
+                        //console.log(newKeyword)
+                        //console.log(oldKeyword)
+                        thePage.value = 1
+                        loadPointRecords()
+                    })
+
+                    loadPointRecords()
+
+                    return {
+                        pointRecords,
+                        keyword,
+                        sortHandler,
+                        sortType,
+                        sortBy,
+                        totalPages,
+                        pagingHandler,
+                        thePage
+                    }
+                }
+            }).mount('#app')
+        </script>
+    }
+
+    @section Styles{
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    }

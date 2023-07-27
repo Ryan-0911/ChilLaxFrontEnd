@@ -6,12 +6,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ChilLaxFrontEnd</title>
+    <title>@ViewData["Title"]</title>
     @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ChilLaxFrontEnd.styles.css" asp-append-version="true" />*@
     <link rel="icon" href="/assets/images/logo1.png" />
-
     <link rel="manifest" href="/manifest.json" />
     <meta name="msapplication-TileColor" content="#ffffff" />
     <meta name="msapplication-TileImage" content="assets/images/favicons/ms-icon-144x144.png" />
@@ -26,7 +25,7 @@
     <link href="/assets/lib/animate.css/animate.css" rel="stylesheet" />
     <link href="/assets/lib/et-line-font/et-line-font.css" rel="stylesheet" />
     <link href="/assets/lib/flexslider/flexslider.css" rel="stylesheet" />
-    
+
     <link href="/assets/lib/owl.carousel/dist/assets/owl.carousel.min.css" rel="stylesheet" />
     <link href="/assets/lib/owl.carousel/dist/assets/owl.theme.default.min.css" rel="stylesheet" />
     <link href="/assets/lib/magnific-popup/dist/magnific-popup.css" rel="stylesheet" />
@@ -73,16 +72,16 @@
         .user-info {
             display: flex;
             align-items: center;
+            justify-content: space-around;
         }
 
             .user-info h3 {
                 font-weight: 500;
             }
 
-            .user-info img {
-                width: 60px;
-                border-radius: 50%;
-                margin-right: 15px;
+            .user-info p {
+                align-self: center; /* 將 p 元素自身垂直對齊到 center */
+                margin: 0; /* 清除預設的 margin，使其垂直居中 */
             }
 
         .sub-menu-link {
@@ -234,7 +233,8 @@
                             <a asp-action="TarotIndax" asp-controller="Tarot">Tarot</a>
                         </li>
                         <li>
-                            <a asp-action="List" asp-controller="Product">Product</a>
+                            <a href="/Product/list" >Shop</a>
+                        </li>
                         <li>
                             <a href="#">Customer Service</a>
                         </li>
@@ -251,21 +251,22 @@
                                 Member member = JsonSerializer.Deserialize<Member>(json);
                                 <h3>@member.MemberName</h3>
                             }
+                            <p><i class="fa-solid fa-coins fa-fade" style="color: #f2b202; font-size: 2rem"></i> @member.MemberPoint</p>
                         </div>
                         <hr style="border: 0; height: 1px; width: 100%; background: #ccc; margin: 15px 0 10px" />
-                        <a href="#" class="sub-menu-link">
-                            <img src="/assets/images/edit.png" />
+                        <a href="@Url.Action("editMemberProfile", "Login")" class="sub-menu-link">
+
+                            <img src="~/assets/images/edit.png" />
                             <p>個人資料</p>
                             <span>></span>
                         </a>
                         <a asp-action="PointRecord" asp-controller="Home" class="sub-menu-link">
-                            <img src="/assets/images/footprint.png" />
-                            <p>總點數</p>
+                            <img src="~/assets/images/footprint.png" />
+                            <p>點數紀錄</p>
                             <span>></span>
                         </a>
-                        @*<a href="#" class="sub-menu-link">*@
                         <a href="@Url.Action("Logout", "Login")" class="sub-menu-link">
-                            <img src="/assets/images/logout.png" />
+                            <img src="~/assets/images/logout.png" />
                             <p>登出</p>
                             <span>></span>
                         </a>
@@ -325,7 +326,6 @@
     </script>
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
-
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/assets/lib/jquery/dist/jquery.js"></script>
     <script src="~/assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
