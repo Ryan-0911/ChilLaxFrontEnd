@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ChilLaxFrontEnd.Models;
 using System.Text.Json;
+using static System.Collections.Specialized.BitVector32;
+using System.Diagnostics.Metrics;
+using Microsoft.Build.Framework;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -15,14 +18,6 @@ namespace ChilLaxFrontEnd.Controllers
     public class CartsAPIController : ControllerBase
     {
         private readonly ChilLaxContext _context;
-
-        public CartsAPIController(ChilLaxContext context)
-        {
-            _context = context;
-        }
-
-
-
 
         // GET: api/CartsAPI/Delete/5
         [HttpGet("Delete/{id}")]
@@ -85,120 +80,16 @@ namespace ChilLaxFrontEnd.Controllers
 
             return "新增成功";
         }
+
+        //POST: api/CartsAPI/SaveCartSession
+        [HttpPost]
+        [Route("SaveCartSession")]
+        public string SaveCartSession( CartResultReq cartResultReq)
+        {
+            string cartsJson = JsonSerializer.Serialize(cartResultReq);
+            HttpContext.Session.SetString(CDictionary.SK_CHECKOUT_DATA, cartsJson);
+
+            return "list";
+        }
     }
-
-    //    // GET: api/CartsAPI
-    //    [HttpGet]
-    //        public async Task<ActionResult<IEnumerable<Cart>>> GetCart()
-    //        {
-    //          if (_context.Cart == null)
-    //          {
-    //              return NotFound();
-    //          }
-    //            return await _context.Cart.ToListAsync();
-    //        }
-
-    //        // GET: api/CartsAPI/5
-    //        [HttpGet("{id}")]
-    //        public async Task<ActionResult<Cart>> GetCart(int id)
-    //        {
-    //          if (_context.Cart == null)
-    //          {
-    //              return NotFound();
-    //          }
-    //            var cart = await _context.Cart.FindAsync(id);
-
-    //            if (cart == null)
-    //            {
-    //                return NotFound();
-    //            }
-
-    //            return cart;
-    //        }
-
-    //        // PUT: api/CartsAPI/5
-    //        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //        [HttpPut("{id}")]
-    //        public async Task<IActionResult> PutCart(int id, Cart cart)
-    //        {
-    //            if (id != cart.MemberId)
-    //            {
-    //                return BadRequest();
-    //            }
-
-    //            _context.Entry(cart).State = EntityState.Modified;
-
-    //            try
-    //            {
-    //                await _context.SaveChangesAsync();
-    //            }
-    //            catch (DbUpdateConcurrencyException)
-    //            {
-    //                if (!CartExists(id))
-    //                {
-    //                    return NotFound();
-    //                }
-    //                else
-    //                {
-    //                    throw;
-    //                }
-    //            }
-
-    //            return NoContent();
-    //        }
-
-    //        // POST: api/CartsAPI
-    //        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //        [HttpPost]
-    //        public async Task<ActionResult<Cart>> PostCart(Cart cart)
-    //        {
-    //          if (_context.Cart == null)
-    //          {
-    //              return Problem("Entity set 'ChilLaxContext.Cart'  is null.");
-    //          }
-    //            _context.Cart.Add(cart);
-    //            try
-    //            {
-    //                await _context.SaveChangesAsync();
-    //            }
-    //            catch (DbUpdateException)
-    //            {
-    //                if (CartExists(cart.MemberId))
-    //                {
-    //                    return Conflict();
-    //                }
-    //                else
-    //                {
-    //                    throw;
-    //                }
-    //            }
-
-    //            return CreatedAtAction("GetCart", new { id = cart.MemberId }, cart);
-    //        }
-
-    //        // DELETE: api/CartsAPI/5
-    //        [HttpDelete("{id}")]
-    //        public async Task<IActionResult> DeleteCart(int id)
-    //        {
-    //            if (_context.Cart == null)
-    //            {
-    //                return NotFound();
-    //            }
-    //            var cart = await _context.Cart.FindAsync(id);
-    //            if (cart == null)
-    //            {
-    //                return NotFound();
-    //            }
-
-    //            _context.Cart.Remove(cart);
-    //            await _context.SaveChangesAsync();
-
-    //            return NoContent();
-    //        }
-
-    //        private bool CartExists(int id)
-    //        {
-    //            return (_context.Cart?.Any(e => e.MemberId == id)).GetValueOrDefault();
-    //        }
-    //    }
 }

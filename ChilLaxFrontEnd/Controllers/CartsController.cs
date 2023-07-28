@@ -72,6 +72,20 @@ namespace ChilLaxFrontEnd.Controllers
             return "刪除成功";
         }
 
+        //GET: Carts/list
+        public async Task<ActionResult<List<ProductOrderDetailDTO>>> list()
+        {
+            CartList cartList = new CartList();
+            string? json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            string? cartjson = HttpContext.Session.GetString(CDictionary.SK_CHECKOUT_DATA);
+            cartList.MemberPick = JsonSerializer.Deserialize<MemberPick>(json);
+            cartList.CartResultReq = JsonSerializer.Deserialize<CartResultReq>(cartjson);
+            
+            //for (int i = 0; i< productOrderDetailDTO)
+            //productOrderDetailDTO.Member = _context.Member.Where(m => m.MemberId == Mid).FirstOrDefault();
+
+            return View(cartList);
+        }
 
     }
 }

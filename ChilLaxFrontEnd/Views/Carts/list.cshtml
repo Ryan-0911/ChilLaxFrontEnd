@@ -1,0 +1,49 @@
+﻿@model ChilLaxFrontEnd.Models.CartList
+@{
+    ViewData["Title"] = "list";
+}
+<style>
+    .checkout-page{
+        padding: 30px;
+        width: 40%;
+        min-width: 400px;
+        margin: 60px auto;
+        background: #bebad2;
+    }
+</style>
+<div class="checkout-page">
+<h2>訂單確認</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="app">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">購買人</label>
+                <p>@Model.MemberPick.MemberName</p>
+            </div>
+            <div class="form-group">
+                <label class="control-label">總金額</label>
+                <p>123</p>
+            </div>
+            <div class="form-group">
+                <label for="OrderTotalPrice" class="control-label">寄送方式</label>
+                <select name="OrderTotalPrice">
+                    <option>宅配</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="OrderAddress" class="control-label">地址</label>
+                <input name="OrderAddress" class="form-control" value="@Model.MemberPick.MemberAddress"/>
+            </div>
+            <div class="form-group">
+                <label for="OrderNote" class="control-label">備註</label>
+                <input name="OrderNote" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="送出訂單" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+</div>

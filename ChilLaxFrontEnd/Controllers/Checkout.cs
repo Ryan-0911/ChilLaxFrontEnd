@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ChilLaxFrontEnd.Models;
 using System.Linq;
 using ChilLaxFrontEnd.Models.DTO;
+using System.Text.Json;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -17,6 +18,7 @@ namespace ChilLaxFrontEnd.Controllers
             _context = context;
         }
 
+        
         public async Task<ActionResult<string>> Index()
         {
             ChilLaxContext db = new ChilLaxContext();

@@ -10,7 +10,8 @@ namespace ChilLaxFrontEnd.Models.DTO
         public ProductOrder? ProductOrder { get; set; }
         public OrderDetail? OrderDetail { get; set; }
         public Product? Product { get; set; }
-
+        public Member? Member { get; set; }
+        public Cart? Cart { get; set; }
 
     }
 }
