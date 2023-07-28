@@ -93,6 +93,7 @@ $('#sendButton').on('click', function () {
 
     shuffleBtn.addEventListener("click", shuffleTarotCards);
 
+
     function shuffleTarotCards() {
         if (currentIndex === 0) {
             shuffleBtn.disabled = true; // 禁用按鈕，直到三張牌都出現

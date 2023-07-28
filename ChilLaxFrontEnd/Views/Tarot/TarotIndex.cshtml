@@ -140,5 +140,48 @@
                 
             });
         });
+        document.getElementById("shuffleBtn").addEventListener("click", function () {
+          
+            
+            // 發送 GET 請求獲取會員點數
+            $.ajax({
+                type: "GET",
+                url: "https://localhost:5000/api/GetPointHistory"
+            }).done(data => {
+                const memberPoints = data.reduce((total, item) => total + item.ModifiedAmount, 0);
+
+                // 檢查點數是否足夠
+                if (memberPoints >= 300) {
+                    // 足夠點數，詢問會員是否要使用點數進行占卜
+                    const confirmResult = confirm("您目前有 " + memberPoints + " 點，是否要使用 300 點進行占卜呢？");
+                    if (confirmResult) {
+                        // 使用 POST 請求新增點數記錄
+                        $.ajax({
+                            type: "POST",
+                            url: "https://localhost:5000/api/PostPointHistory",
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                ModifiedSource: "Tarot",
+                                ModifiedAmount: -300
+                            })
+                        }).done(result => {
+                            // 在此處理成功新增點數記錄的情況
+                            alert("您的點數已成功扣除 300 點，可以進行占卜了！");
+                            // 啟動洗牌按鈕進行占卜
+                            shuffleTarotCards();
+                        }).fail(err => {
+                            // 在此處理新增點數記錄失敗的情況
+                            alert("新增點數記錄時發生錯誤：" + err.statusText);
+                        });
+                    }
+                } else {
+                    // 不足夠點數
+                    alert("您的點數不足，請充值後再進行占卜！");
+                }
+            }).fail(err => {
+                alert("獲取會員點數時發生錯誤：" + err.statusText);
+            });
+        });
+
     </script>
 }
