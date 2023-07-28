@@ -9,6 +9,7 @@ using System.Linq; // 加入這個命名空間以使用 LINQ 查詢
 using System.Collections.Generic; // 加入這個命名空間以使用 IEnumerable<T>
 using System.Threading.Tasks; // 加入這個命名空間以使用非同步 Task<T> 方法
 using System;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -145,19 +146,7 @@ namespace ChilLaxFrontEnd.Controllers
 
         public IActionResult AddToCart(int? id)
         {
-            //if(id == null)
-            //{
-            //    return RedirectToAction("List");
-            //}
-            //ViewBag.product_id = id;
-            //return View();
 
-            //if (id == null)
-            //{
-            //    return RedirectToAction("List");
-            //}
-
-            // 假設您的資料庫內含有名為 "Products" 的資料表，並包含 ProductId 欄位用於查詢產品
             Product product = db.Product.FirstOrDefault(p => p.ProductId == id);
 
             if (product == null || id == null) 
@@ -202,7 +191,7 @@ namespace ChilLaxFrontEnd.Controllers
 
             db.SaveChanges();
 
-            return View();
+            return RedirectToAction("Details", "Carts", new { id = member.MemberId });
 
 
 
