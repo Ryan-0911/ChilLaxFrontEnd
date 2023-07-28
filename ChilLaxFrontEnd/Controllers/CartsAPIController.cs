@@ -127,11 +127,11 @@ namespace ChilLaxFrontEnd.Controllers
             _context.SaveChanges();
 
             //新增訂單詳細資料表
-            int orderid = _context.ProductOrder.Max().OrderId.Max();
+            int orderid = _context.ProductOrder.Max().OrderId;
             for(int i=0; i< CartResultReq.trueCheckboxs.Length; i++)
             {
                 OrderDetail orderDetail = new OrderDetail();
-                orderDetail.OrderId = orderid.ToString();
+                orderDetail.OrderId = orderid;
                 orderDetail.ProductId = CartResultReq.trueCheckboxs[i].pid;
                 orderDetail.CartProductQuantity = CartResultReq.trueCheckboxs[i].qty;
                 _context.OrderDetail.Add(orderDetail);
