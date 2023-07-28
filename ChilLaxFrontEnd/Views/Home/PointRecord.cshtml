@@ -53,7 +53,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="{modifiedSource, content, modifiedAmount, modifiedTime} in pointRecords">
+                    <tr v-for="{modifiedSource, content, modifiedAmount, modifiedTime} in pointRecords" :style="getRowStyle(modifiedSource)">
                         <td>{{modifiedSource}}</td>
                         <td>{{content}}</td>
                         <td>{{modifiedAmount}}</td>
@@ -61,6 +61,12 @@
                     </tr>
                 </tbody>
             </table>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" v-for="page in totalPages"><a class="page-link" href="#" @@click="pagingHandler(page)">{{ page }}</a></li>
+
+                </ul>
+            </nav>
 
             {{pointRecords}}
         </div>
@@ -73,31 +79,31 @@
             const { createApp, ref, watch } = Vue
             createApp({
                 setup() {
-                    const pointRecords = ref([]) // 顯示在產品中的資料
+                    const pointRecords = ref([]) // 點數紀錄
                     const selectedOption = ref("") // 下拉選單所選的內容
                     const startDate = ref("") // 交易起始日的值
                     const endDate = ref("") // 交易終止日的值
                     const sortBy = ref("")       //排序的欄位
                     const sortTypeA = ref("asc")  //升冪還是降冪
                     const sortTypeT = ref("asc")  //升冪還是降冪
-                    //const totalPages = ref(0)   //總共有幾頁
-                    //const thePage = ref(1)       //目前是第幾頁
+                    const totalPages = ref()   //總共有幾頁
+                    const thePage = ref(1)       //目前是第幾頁
 
                     const loadPointRecords = async () => {
                         let API_URL = ''
-                        if (sortBy == "modifiedAmount") {
-                            API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}`
+                        if (sortBy.value == "modifiedAmount") {
+                            API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}&page=${thePage.value}`
                         }
                         else {
-                            API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}`
+                            API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}&page=${thePage.value}`
 
                         }
                         const response = await fetch(API_URL, {
                             method: "POST",
                         })
                         const datas = await response.json()
-                        pointRecords.value = datas
-                        //totalPages.value = datas.totalPages
+                        pointRecords.value = datas.pointRecords
+                        totalPages.value = datas.totalPages
                     }
                     loadPointRecords()
 
@@ -140,7 +146,31 @@
                         console.log(sortBy.value, sortTypeA.value, sortTypeT.value)
                         //thePage.value = 1
                         loadPointRecords()
+                    }
 
+                    // 列的顏色 (根據modifiedSource而定)---------------------------------------------------------------------------------------------
+                    const getRowStyle = modifiedSource => {
+                        console.log(modifiedSource);
+                        // 如果 modifiedSource 是 "focus"，設置綠色背景
+                        if (modifiedSource === "focus") {
+                            return { backgroundColor: "#A9E4EF" };
+                        }
+                        // 如果 modifiedSource 是 "tarot"，設置藍色背景
+                        if (modifiedSource === "tarot") {
+                            return { backgroundColor: "#DDF1DD" };
+                        }
+                        // 如果 modifiedSource 是 "product"，設置黃色背景
+                        if (modifiedSource === "product") {
+                            return { backgroundColor: "#FFFBDB" };
+                        }
+                        // 預設情況下，不應用任何額外的 CSS 類，保持預設的背景色
+                        return {};
+                    };
+
+                    //分頁功能---------------------------------------------------------------------------------------------
+                    const pagingHandler = page => {
+                        thePage.value = page
+                        loadPointRecords()
                     }
 
 
@@ -153,9 +183,10 @@
                         sortTypeA,
                         sortTypeT,
                         sortBy,
-                        //totalPages,
-                        //pagingHandler,
-                        //thePage
+                        getRowStyle,
+                        totalPages,
+                        pagingHandler,
+                        thePage
                     }
                 }
             }).mount('#app')
