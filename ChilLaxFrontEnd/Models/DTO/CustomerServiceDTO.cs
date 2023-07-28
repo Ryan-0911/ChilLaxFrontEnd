@@ -6,5 +6,7 @@
         public int MemberId { get; set; }
         public string Message { get; set; }
         public string MessageDatetime { get; set; }
+        public string Reply { get; set; }
+        public string ReplyDatetime { get; set; }
     }
 }

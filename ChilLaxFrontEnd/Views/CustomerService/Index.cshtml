@@ -16,6 +16,8 @@
             @*<th>會員編號</th>*@
             <th>回饋訊息</th>
             <th>回饋時間</th>
+            <th>客服回覆訊息</th>
+            <th>客服回覆時間</th>
         </tr>
     </thead>
 </table>
@@ -43,8 +45,10 @@
                 columns: [
                     //{ "data": "customerServiceId", "width": "25%" },
                     //{ "data": "memberId", "width": "25%" },
-                    { "data": "message", "width": "75%" },
+                    { "data": "message", "width": "25%" },
                     { "data": "messageDatetime", "width": "25%" },
+                    { "data": "reply", "width": "25%" },
+                    { "data": "replyDatetime", "width": "25%" },
                 ],
                 fixedHeader: {
                     header: true
