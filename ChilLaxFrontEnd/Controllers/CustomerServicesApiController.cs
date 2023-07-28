@@ -31,7 +31,7 @@ namespace ChilLaxFrontEnd.Controllers
                 return NotFound();
             }
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
-            Console.WriteLine(json);
+            //Console.WriteLine(json);
             Member member = JsonSerializer.Deserialize<Member>(json);
 
             return await _context.CustomerService.Where(Cs => Cs.MemberId == member.MemberId).ToListAsync();
@@ -48,33 +48,33 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         // GET: api/CustomerServicesApi/5
-        [HttpGet("{id}")]
-        public async Task<List<CustomerServiceDTO>> GetCustomerService(int id)
-        {
-            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
-            Console.WriteLine(json);
-            Member member = JsonSerializer.Deserialize<Member>(json);
+        //[HttpGet("{id}")]
+        //public async Task<List<CustomerServiceDTO>> GetCustomerService(int id)
+        //{
+        //    string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+        //    Console.WriteLine(json);
+        //    Member member = JsonSerializer.Deserialize<Member>(json);
 
 
-            if (_context.CustomerService == null)
-          {
-              return null;
-          }
-            var customerService = _context.CustomerService.Where(cus=> cus.MemberId== id).Select(cus=> new CustomerServiceDTO {
+        //    if (_context.CustomerService == null)
+        //  {
+        //      return null;
+        //  }
+        //    var customerService = _context.CustomerService.Where(cus=> cus.MemberId== id).Select(cus=> new CustomerServiceDTO {
                 
-                MemberId = cus.MemberId,
-                Message = cus.Message,
-                MessageDatetime = cus.MessageDatetime,
+        //        MemberId = cus.MemberId,
+        //        Message = cus.Message,
+        //        MessageDatetime = cus.MessageDatetime,
 
-            }).ToList();
+        //    }).ToList();
 
-            if (customerService == null || customerService.Count == 0)
-            {
-                return null;
-            }
+        //    if (customerService == null || customerService.Count == 0)
+        //    {
+        //        return null;
+        //    }
 
-            return customerService;
-        }
+        //    return customerService;
+        //}
 
         // PUT: api/CustomerServicesApi/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -112,10 +112,13 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpPost]
         public async Task<CustomerServiceDTO> PostCustomerService(CustomerServiceDTO cusDTO)
         {
-          CustomerService cus = new CustomerService
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            //Console.WriteLine(json);
+            Member member = JsonSerializer.Deserialize<Member>(json);
+            CustomerService cus = new CustomerService
           { 
-            MemberId = cusDTO.MemberId,
-            MessageDatetime = DateTime.Now.ToString(),
+            MemberId = member.MemberId,
+            MessageDatetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
             Message = cusDTO.Message,
           
           };
