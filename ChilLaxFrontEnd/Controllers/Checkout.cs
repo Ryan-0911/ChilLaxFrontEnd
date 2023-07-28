@@ -30,7 +30,7 @@ namespace ChilLaxFrontEnd.Controllers
             string website = $"https://localhost:5000";
 
             //取得最新一筆訂單
-            string maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
+            int maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
             //ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
             List<ProductOrderDetailDTO> productOrderDetails = await db.ProductOrder
                .Where(o => o.OrderId == maxOrderId)
@@ -99,7 +99,7 @@ namespace ChilLaxFrontEnd.Controllers
                 try
                 {
 
-                    ProductOrder productOrder = await _context.ProductOrder.FirstOrDefaultAsync(po => po.OrderId == id.ToString());
+                    ProductOrder productOrder = await _context.ProductOrder.FirstOrDefaultAsync(po => po.OrderId == id);
 
                     if (productOrder == null)
                         return "找不到該訂單";

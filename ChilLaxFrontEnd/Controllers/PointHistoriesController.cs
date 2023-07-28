@@ -37,8 +37,8 @@ namespace ChilLaxFrontEnd.Controllers
             Member member = JsonSerializer.Deserialize<Member>(json);
 
             // Product
-            var queryP = from pointHistory in _context.PointHistory.ToList()
-                         join productOrder in _context.ProductOrder.ToList()
+            var queryP = from pointHistory in _context.PointHistory
+                         join productOrder in _context.ProductOrder
                          on pointHistory.PointDetailId equals productOrder.OrderId.ToString()
                          where pointHistory.MemberId == member.MemberId
                          select new PointRecordDTO
@@ -94,14 +94,24 @@ namespace ChilLaxFrontEnd.Controllers
                          };
 
             //// Product---------------------------------------------------------------------------------------------------------------------------------------------
-
-
+            var queryP = from pointHistory in _context.PointHistory
+                         join productOrder in _context.ProductOrder
+                         on pointHistory.PointDetailId equals productOrder.OrderId.ToString()
+                         where pointHistory.MemberId == member.MemberId
+                         select new PointRecordDTO
+                         {
+                             ModifiedSource = pointHistory.ModifiedSource,
+                             ModifiedAmount = pointHistory.ModifiedAmount,
+                             Content = $"消費總額: {(productOrder.OrderTotalPrice).ToString()}",
+                             ModifiedTime = productOrder.OrderDate,
+                         };
 
             // 將上面三個 PointRecordDTO 加在同一個 PointRecordDTO *先以ToList()把queryF跟queryT載入記憶體才能操作
             var resultF = await queryF.ToListAsync();
             var resultT = await queryT.ToListAsync();
+            var resultP = await queryP.ToListAsync();
             //var resultP = await queryP.ToListAsync();
-            var resultAll = resultF.Concat(resultT).ToList();
+            var resultAll = resultF.Concat(resultT).Concat(resultP).ToList();
 
 
             // 根據下拉選單的選擇進行組合
@@ -198,7 +208,7 @@ namespace ChilLaxFrontEnd.Controllers
                                 queryT = sortType == "asc" ? queryT.OrderBy(t => t.ModifiedTime) : queryT.OrderByDescending(t => t.ModifiedTime);
                                 break;
                             default:
-                                break; 
+                                break;
                         }
                     }
                     // 分頁
@@ -211,9 +221,42 @@ namespace ChilLaxFrontEnd.Controllers
                     return prpd;
                     break;
 
-                //case "Product":
-                //    return queryP.ToList();
-                //    break;
+                case "Product":
+                    // 日期
+                    if (startDate != null)
+                    {
+                        queryP = queryP.Where(p => p.ModifiedTime >= startDate);
+                    }
+                    if (endDate != null)
+                    {
+                        queryP = queryP.Where(p => p.ModifiedTime <= endDate);
+                    }
+                    // 排序
+                    if (!string.IsNullOrWhiteSpace(sortBy))
+                    {
+                        switch (sortBy)
+                        {
+                            case "modifiedAmount":
+                                queryP = sortType == "asc" ? queryP.OrderBy(p => p.ModifiedAmount) : queryP.OrderByDescending(p => p.ModifiedAmount);
+                                break;
+                            case "modifiedTime":
+                                queryP = sortType == "asc" ? queryP.OrderBy(p => p.ModifiedTime) : queryP.OrderByDescending(p => p.ModifiedTime);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    // 分頁
+                    TotalCount = queryP.Count(); // 共有多少筆資料
+                    TotalPages = (int)Math.Ceiling((decimal)TotalCount / pageSize);  // 共有幾頁
+                    pointRecords = queryP.Skip((int)((page - 1) * pageSize)).Take(pageSize).ToList();
+
+                    prpd.TotalPages = TotalPages;
+                    prpd.PointRecords = pointRecords;
+                    return prpd;
+                    break;
+
+                    return prpd;
 
                 default:
                     // 日期
