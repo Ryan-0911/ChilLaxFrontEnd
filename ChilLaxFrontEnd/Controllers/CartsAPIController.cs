@@ -99,11 +99,13 @@ namespace ChilLaxFrontEnd.Controllers
         //POST: api/CartsAPI/SaveProductOrder
         [HttpPost]
         [Route("SaveProductOrder")]
-        public string SaveProductOrder(ProductOrderReq por)
+        public async Task<string> SaveProductOrder(ProductOrderReq por)
         {
             string memberjson = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
             string cartjson = HttpContext.Session.GetString(CDictionary.SK_CHECKOUT_DATA);
             Member member = JsonSerializer.Deserialize<Member>(memberjson);
+            int mid = member.MemberId;
+
             CartResultReq CartResultReq = JsonSerializer.Deserialize<CartResultReq>(cartjson);
             int totoPrice = 0;
             for (int i =0; i< CartResultReq.trueCheckboxs.Length; i++)
@@ -113,31 +115,59 @@ namespace ChilLaxFrontEnd.Controllers
                 totoPrice += product.FirstOrDefault().ProductPrice * CartResultReq.trueCheckboxs[i].qty;
             }
 
-            //新增訂單
-            ProductOrder productOrder = new ProductOrder();
-            productOrder.MemberId = member.MemberId;
-            productOrder.OrderPayment = false;
-            productOrder.OrderTotalPrice = totoPrice;
-            productOrder.OrderDelivery = false;
-            productOrder.OrderAddress = member.MemberAddress;
-            productOrder.OrderDate = DateTime.Parse(por.OrderDate);
-            productOrder.OrderNote = por.OrderNote;
-            productOrder.OrderState = "未出貨";
-            _context.ProductOrder.Add(productOrder);
-            _context.SaveChanges();
-
-            //新增訂單詳細資料表
-            int orderid = _context.ProductOrder.Max().OrderId;
-            for(int i=0; i< CartResultReq.trueCheckboxs.Length; i++)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.OrderId = orderid;
-                orderDetail.ProductId = CartResultReq.trueCheckboxs[i].pid;
-                orderDetail.CartProductQuantity = CartResultReq.trueCheckboxs[i].qty;
-                _context.OrderDetail.Add(orderDetail);
+                try
+                {
+                    //新增訂單
+                    ProductOrder productOrder = new ProductOrder();
+                    productOrder.MemberId = member.MemberId;
+                    productOrder.OrderPayment = false;
+                    productOrder.OrderTotalPrice = totoPrice;
+                    productOrder.OrderDelivery = false;
+                    productOrder.OrderAddress = member.MemberAddress;
+                    productOrder.OrderDate = DateTime.Parse(por.OrderDate);
+                    productOrder.OrderNote = por.OrderNote;
+                    productOrder.OrderState = "未出貨";
+                    _context.ProductOrder.Add(productOrder);
+                    await _context.SaveChangesAsync();
+
+                    //新增訂單詳細資料表
+                    int orderid = _context.ProductOrder.Max(p => p.OrderId);
+                    for (int i = 0; i < CartResultReq.trueCheckboxs.Length; i++)
+                    {
+                        OrderDetail orderDetail = new OrderDetail();
+                        orderDetail.OrderId = orderid;
+                        orderDetail.ProductId = CartResultReq.trueCheckboxs[i].pid;
+                        orderDetail.CartProductQuantity = CartResultReq.trueCheckboxs[i].qty;
+                        _context.OrderDetail.Add(orderDetail);
+                    }
+                    await _context.SaveChangesAsync();
+
+                    //刪除購物車內商品
+                    for (int i = 0; i < CartResultReq.trueCheckboxs.Length; i++)
+                    {
+                        Cart cart = new Cart();
+                        cart = _context.Cart.FirstOrDefault(c => c.MemberId == mid && c.ProductId == CartResultReq.trueCheckboxs[i].pid);
+                        _context.Remove(cart);
+                    }
+                    await _context.SaveChangesAsync();
+
+
+                    await transaction.CommitAsync();
+
+                    return "";
+                   
+                }
+                catch (Exception ex)
+                {
+                    // 發生例外時回滾交易
+                    await transaction.RollbackAsync();
+                    return "結帳失敗：" + ex.Message;
+                }
             }
 
-            return "list";
+           
         }
     }
 }
