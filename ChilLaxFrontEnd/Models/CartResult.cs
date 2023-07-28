@@ -25,4 +25,10 @@
         public MemberPick MemberPick { get; set; }
 
     }
+    public class ProductOrderReq
+    {
+        public string OrderAddress { get; set; }
+        public string OrderNote { get; set; }
+        public string OrderDate { get; set; }
+    }
 }

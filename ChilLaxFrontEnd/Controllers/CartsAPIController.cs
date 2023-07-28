@@ -18,6 +18,10 @@ namespace ChilLaxFrontEnd.Controllers
     public class CartsAPIController : ControllerBase
     {
         private readonly ChilLaxContext _context;
+        public CartsAPIController(ChilLaxContext context)
+        {
+            _context = context;
+        }
 
         // GET: api/CartsAPI/Delete/5
         [HttpGet("Delete/{id}")]
@@ -88,6 +92,50 @@ namespace ChilLaxFrontEnd.Controllers
         {
             string cartsJson = JsonSerializer.Serialize(cartResultReq);
             HttpContext.Session.SetString(CDictionary.SK_CHECKOUT_DATA, cartsJson);
+
+            return "list";
+        }
+
+        //POST: api/CartsAPI/SaveProductOrder
+        [HttpPost]
+        [Route("SaveProductOrder")]
+        public string SaveProductOrder(ProductOrderReq por)
+        {
+            string memberjson = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            string cartjson = HttpContext.Session.GetString(CDictionary.SK_CHECKOUT_DATA);
+            Member member = JsonSerializer.Deserialize<Member>(memberjson);
+            CartResultReq CartResultReq = JsonSerializer.Deserialize<CartResultReq>(cartjson);
+            int totoPrice = 0;
+            for (int i =0; i< CartResultReq.trueCheckboxs.Length; i++)
+            {
+                int pid = CartResultReq.trueCheckboxs[i].pid;
+                var product = _context.Product.Where(p => p.ProductId == pid);
+                totoPrice += product.FirstOrDefault().ProductPrice * CartResultReq.trueCheckboxs[i].qty;
+            }
+
+            //新增訂單
+            ProductOrder productOrder = new ProductOrder();
+            productOrder.MemberId = member.MemberId;
+            productOrder.OrderPayment = false;
+            productOrder.OrderTotalPrice = totoPrice;
+            productOrder.OrderDelivery = false;
+            productOrder.OrderAddress = member.MemberAddress;
+            productOrder.OrderDate = DateTime.Parse(por.OrderDate);
+            productOrder.OrderNote = por.OrderNote;
+            productOrder.OrderState = "未出貨";
+            _context.ProductOrder.Add(productOrder);
+            _context.SaveChanges();
+
+            //新增訂單詳細資料表
+            int orderid = _context.ProductOrder.Max().OrderId.Max();
+            for(int i=0; i< CartResultReq.trueCheckboxs.Length; i++)
+            {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.OrderId = orderid.ToString();
+                orderDetail.ProductId = CartResultReq.trueCheckboxs[i].pid;
+                orderDetail.CartProductQuantity = CartResultReq.trueCheckboxs[i].qty;
+                _context.OrderDetail.Add(orderDetail);
+            }
 
             return "list";
         }
