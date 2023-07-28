@@ -39,8 +39,8 @@
     {
         @Html.AntiForgeryToken()
         <hr />
+        <input type="hidden" name="ProductId" value="@Model.ProductId" id="PId" />
 
-        <input type="hidden" name="txtFId" value="@ViewBag.FId" />
 
         @* <!-- SECTION --> *@
         <div class="section">
@@ -52,7 +52,7 @@
                     <div id="product-imgs">
                         <div class="product-preview">
                             <img src="~/assets/images/@Model.ProductImg" />
-                            <input type="hidden" name="ProductId" value="@Model.ProductId" id="PId" />
+
                         </div>
                     </div>
                 </div>

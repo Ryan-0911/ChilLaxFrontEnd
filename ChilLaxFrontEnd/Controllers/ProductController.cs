@@ -82,7 +82,8 @@ namespace ChilLaxFrontEnd.Controllers
                     .Take(8)
                     .ToList();
                 productsPagingDTO.pageCount = pageCount;
-                productsPagingDTO.nowpage = nowpage;    
+                productsPagingDTO.nowpage = nowpage; 
+                
                 return View(new List<ProductsPagingDTO> { productsPagingDTO });
             }
 
@@ -109,19 +110,31 @@ namespace ChilLaxFrontEnd.Controllers
             //return View(new List<ProductsPagingDTO> { productsPagingDTO });
 
 
-            Cart cart = new Cart
+            // 寫入購物車資料表
+            // 檢查資料庫中是否已經有相同的購物車記錄
+            var existingCart = db.Cart.FirstOrDefault(c => c.MemberId == member.MemberId && c.ProductId == cvm.ProductId);
+
+            if (existingCart != null)
             {
-                MemberId = member.MemberId,
-                ProductId = cvm.ProductId,
-                CartProductQuantity = cvm.txtCount
-            };
+                // 如果已經存在相同的購物車記錄，可以選擇更新數量或是拋出錯誤訊息
+                existingCart.CartProductQuantity += cvm.txtCount;
+            }
+            else
+            {
+                // 如果資料庫中還不存在相同的購物車記錄，則新增一筆新的購物車記錄
+                Cart cart = new Cart
+                {
+                    MemberId = member.MemberId,
+                    ProductId = cvm.ProductId,
+                    CartProductQuantity = cvm.txtCount
+                };
 
+                db.Cart.Add(cart);
+            }
 
-            db.Cart.Add(cart);
             db.SaveChanges();
 
-
-            return View(productsPagingDTO);
+            return View();
 
 
         }
@@ -163,23 +176,35 @@ namespace ChilLaxFrontEnd.Controllers
             ChilLaxContext db = new ChilLaxContext();
 
 
-            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER); // 抓會員id登入的session
-            Console.WriteLine(json);
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
             Member member = JsonSerializer.Deserialize<Member>(json);
 
-            Cart cart = new Cart
+            // 檢查資料庫中是否已經有相同的購物車記錄
+            var existingCart = db.Cart.FirstOrDefault(c => c.MemberId == member.MemberId && c.ProductId == ProductId);
+
+            if (existingCart != null)
             {
-                MemberId = member.MemberId,
-                ProductId = cvm.ProductId,
-                CartProductQuantity = cvm.txtCount
-            };
+                // 如果已經存在相同的購物車記錄，可以選擇更新數量或是拋出錯誤訊息
+                existingCart.CartProductQuantity += cvm.txtCount;
+            }
+            else
+            {
+                // 如果資料庫中還不存在相同的購物車記錄，則新增一筆新的購物車記錄
+                Cart cart = new Cart
+                {
+                    MemberId = member.MemberId,
+                    ProductId = ProductId,
+                    CartProductQuantity = cvm.txtCount
+                };
 
+                db.Cart.Add(cart);
+            }
 
-            db.Cart.Add(cart);
             db.SaveChanges();
 
             return View();
-            //return RedirectToAction("AddToCart");
+
+
 
 
         }
