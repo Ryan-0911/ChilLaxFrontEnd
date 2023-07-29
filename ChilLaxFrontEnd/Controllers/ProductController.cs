@@ -165,8 +165,8 @@ namespace ChilLaxFrontEnd.Controllers
             ChilLaxContext db = new ChilLaxContext();
 
 
-            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
-            Member member = JsonSerializer.Deserialize<Member>(json);
+            string? json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            Member? member = JsonSerializer.Deserialize<Member>(json);
 
             // 檢查資料庫中是否已經有相同的購物車記錄
             var existingCart = db.Cart.FirstOrDefault(c => c.MemberId == member.MemberId && c.ProductId == ProductId);
@@ -191,37 +191,37 @@ namespace ChilLaxFrontEnd.Controllers
 
             db.SaveChanges();
 
-            return RedirectToAction("Details", "Carts", new { id = member.MemberId });
+            return RedirectToAction("Details", "Carts",null);
 
 
 
 
         }
 
-        //[HttpPost]
-        //public IActionResult ProductToCart(CAddToCartViewModel cvm)
-        //{
-        //    ChilLaxContext db = new ChilLaxContext();
+        [HttpPost]
+        public async Task<IActionResult> ProductToCartAsync(CAddToCartViewModel cvm)
+        {
+            ChilLaxContext db = new ChilLaxContext();
 
 
-        //    string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER); // 抓會員id登入的session
-        //    Console.WriteLine(json);
-        //    Member member = JsonSerializer.Deserialize<Member>(json);
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER); // 抓會員id登入的session
+            Console.WriteLine(json);
+            Member member = JsonSerializer.Deserialize<Member>(json);
 
-        //    Cart cart = new Cart();
+            Cart cart = new Cart();
 
-        //    cart.MemberId = member.MemberId;
-        //    cart.ProductId = cvm.ProductId;
-        //    cart.CartProductQuantity = cvm.txtCount;
+            cart.MemberId = member.MemberId;
+            cart.ProductId = cvm.ProductId;
+            cart.CartProductQuantity = cvm.txtCount;
 
-        //    _context.Cart.Add(cart);
-        //    _context.SaveChanges();
-        //    //  await _context.SaveChangesAsync();   將暫存的異動儲存到資料庫，確保資料庫中的資料與內存中的資料保持同步。
+            _context.Cart.Add(cart);
+            _context.SaveChanges();
+            await _context.SaveChangesAsync();   //將暫存的異動儲存到資料庫，確保資料庫中的資料與內存中的資料保持同步。
 
 
-        //    return RedirectToAction("List");
+            return RedirectToAction("List");
 
-        //}
+        }
 
         // 檢視購物車
         public IActionResult CartView()
