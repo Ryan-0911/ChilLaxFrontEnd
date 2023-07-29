@@ -115,71 +115,71 @@
 			position: relative;
 		}
 
-			.profile-mc .form-mc input, .profile-mc .form-mc .genderMC {
-				height: 90%;
-				width: 50%;
-				border: 1px solid #ddd;
-				font-size: 18px;
-				padding-right: 20px;
-				transition: border-color 0.3s;
-				text-align: center;
-			}
+		.profile-mc .form-mc input, .profile-mc .form-mc .genderMC {
+			height: 90%;
+			width: 50%;
+			border: 1px solid #ddd;
+			font-size: 18px;
+			padding-right: 20px;
+			transition: border-color 0.3s;
+			text-align: center;
+		}
 
-				.profile-mc .form-mc input:focus, .profile-mc .form-mc .genderMC:focus {
-					border-color: #5CADAD;
-					outline: none;
-					box-shadow: 0 0 5px #5CADAD;
-				}
+		.profile-mc .form-mc input:focus, .profile-mc .form-mc .genderMC:focus {
+			border-color: #5CADAD;
+			outline: none;
+			box-shadow: 0 0 5px #5CADAD;
+		}
 
-			.profile-mc .form-mc a {
-				color: #1961af;
-				text-decoration: none;
-				font-size: 18px;
-			}
+		.profile-mc .form-mc a {
+			color: #1961af;
+			text-decoration: none;
+			font-size: 18px;
+		}
 
-				.profile-mc .form-mc a:hover {
-					color: rgb(34, 46, 69);
-					text-decoration: underline;
-				}
+		.profile-mc .form-mc a:hover {
+			color: rgb(34, 46, 69);
+			text-decoration: underline;
+		}
 
-			.profile-mc .form-mc .btn-mc {
-				position: absolute;
-				right: 0;
-				bottom: 10px;
-			}
+		.profile-mc .form-mc .btn-mc {
+			position: absolute;
+			right: 0;
+			bottom: 10px;
+		}
 
-				.profile-mc .form-mc .btn-mc button {
-					display: inline-block;
-					width: 120px;
-					border-radius: 4px;
-					margin-left: 12px;
-					text-align: center;
-					padding: 6px 12px;
-					border: none;
-					cursor: pointer;
-					font-size: 14px;
-				}
+		.profile-mc .form-mc .btn-mc button {
+			display: inline-block;
+			width: 120px;
+			border-radius: 4px;
+			margin-left: 12px;
+			text-align: center;
+			padding: 6px 12px;
+			border: none;
+			cursor: pointer;
+			font-size: 14px;
+		}
 
-				.profile-mc .form-mc .btn-mc .cancelBtn {
-					background-color: #fff;
-					color: #000000;
-					border: 1px solid #d3d3d3b3;
-				}
+		.profile-mc .form-mc .btn-mc .cancelBtn {
+			background-color: #fff;
+			color: #000000;
+			border: 1px solid #d3d3d3b3;
+		}
 
-					.profile-mc .form-mc .btn-mc .cancelBtn:hover {
-						border: 1px solid #000000;
-					}
+		.profile-mc .form-mc .btn-mc .cancelBtn:hover {
+			border: 1px solid #000000;
+		}
 
-				.profile-mc .form-mc .btn-mc .saveBtn {
-					background-color: #4F9D9D;
-					color: #fff;
-				}
+		.profile-mc .form-mc .btn-mc .saveBtn {
+			background-color: #4F9D9D;
+			color: #fff;
+		}
 
-					.profile-mc .form-mc .btn-mc .saveBtn:hover {
-						background-color: #fff;
-						color: #4F9D9D;
-						border: 1px solid #4F9D9D;
-					}
+		.profile-mc .form-mc .btn-mc .saveBtn:hover {
+			background-color: #fff;
+			color: #4F9D9D;
+			border: 1px solid #4F9D9D;
+		}
 
 		.validation-error-message {
 			color: red;
@@ -225,7 +225,7 @@
 						<div class="form-mc">
 							<i class="fa-solid fa-envelope"></i>
 							<label>信箱</label>
-							<input type="email" id="memberEmail" name="memberEmail" value="@Model.memberEmail" autocomplete="off" required />
+							<input type="email" id="memberEmail" name="memberEmail" value="@Model.memberEmail" autocomplete="off" required readonly/>
 						</div>
 						<div class="form-mc">
 							<i class="fa-solid fa-children"></i>
