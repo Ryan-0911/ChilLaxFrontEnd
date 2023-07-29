@@ -57,8 +57,8 @@ namespace ChilLaxFrontEnd.Controllers
                 datas = db.Product.Where(p => p.ProductName.Contains(keyword));
             }
 
-            //return View(datas);
-
+            //取的購物車商品
+            productsPagingDTO.carts = _context.Cart.Where(c => c.MemberId == id).ToList();
 
             // 頁數
             if (nowpage == null)
