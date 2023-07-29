@@ -15,6 +15,7 @@ using System.Text;
 using System.Web;
 using System.Security.Cryptography;
 using static ChilLaxFrontEnd.Controllers.Checkout;
+using ChilLaxFrontEnd.ViewModels;
 
 namespace ChilLaxFrontEnd.Controllers
 {
