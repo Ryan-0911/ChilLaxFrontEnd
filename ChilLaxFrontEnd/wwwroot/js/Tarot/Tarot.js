@@ -141,13 +141,13 @@ function showNextCard() {
         // 將cardName的值作為參數傳遞給SendMessage方法
         threeCards.push(cardName);
 
-        if (currentIndex === 3) {
-            const threeCardsString = threeCards.join(", "); // 將threeCards以逗號分隔轉為字串
-            connection.invoke("SendMessage", threeCardsString) // 使用invoke呼叫SendMessage方法，並傳遞threeCardsString作為參數
-                .catch(function (err) {
-                    console.error(err);
-                });
-        }
+        //if (currentIndex === 3) {
+        //    const threeCardsString = threeCards.join(", "); // 將threeCards以逗號分隔轉為字串
+        //    connection.invoke("SendMessage", threeCardsString) // 使用invoke呼叫SendMessage方法，並傳遞threeCardsString作為參數
+        //        .catch(function (err) {
+        //            console.error(err);
+        //        });
+        //}
 
         tarotCardElement.classList.remove("card-removed");
         tarotCardElement.classList.add("card-appeared");

@@ -24,20 +24,32 @@ namespace ChilLaxFrontEnd.Controllers
 
         // GET: api/TarotPointHistories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PointHistory>>> GetPointHistory()
+        //public async Task<ActionResult<IEnumerable<PointHistory>>> GetPointHistory()
+        //{
+        //    if (_context.CustomerService == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+        //    //Console.WriteLine(json);
+        //    Member member = JsonSerializer.Deserialize<Member>(json);
+
+        //    return await _context.PointHistory.Where(Cs => Cs.MemberId == member.MemberId).ToListAsync();
+        //}
+        public async Task<ActionResult<decimal>> GetTotalModifiedAmount()
         {
-            if (_context.CustomerService == null)
-            {
-                return NotFound();
-            }
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
-            //Console.WriteLine(json);
             Member member = JsonSerializer.Deserialize<Member>(json);
 
-            return await _context.PointHistory.Where(Cs => Cs.MemberId == member.MemberId).ToListAsync();
+            // 取得指定 MemberId 的 ModifiedAmount 欄位值加總
+            decimal totalModifiedAmount = await _context.PointHistory
+                .Where(ph => ph.MemberId == member.MemberId)
+                .SumAsync(ph => ph.ModifiedAmount);
+
+            return totalModifiedAmount;
         }
 
-        
+
 
         // POST: api/TarotPointHistories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -50,6 +62,7 @@ namespace ChilLaxFrontEnd.Controllers
             Member member = JsonSerializer.Deserialize<Member>(json);
             PointHistory pot = new PointHistory
             {
+                PointDetailId = TarotPointHistoryDTO.PointDetailId,
                 MemberId = member.MemberId,
                 ModifiedSource = TarotPointHistoryDTO.ModifiedSource,
                 ModifiedAmount = TarotPointHistoryDTO.ModifiedAmount,
