@@ -59,10 +59,11 @@ namespace ChilLaxFrontEnd.Controllers
 
             //取的購物車商品
             productsPagingDTO.carts = _context.Cart.Where(c => c.MemberId == id).ToList();
+            int catrqty = productsPagingDTO.carts.Count;
 
 
             // 頁數
-            if(nowpage == null)
+            if (nowpage == null)
             {
                 nowpage = 1;
             }
