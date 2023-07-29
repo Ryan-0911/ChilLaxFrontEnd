@@ -23,6 +23,17 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
+        #Surebtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #5E005E;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
         .chat-container {
             
             height: 400px;
@@ -53,9 +64,12 @@
     <img src="~/assets/images/占卜師.png" />
     
 </div>
-<button id="Surebtn">是否開始占卜?</button>
 
-<div class="tarot-container">
+<div class="button-container" id="sureBtnContainer">
+    <button id="Surebtn">是否開始占卜?</button>
+</div>
+
+<div class="tarot-container" >
     <div class="tarot-card" id="card1">
 
         <div class="card-name" id="cardName1"></div>
@@ -71,11 +85,11 @@
     
 </div>
 
-<div class="button-container">
+<div class="button-container" id="btnContainer" style="display: none;">
     <button id="shuffleBtn" >Shuffle Tarot Cards</button>
 </div>
 
-<div class="text-center chat-container">
+<div class="text-center chat-container" id="chatContainer" style="display: none;">
     <div class="col-12">
         <h3>聊天內容</h3>
         <ul class="list-group" id="Content">
@@ -83,7 +97,7 @@
     </div>
 </div>
 
-<div class="text-center">
+<div class="text-center" id="inputContainer" style="display: none;">
     <div class="col-8 mx-auto">
         
         <div class="mb-3">
@@ -139,12 +153,25 @@
                 
             });
         });
-
+        function _uuid() {
+            var d = Date.now();
+            if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+                d += performance.now(); //use high-precision timer if available
+            }
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = (d + Math.random() * 16) % 16 | 0;
+                d = Math.floor(d / 16);
+                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+        }
+        //let potID = _uuid();
         let memberPoints = 0;
         document.getElementById("Surebtn").addEventListener("click", function () {
+            let potID = _uuid();
 
             var TarotPointDTO = {
-                pointDetailId:0,
+                pointDetailId: potID,
+
                 modifiedSource:"Tarot",
                 modifiedAmount:-300,
             };
@@ -168,10 +195,15 @@
                             contentType: "application/json"                            
                         }).done(result => {
                             // 在此處理成功新增點數記錄的情況
-                            alert(data);
+                            
                             alert("您的點數已成功扣除 300 點，可以進行占卜了！");
                             // 啟動洗牌按鈕進行占卜
-                            shuffleTarotCards();
+                            document.getElementById("sureBtnContainer").style.display = "none";
+                            //document.getElementById("tarotContainer").style.display = "block";
+                            document.getElementById("btnContainer").style.display = "block";
+                            document.getElementById("chatContainer").style.display = "block";
+                            document.getElementById("inputContainer").style.display = "block";
+
                         }).fail(err => {
                             // 在此處理新增點數記錄失敗的情況
                             alert("新增點數記錄時發生錯誤：" + err.statusText);
