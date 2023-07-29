@@ -18,7 +18,50 @@ namespace ChilLaxFrontEnd.Controllers
             _context = context;
         }
 
-        
+        public class EcpayApiService
+        {
+            private readonly HttpClient _httpClient;
+
+            public EcpayApiService()
+            {
+                // 初始化 HttpClient
+                _httpClient = new HttpClient
+                {
+                    BaseAddress = new Uri("https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5")
+                };
+            }
+
+            public async Task<string> PostToEcpayApiAsync(Ecpay ecpay)
+            {
+                try
+                {
+                    // 將 ecpay 轉換成 JSON 格式
+                    string ecpayJson = JsonSerializer.Serialize(ecpay);
+
+                    // 設置 Content-Type 為 application/json
+                    HttpContent httpContent = new StringContent(ecpayJson, Encoding.UTF8, "application/json");
+
+                    // 呼叫綠界的 API
+                    HttpResponseMessage response = await _httpClient.PostAsync("", httpContent);
+
+                    // 確認請求是否成功
+                    response.EnsureSuccessStatusCode();
+
+                    // 讀取回傳的內容
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    return responseContent;
+                }
+                catch (HttpRequestException ex)
+                {
+                    // 請求出現異常
+                    Console.WriteLine($"Http Request Exception: {ex.Message}");
+                    throw;
+                }
+            }
+        }
+
+
         public async Task<ActionResult<string>> Index()
         {
             ChilLaxContext db = new ChilLaxContext();

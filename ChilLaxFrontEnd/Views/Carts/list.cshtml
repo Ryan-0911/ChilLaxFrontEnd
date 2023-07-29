@@ -82,7 +82,12 @@
             contentType: "application/json; charset=utf-8",
             dataType: "text",
             success: function (response) {
-                window.location.replace(response);
+                // 在此处处理后端返回的 response 值
+                console.log(response); // 可以在控制台输出 response
+                // 将 response 插入到 HTML 页面的指定位置
+                $('#targetElement').html(response); // 例如，假设目标元素的 ID 是 "targetElement"
+                const targetUrl = `${baseAddress}/checkout/Index`;
+                window.location.href = targetUrl;
             },
             error: function (xhr, status, error) {
                 //alert(error);

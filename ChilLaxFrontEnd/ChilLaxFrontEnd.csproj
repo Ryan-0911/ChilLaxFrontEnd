@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Carts\app.cshtml" />
     <Content Remove="Views\Carts\Create.cshtml" />
     <Content Remove="Views\Carts\Delete.cshtml" />
     <Content Remove="Views\Carts\Edit.cshtml" />
