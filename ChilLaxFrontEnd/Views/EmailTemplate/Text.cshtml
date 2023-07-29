@@ -9,7 +9,7 @@
     <h1>歡迎您，@ViewBag.UserName</h1>
     <p>感謝您註冊成為我們的會員。</p>
     <p>請點擊以下連結來驗證您的帳號：</p>
-    <a href="@ViewBag.ConfirmationLink">點擊這裡</a>
+    <a id="verificationLink">點擊這裡</a>
     <p style="display:none;" id="regID">@ViewBag.regID</p>
 
 </body>
@@ -43,23 +43,23 @@
         window.open(pageUrl, "_self").close();
     }
 
-    //function verifyEmail() {
-    //    console.log("verifyEmail");
-    //    let regID = document.getElementById("regID").innerText;
-    //    console.log(regID);
+        //function verifyEmail() {
+        //    console.log("verifyEmail");
+        //    let regID = document.getElementById("regID").innerText;
+        //    console.log(regID);
 
-    //    $.ajax({
-    //        type: "PUT",
-    //        url: `/api/members/Verify/${regID}`,
-    //        contentType: "application/json"
-    //    }).done(data => {
-    //        alert(data.message);
-    //        window.location.href = "https://localhost:7189/Login/Login";
-    //    }).fail(err => {
-    //        alert("ajax呼叫失敗：" + err.responseText);
-    //        console.log(err.responseText);
-    //    });
-    //}
+        //    $.ajax({
+        //        type: "PUT",
+        //        url: `/api/members/Verify/${regID}`,
+        //        contentType: "application/json"
+        //    }).done(data => {
+        //        alert(data.message);
+        //        window.location.href = "https://localhost:7189/Login/Login";
+        //    }).fail(err => {
+        //        alert("ajax呼叫失敗：" + err.responseText);
+        //        console.log(err.responseText);
+        //    });
+        //}
 </script>
 
 

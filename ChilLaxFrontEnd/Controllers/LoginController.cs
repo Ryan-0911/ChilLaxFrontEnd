@@ -10,6 +10,8 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Encodings.Web;
 using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.AspNetCore.Cors;
+
 //以下為新增的
 using System.Collections.Generic;
 using System.Linq;
@@ -61,8 +63,6 @@ namespace ChilLaxFrontEnd.Controllers
 
             bool isPwdMatch = BCrypt.Net.BCrypt.Verify(vm.txtPassword, membercredential.MemberPassword);
             Console.WriteLine("驗證結果：" + isPwdMatch); // 印出 true
-
-            //測試變更
 
 
             if (membercredential != null && member != null && isPwdMatch == true)

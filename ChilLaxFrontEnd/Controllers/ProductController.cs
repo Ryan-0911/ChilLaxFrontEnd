@@ -9,6 +9,7 @@ using System.Linq; // 加入這個命名空間以使用 LINQ 查詢
 using System.Collections.Generic; // 加入這個命名空間以使用 IEnumerable<T>
 using System.Threading.Tasks; // 加入這個命名空間以使用非同步 Task<T> 方法
 using System;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -28,7 +29,7 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         [HttpGet]
-        public IActionResult List(CKeywordViewModel ckvm, int? nowpage, int? _pageCount, string? productcategory)
+        public IActionResult List(CKeywordViewModel ckvm, CAddToCartViewModel cvm, int? nowpage, int? _pageCount, string? productcategory)
         {
             //取得會員ID
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
@@ -46,7 +47,6 @@ namespace ChilLaxFrontEnd.Controllers
                 .Select(group => group.Key)
                 .ToList();
 
-
             if (string.IsNullOrEmpty(keyword))
             {
                 datas = from p in db.Product
@@ -59,8 +59,6 @@ namespace ChilLaxFrontEnd.Controllers
 
             //取的購物車商品
             productsPagingDTO.carts = _context.Cart.Where(c => c.MemberId == id).ToList();
-            int catrqty = productsPagingDTO.carts.Count;
-
 
             // 頁數
             if (nowpage == null)
@@ -85,9 +83,11 @@ namespace ChilLaxFrontEnd.Controllers
                     .Take(8)
                     .ToList();
                 productsPagingDTO.pageCount = pageCount;
-                productsPagingDTO.nowpage = nowpage;    
+                productsPagingDTO.nowpage = nowpage; 
+                
                 return View(new List<ProductsPagingDTO> { productsPagingDTO });
             }
+
             var prod = db.Product.Where(p => p.ProductCategory == productcategory )
                                 .OrderByDescending(p => p.ProductCategory)
                                 .Skip(8*((int)nowpage)-1)
@@ -98,57 +98,55 @@ namespace ChilLaxFrontEnd.Controllers
             productsPagingDTO.pageCount = pageCount;
             productsPagingDTO.nowpage = nowpage;
 
-            //return View(productsPagingDTO);
-            return View(new List<ProductsPagingDTO> { productsPagingDTO });
-        }
-
-
-
-        [HttpGet]
-        public async Task<ActionResult<ProductsPagingDTO>> GetProductsByCategory(string category, int page = 1)
-        {
-            var productsInCategory = _context.Product.Where(p => p.ProductCategory == category).ToList();
-            //return Json(productsInCategory);
-
-            
-
-            int PageSize = 8;
-
-            // 計算商品總數量和總頁數
-            int totalProducts = productsInCategory.Count();
-            int totalPages = (int)Math.Ceiling((double)totalProducts / PageSize);
-
-            // 取得當前頁面的商品資料
-            var currentPageProducts = productsInCategory
-                .Skip((page - 1) * PageSize)
-                .Take(PageSize)
+            // 取得產品的分類群組資料
+            var productCategories = db.Product
+                .GroupBy(p => p.ProductCategory)
+                .Select(group => group.Key)
                 .ToList();
 
-            // 回傳商品資料和分頁相關資訊
-            ProductsPagingDTO prodDTO = new ProductsPagingDTO();
-            prodDTO.TotalPages = totalPages;
-            prodDTO.ProductsResult = currentPageProducts;
+            // 傳遞產品分類群組資料到View
+            productsPagingDTO.ProdCategory = productCategories;
 
-            return prodDTO;
+            //return View(productsPagingDTO);
+            //return View(new List<ProductsPagingDTO> { productsPagingDTO });
+
+
+            // 寫入購物車資料表
+            // 檢查資料庫中是否已經有相同的購物車記錄
+            var existingCart = db.Cart.FirstOrDefault(c => c.MemberId == member.MemberId && c.ProductId == cvm.ProductId);
+
+            if (existingCart != null)
+            {
+                // 如果已經存在相同的購物車記錄，可以選擇更新數量或是拋出錯誤訊息
+                existingCart.CartProductQuantity += cvm.txtCount;
+            }
+            else
+            {
+                // 如果資料庫中還不存在相同的購物車記錄，則新增一筆新的購物車記錄
+                Cart cart = new Cart
+                {
+                    MemberId = member.MemberId,
+                    ProductId = cvm.ProductId,
+                    CartProductQuantity = cvm.txtCount
+                };
+
+                db.Cart.Add(cart);
+            }
+
+            db.SaveChanges();
+
+            return View();
+
 
         }
+
+
+
 
 
         public IActionResult AddToCart(int? id)
         {
-            //if(id == null)
-            //{
-            //    return RedirectToAction("List");
-            //}
-            //ViewBag.product_id = id;
-            //return View();
 
-            //if (id == null)
-            //{
-            //    return RedirectToAction("List");
-            //}
-
-            // 假設您的資料庫內含有名為 "Products" 的資料表，並包含 ProductId 欄位用於查詢產品
             Product product = db.Product.FirstOrDefault(p => p.ProductId == id);
 
             if (product == null || id == null) 
@@ -162,32 +160,68 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToCart(CAddToCartViewModel cvm)
+        public IActionResult AddToCart(CAddToCartViewModel cvm, int ProductId, int MemberId, int CartProductQuantity)
         {
             ChilLaxContext db = new ChilLaxContext();
-            Product prod = db.Product.FirstOrDefault(t => t.ProductId == cvm.txtFId);
-            if (prod != null)
+
+
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            Member member = JsonSerializer.Deserialize<Member>(json);
+
+            // 檢查資料庫中是否已經有相同的購物車記錄
+            var existingCart = db.Cart.FirstOrDefault(c => c.MemberId == member.MemberId && c.ProductId == ProductId);
+
+            if (existingCart != null)
             {
-                string json = "";
-                List<CShoppingCartItem> cart = null;
-                if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
-                {
-                    json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
-                    cart = JsonSerializer.Deserialize<List<CShoppingCartItem>>(json);
-                }
-                else
-                    cart = new List<CShoppingCartItem>();
-                CShoppingCartItem item = new CShoppingCartItem();
-                item.price = (decimal)prod.ProductPrice;
-                item.productId = cvm.txtFId;
-                item.count = cvm.txtCount;
-                item.product = prod;
-                cart.Add(item);
-                json = JsonSerializer.Serialize(cart);
-                HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST, json);
+                // 如果已經存在相同的購物車記錄，可以選擇更新數量或是拋出錯誤訊息
+                existingCart.CartProductQuantity += cvm.txtCount;
             }
-            return RedirectToAction("List");
+            else
+            {
+                // 如果資料庫中還不存在相同的購物車記錄，則新增一筆新的購物車記錄
+                Cart cart = new Cart
+                {
+                    MemberId = member.MemberId,
+                    ProductId = ProductId,
+                    CartProductQuantity = cvm.txtCount
+                };
+
+                db.Cart.Add(cart);
+            }
+
+            db.SaveChanges();
+
+            return RedirectToAction("Details", "Carts", new { id = member.MemberId });
+
+
+
+
         }
+
+        //[HttpPost]
+        //public IActionResult ProductToCart(CAddToCartViewModel cvm)
+        //{
+        //    ChilLaxContext db = new ChilLaxContext();
+
+
+        //    string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER); // 抓會員id登入的session
+        //    Console.WriteLine(json);
+        //    Member member = JsonSerializer.Deserialize<Member>(json);
+
+        //    Cart cart = new Cart();
+
+        //    cart.MemberId = member.MemberId;
+        //    cart.ProductId = cvm.ProductId;
+        //    cart.CartProductQuantity = cvm.txtCount;
+
+        //    _context.Cart.Add(cart);
+        //    _context.SaveChanges();
+        //    //  await _context.SaveChangesAsync();   將暫存的異動儲存到資料庫，確保資料庫中的資料與內存中的資料保持同步。
+
+
+        //    return RedirectToAction("List");
+
+        //}
 
         // 檢視購物車
         public IActionResult CartView()
