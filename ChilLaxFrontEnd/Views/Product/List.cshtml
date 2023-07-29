@@ -71,7 +71,7 @@
                     <li class="cart">
                         <a asp-action="Details" asp-controller="Carts">
                             <img src="~/assets/images/icons8-cart.gif" />
-                            <i>購物車（0）</i>
+                            <i>購物車（@Model.FirstOrDefault().carts.Count()）</i>
                         </a>
                         <div class="cart-list">
                             購物車內還沒有東西，趕緊點選商品加入購物車吧！

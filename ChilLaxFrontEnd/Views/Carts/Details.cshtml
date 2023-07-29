@@ -128,6 +128,7 @@
             }
         </tbody>
     </table>
+    <a href=""
     <button onclick="checkout()">結帳</button>
 </div>
 
@@ -186,20 +187,34 @@
             el.innerHTML = parseInt(el.innerHTML) - 1;
         }
 
-        //選擇商品並結帳
-        function checkout() {
-            const checkboxes = document.querySelectorAll('tbody tr');
-            console.log(checkboxes);
-            const trueCheckboxs = [];
-            for (let i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i].childNodes[1].childNodes[1].checked) {
-                    trueCheckboxs.push({
-                        id: parseInt(checkboxes[i].children[0].children[1].value),
-                        qty: parseInt(checkboxes[i].children[4].children[0].innerText)
-                    });
-                };
+    //選擇商品並結帳
+    function checkout() {
+        const checkboxes = document.querySelectorAll('tbody tr');
+        console.log(checkboxes);
+        const trueCheckboxs = [];
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].childNodes[1].childNodes[1].checked){
+                trueCheckboxs.push({
+                    pid: parseInt(checkboxes[i].children[0].children[1].value),
+                    qty: parseInt(checkboxes[i].children[4].children[0].innerText)
+                });
+            };
+        }
+        console.log(JSON.stringify({trueCheckboxs}));
+        $.ajax({
+            type: "POST",
+            url: `${baseAddress}/api/CartsAPI/SaveCartSession`,
+            data: JSON.stringify({ trueCheckboxs }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (response) {
+                    window.location.replace(response)
+            },
+            error: function (xhr, status, error) {
+                    //alert(error);
             }
-            console.log(trueCheckboxs);
+        });
 
         }
 

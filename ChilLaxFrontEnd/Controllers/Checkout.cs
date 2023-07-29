@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ChilLaxFrontEnd.Models;
 using System.Linq;
 using ChilLaxFrontEnd.Models.DTO;
+using System.Text.Json;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -17,20 +18,65 @@ namespace ChilLaxFrontEnd.Controllers
             _context = context;
         }
 
+        public class EcpayApiService
+        {
+            private readonly HttpClient _httpClient;
+
+            public EcpayApiService()
+            {
+                // 初始化 HttpClient
+                _httpClient = new HttpClient
+                {
+                    BaseAddress = new Uri("https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5")
+                };
+            }
+
+            public async Task<string> PostToEcpayApiAsync(Ecpay ecpay)
+            {
+                try
+                {
+                    // 將 ecpay 轉換成 JSON 格式
+                    string ecpayJson = JsonSerializer.Serialize(ecpay);
+
+                    // 設置 Content-Type 為 application/json
+                    HttpContent httpContent = new StringContent(ecpayJson, Encoding.UTF8, "application/json");
+
+                    // 呼叫綠界的 API
+                    HttpResponseMessage response = await _httpClient.PostAsync("", httpContent);
+
+                    // 確認請求是否成功
+                    response.EnsureSuccessStatusCode();
+
+                    // 讀取回傳的內容
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    return responseContent;
+                }
+                catch (HttpRequestException ex)
+                {
+                    // 請求出現異常
+                    Console.WriteLine($"Http Request Exception: {ex.Message}");
+                    throw;
+                }
+            }
+        }
+
+
         public async Task<ActionResult<string>> Index()
         {
             ChilLaxContext db = new ChilLaxContext();
 
             //產生隨機亂數
             string guid_num = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 13);
+            int oid = db.ProductOrder.Max(po => po.OrderId);
             string this_products = string.Empty;
-            string orderId = "ChilLax" + $"{guid_num}";
+            string orderId = "ChilLax" + $"{oid}";
             string msg = "備註欄";
             //需填入你的網址
             string website = $"https://localhost:5000";
 
             //取得最新一筆訂單
-            string maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
+            int maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
             //ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
             List<ProductOrderDetailDTO> productOrderDetails = await db.ProductOrder
                .Where(o => o.OrderId == maxOrderId)
@@ -63,10 +109,10 @@ namespace ChilLaxFrontEnd.Controllers
                 { "TradeDesc",  $"{msg}"},
                 //商品名稱
                 { "ItemName",  $"{this_products}"},
-                //付款完成通知回傳網址
-                { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
                 //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                { "OrderResultURL", $"{website}/Checkout/UpdatePayment/{maxOrderId}"},
+                { "ReturnURL",  $"http://yulin.win/api/Checkout/UpdatePaymentAsync"},
+                //付款完成通知回傳網址
+                { "OrderResultURL", $"{website}/Home/Index"},
                 //Client端返回特店的按鈕連結
                 { "ClientRedirectURL",  $"{website}"},
                 //特店編號(綠界提供測試商店編號)
@@ -99,7 +145,7 @@ namespace ChilLaxFrontEnd.Controllers
                 try
                 {
 
-                    ProductOrder productOrder = await _context.ProductOrder.FirstOrDefaultAsync(po => po.OrderId == id.ToString());
+                    ProductOrder productOrder = await _context.ProductOrder.FirstOrDefaultAsync(po => po.OrderId == id);
 
                     if (productOrder == null)
                         return "找不到該訂單";
