@@ -1,401 +1,445 @@
 ﻿@{
-    Layout = null;
- }
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	Layout = null;
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "poppins",sans-serif;
-        }
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: "poppins",sans-serif;
+	}
 
-        .background {
-            
-            /* 最下層背景 */
-            background: url('@Url.Content("~/images/login.jpg")');
-            
-            /* background-color: #98979783; */
-            background-position: center;
-            background-size: cover;
-            height: 100vh;
-            width: 100%;
-            /* margin-top:50px; */
-            filter: blur(2px);
-        }
+	.background {
+		/* 最下層背景 */
+		background: url('@Url.Content("~/images/login.jpg")');
+		/* background-color: #98979783; */
+		background-position: center;
+		background-size: cover;
+		height: 100vh;
+		width: 100%;
+		/* margin-top:50px; */
+		filter: blur(2px);
+	}
 
-        .main {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%,-50%);
-			width: 75%;
-            height: 700px;
-            /* margin-top: 50px; */
+	.main {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		width: 75%;
+		height: 700px;
+		/* margin-top: 50px; */
 
-            background: url('@Url.Content("~/images/login.jpg")');
-            /* background-image: linear-gradient(to right bottom, rgb(40, 42, 55) 0%, rgb(40, 42, 55) 20%, rgba(40, 42, 55, 0.9) 60%, rgba(17, 22, 50, 0.4) 100%),url(../images/login.jpg); */
-            background-position: center;
-            background-size: cover;
-            border-radius: 20px;
-            overflow: hidden;
-        }
+		background: url('@Url.Content("~/images/login.jpg")');
+		/* background-image: linear-gradient(to right bottom, rgb(40, 42, 55) 0%, rgb(40, 42, 55) 20%, rgba(40, 42, 55, 0.9) 60%, rgba(17, 22, 50, 0.4) 100%),url(../images/login.jpg); */
+		background-position: center;
+		background-size: cover;
+		border-radius: 20px;
+		overflow: hidden;
+	}
 
 
-            /*中間白色透明背景*/
-            .main .login-section{
-                position: absolute;
-                left: 50%;
-                transform: translate(-50%,0);
-                /* margin:0 auto; */
-                /* width: calc(100% - 58%); */
-                width: 500px;
-                height: 100%;
-                color: #fff;
-                background-color: rgba(88, 85, 85, 0.2);
-                /* backdrop-filter: blur(4px); */
-            }
+		/*中間白色透明背景*/
+		.main .login-section {
+			position: absolute;
+			left: 50%;
+			transform: translate(-50%,0);
+			/* margin:0 auto; */
+			/* width: calc(100% - 58%); */
+			width: 500px;
+			height: 100%;
+			color: #fff;
+			background-color: rgba(88, 85, 85, 0.2);
+			/* backdrop-filter: blur(4px); */
+		}
 
-        .login-section .form-box{
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
+	.login-section .form-box {
+		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+	}
 
-        /* 登入註冊版面上下切換*/
-/*        .register-section .register {
-            margin-bottom: 50px;
-            transform: translateY(100%);
-            transition: transform .6s ease;
-            transition-delay: 0s;
-        }*/
+	/* 登入註冊版面上下切換*/
+	/*        .register-section .register {
+					margin-bottom: 50px;
+					transform: translateY(100%);
+					transition: transform .6s ease;
+					transition-delay: 0s;
+				}*/
 
-/*        .register-section.active .register { 按註冊連結(在登入畫面)，將註冊section往上
-            transform: translateY(0px);
-            transition-delay: .7s;
-        }*/
+	/*        .register-section.active .register { 按註冊連結(在登入畫面)，將註冊section往上
+					transform: translateY(0px);
+					transition-delay: .7s;
+				}*/
 
-        .login-section .login{
-            margin-bottom: 50px;
-            transform: translateY(0px);
-            transition: transform .6s ease;
-            transition-delay: 0.7s;
-        }
-        /*
-        .login-section.active .login { 按登入連結(在註冊畫面)，將登入section往上
-            transform: translateY(100%);
-            transition-delay: 0s;
-        }*/
+	.login-section .login {
+		margin-bottom: 50px;
+		transform: translateY(0px);
+		transition: transform .6s ease;
+		transition-delay: 0.7s;
+	}
+	/*
+				.login-section.active .login { 按登入連結(在註冊畫面)，將登入section往上
+					transform: translateY(100%);
+					transition-delay: 0s;
+				}*/
 
 
 
-        .login h2{
-            text-align: center;
-            font-size: 30px;
-            margin: 20px 0 5px 0;
-        }
+	.login h2 {
+		text-align: center;
+		font-size: 30px;
+		margin: 20px 0 5px 0;
+	}
 
-        .login h5{
-            text-align: center;
-            font-size: 16px;
-        }
+	.login h5 {
+		text-align: center;
+		font-size: 16px;
+	}
 
-        .form-box .input-box{
-            width: 400px;
-            height: 50px;
-            border-bottom: 2px solid#fff;
-            margin: 30px 0;
-            position: relative;
-        }
-
-
-        .input-box input{
-            height: 100%;
-            color: #fff;
-            background: transparent;
-            border: none;
-            outline: none;
-            font-size: 18px;
-            position: absolute;
-            top: 50%;
-            /* left: 0; */
-            transform: translateY(-40%);
-            width: 350px;
-            padding-left: 80px;
-            text-transform:none;
-        }
+	.form-box .input-box {
+		width: 400px;
+		height: 50px;
+		border-bottom: 2px solid#fff;
+		margin: 30px 0;
+		position: relative;
+	}
 
 
-        .input-box label{
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-30%);
-            font-size: 16px;
-            pointer-events: none;
-            transition: .5s ease;
-        }
-
-        .input-box .icon{
-            position: absolute;
-            top: 13px;
-            right: 0;
-            font-size: 19px;
-        }
-        /*文字向上漂浮*/
-        .input-box input:focus ~ label
-       {
-            top: -5px;
-        }
+	.input-box input {
+		height: 100%;
+		color: #fff;
+		background: transparent;
+		border: none;
+		outline: none;
+		font-size: 18px;
+		position: absolute;
+		top: 50%;
+		/* left: 0; */
+		transform: translateY(-40%);
+		width: 350px;
+		padding-left: 80px;
+		text-transform: none;
+	}
 
 
-        .remember-password {
-            font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            margin: -15px 0 15px;
-            display: flex;
-            justify-content: space-between;
-        }
+	.input-box label {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translateY(-30%);
+		font-size: 16px;
+		pointer-events: none;
+		transition: .5s ease;
+	}
 
-            .remember-password label input {
-                accent-color: #fff;
-                margin-right: 3px;
-            }
+	.input-box .icon {
+		position: absolute;
+		top: 13px;
+		right: 0;
+		font-size: 19px;
+	}
+	/*文字向上漂浮*/
+	.input-box input:focus ~ label {
+		top: -5px;
+	}
 
-            .remember-password a {
-                letter-spacing: 1px;
-                color: #fff;
-                text-decoration: none;
-            }
 
-                .remember-password a:hover {
-                    text-decoration: underline;
-                }
+	.remember-password {
+		font-size: 14px;
+		font-weight: 500;
+		letter-spacing: 1px;
+		margin: -15px 0 15px;
+		display: flex;
+		justify-content: space-between;
+	}
 
-        .login .btn{
-            /* background: #fff; */
-            width: 100%;
-            height: 45px;
-            outline: none;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background: #4F9D9D;
-            font-size: 16px;
-            color: #fff;
-            box-shadow: rgba(0,0,0,0.4);
-        }
+		.remember-password label input {
+			accent-color: #fff;
+			margin-right: 3px;
+		}
 
-        .login .btn:hover{
-            background-color: #D1E9E9;
-            color: black;
-        }
+		.remember-password a {
+			letter-spacing: 1px;
+			color: #fff;
+			text-decoration: none;
+		}
 
-        .create-account {
-            
-            margin-top: 50px;
-            background-color: rgba(248, 248, 248, 0.1);
-        }
+			.remember-password a:hover {
+				text-decoration: underline;
+			}
 
-        .create-account p
-        {
-            font-size: 14.5px;
-            text-align: center;
-            line-height: 2.5;
-        }
+	.login .btn {
+		/* background: #fff; */
+		width: 100%;
+		height: 45px;
+		outline: none;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		background: #4F9D9D;
+		font-size: 16px;
+		color: #fff;
+		box-shadow: rgba(0,0,0,0.4);
+	}
 
-        .create-account a {
-            color: #fff;
-            font-weight: bolder;
-            text-decoration: none;
-        }
+		.login .btn:hover {
+			background-color: #D1E9E9;
+			color: black;
+		}
 
-        .create-account a:hover {
-            text-decoration: underline;
-        }
+	.create-account {
+		margin-top: 50px;
+		background-color: rgba(248, 248, 248, 0.1);
+	}
 
-                .main {
-                    position: absolute;
-                    left: 50%;
-                    top: 53%;
-                    transform: translate(-50%,-50%);
-                    width: 75%;
-                    height: 700px;
-                    /* margin-top: 50px; */
+		.create-account p {
+			font-size: 14.5px;
+			text-align: center;
+			line-height: 2.5;
+		}
 
-            .other-login .divider {
-                width: 100%;
-                margin: 80px 0 30px 0;
-                text-align: center;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
+		.create-account a {
+			color: #fff;
+			font-weight: bolder;
+			text-decoration: none;
+		}
 
-            .other-login .divider .line {
-                display: inline-block;
-                max-width: 30%;
-                width: 30%;
-                flex: 1;
-                height: 1px;
-                background-color: #fff;
-            }
+			.create-account a:hover {
+				text-decoration: underline;
+			}
 
-            .other-login .divider .divider-text {
-                vertical-align: middle;
-                margin: 0px 20px;
-                line-height: 0;
-                display: inline-block;
-                width: 100px;
-                color: #fff;
-                font-size: 15px;
-            }
+	.main {
+		position: absolute;
+		left: 50%;
+		top: 53%;
+		transform: translate(-50%,-50%);
+		width: 75%;
+		height: 700px;
+		/* margin-top: 50px; */
 
-                /* 登入註冊版面上下切換*/
-        /*        .register-section .register {
-                    margin-bottom: 50px;
-                    transform: translateY(100%);
-                    transition: transform .6s ease;
-                    transition-delay: 0s;
-                }*/
-            .other-login .other-login-wrapper {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
+		.other-login .divider
 
-            .other-login .other-login-wrapper .other-login-item {
-                border: 1px solid #fff;
-                padding: 8px;
-                text-align: center;
-                border-radius: 10px;
-                cursor: pointer;
-                font-weight: 600;
-                color: rgb(51, 49, 116);
-                margin: 0 10px;
-            }
+	{
+		width: 100%;
+		margin: 80px 0 30px 0;
+		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
 
-            .other-login .other-login-wrapper .other-login-item:hover {
-                border: 1px solid #4F9D9D;
-                background-color: #E0E0E0;
-            }
+	.other-login .divider .line {
+		display: inline-block;
+		max-width: 30%;
+		width: 30%;
+		flex: 1;
+		height: 1px;
+		background-color: #fff;
+	}
 
-            .other-login .other-login-wrapper .other-login-item img {
-                width: 30px;
-                height: 30px;
-                vertical-align: middle;
-            }
+	.other-login .divider .divider-text {
+		vertical-align: middle;
+		margin: 0px 20px;
+		line-height: 0;
+		display: inline-block;
+		width: 100px;
+		color: #fff;
+		font-size: 15px;
+	}
 
-            .pwdVisibility {
-                color: white;
-                font-size:16px;
-                background-color:transparent;
-                border:none;
-                margin-right:12px;
-            }
+	/* 登入註冊版面上下切換*/
+	/*        .register-section .register {
+							margin-bottom: 50px;
+							transform: translateY(100%);
+							transition: transform .6s ease;
+							transition-delay: 0s;
+						}*/
+	.other-login .other-login-wrapper {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
-    </style>
+		.other-login .other-login-wrapper .other-login-item {
+			border: 1px solid #fff;
+			padding: 8px;
+			text-align: center;
+			border-radius: 10px;
+			cursor: pointer;
+			font-weight: 600;
+			color: rgb(51, 49, 116);
+			margin: 0 10px;
+		}
+
+			.other-login .other-login-wrapper .other-login-item:hover {
+				border: 1px solid #4F9D9D;
+				background-color: #E0E0E0;
+			}
+
+			.other-login .other-login-wrapper .other-login-item img {
+				width: 30px;
+				height: 30px;
+				vertical-align: middle;
+			}
+
+	.pwdVisibility {
+		color: white;
+		font-size: 16px;
+		background-color: transparent;
+		border: none;
+		margin-right: 12px;
+	}
+
+</style>
 
 @{
-    ViewData["Title"] = "Login";
+	ViewData["Title"] = "Login";
 }
 @using System.ComponentModel.DataAnnotations
-@model ChilLaxFrontEnd.ViewModels.LoginViewModel
-    <div class="background"></div>
-    <article>
-        <div class="main container">
-            <div class="row login-section">
-                <div class="form-box login col-md-12">
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-                        <h2>Sign In</h2>
-                        <h5>會員登入</h5>
-                        <div class="create-account">
-                            <p>
-                                還沒有帳號?
-                            @Html.ActionLink("進行會員註冊", "Register", null,new { @class = "register-link" })
-                            </p>
-                        </div>
-                    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
-                        <div class="input-box">
-                            <span class="icon"><i class="bi bi-person-circle"></i></span>
-                        @Html.TextBox("txtAccount", null,new { @class = "form-control",autocomplete = "off",required = "required" })
-                            @Html.ValidationMessageFor(model => model.txtAccount)
+@model ChilLaxFrontEnd.Models.MemberCredential
+<div class="background"></div>
+<article>
+	<div class="main container">
+		<div class="row login-section">
+			<div class="form-box login col-md-12">
+				<form id="Login">
+					@Html.AntiForgeryToken()
+					<h2>Log In</h2>
+					<h5>會員登入</h5>
+					<div class="create-account">
+						<p>
+							還沒有帳號?
+							<a href="https://localhost:5000/Login/Register" class="register-link">進行會員註冊</a>
+							@*@Html.ActionLink("進行會員註冊", "Register", null,new { @class = "register-link" })*@
+						</p>
+					</div>
+					@*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+					<div class="input-box">
+						<span class="icon"><i class="bi bi-person-circle"></i></span>
+						<input type="text" id="MemberAccount" name="MemberAccount" class="form-control" autocomplete="off" required />
+						@*@Html.TextBox("memberAccount", null,new { @class = "form-control",autocomplete = "off",required = "required" })*@
+						@*@Html.ValidationMessageFor(model => model.MemberAccount)*@
 
-                            <label>帳號</label>
-                        </div>
-                        <div class="input-box">
-                            <span class="icon">
-                                <button type="button" class="pwdVisibility" id="togglePassword" onclick="togglePasswordVisibility()">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <i class="bi bi-lock-fill"></i>
-                            </span>
-                        @Html.TextBox("txtPassword", null, new { type = "password",@class = "form-control",id = "passwordInput" ,autocomplete = "off",required = "required" })
-                            @Html.ValidationMessageFor(model => model.txtPassword)
+						<label>帳號</label>
+					</div>
+					<div class="input-box">
+						<span class="icon">
+							<button type="button" class="pwdVisibility" id="togglePassword" onclick="togglePasswordVisibility()">
+								<i class="bi bi-eye"></i>
+							</button>
+							<i class="bi bi-lock-fill"></i>
+						</span>
+						<input type="password" id="MemberPassword" name="MemberPassword" class="form-control" autocomplete="off" required />
+						@*@Html.TextBox("memberPassword", null, new { type = "password",@class = "form-control",id = "passwordInput" ,autocomplete = "off",required = "required" })*@
+						@*@Html.ValidationMessageFor(model => model.MemberPassword)*@
+						<label>密碼</label>
+					</div>
+					<div class="remember-password">
+						<label for="checkbox"><input type="checkbox" id="checkbox" class="remeber_account" />記住帳號</label>
+						<a href="#" class="forget_password">忘記密碼</a>
+					</div>
+					<input type="submit" value="登入" id="loginButton" class="btn btn-default" />
+					<div class="other-login">
+						<div class="divider">
+							<span class="line"></span>
+							<span class="divider-text">其他登入方式</span>
+							<span class="line"></span>
+						</div>
+						<div class="other-login-wrapper">
+							<div id="g_id_onload"
+								 data-client_id="24117042909-f73r9qksf4se9ka68pgdviie2ucsl4h4.apps.googleusercontent.com"
+								 data-login_uri="https://localhost:5000/Login/ValidGoogleLogin"
+								 data-auto_prompt="false">
+							</div>
+							<div class="g_id_signin"
+								 data-type="standard"
+								 data-size="large"
+								 data-theme="outline"
+								 data-text="sign_in_with"
+								 data-shape="rectangular"
+								 data-logo_alignment="left">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!--註冊會員-->
 
-                            <label>密碼</label>
-                        </div>
-                        <div class="remember-password">
-                            <label for="checkbox"><input type="checkbox" id="checkbox" class="remeber_account" />記住帳號</label>
-                            <a href="#" class="forget_password">忘記密碼</a>
-                        </div>
-                        <input type="submit" value="登入" class="btn btn-default" />
-                        <div class="other-login">
-                            <div class="divider">
-                                <span class="line"></span>
-                                <span class="divider-text">其他登入方式</span>
-                                <span class="line"></span>
-                            </div>
-                            <div class="other-login-wrapper">
-                            <script src="https://accounts.google.com/gsi/client" async defer></script>
-                                <div id="g_id_onload"
-                                     data-client_id="24117042909-f73r9qksf4se9ka68pgdviie2ucsl4h4.apps.googleusercontent.com"
-                                     data-login_uri="https://localhost:5000/Login/ValidGoogleLogin"
-                                     data-auto_prompt="false">
-                                </div>
-                                <div class="g_id_signin"
-                                     data-type="standard"
-                                     data-size="large"
-                                     data-theme="outline"
-                                     data-text="sign_in_with"
-                                     data-shape="rectangular"
-                                     data-logo_alignment="left">
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-                <!--註冊會員-->
+		</div>
+	</div>
+</article>
+<!-- SIGN UP FORM CREATION -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+	function togglePasswordVisibility() {
+		var MemberPassword = document.getElementById("MemberPassword");
+		var toggleButton = document.getElementById("togglePassword");
 
-            </div>
-        </div>
-    </article>
-    <!-- SIGN UP FORM CREATION -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script>
-        function togglePasswordVisibility() {
-            var passwordInput = document.getElementById("passwordInput");
-            var toggleButton = document.getElementById("togglePassword");
+		if (MemberPassword.type === "password") {
+			MemberPassword.type = "text";
+			toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+		} else {
+			MemberPassword.type = "password";
+			toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+		}
+	}
 
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
-            } else {
-                passwordInput.type = "password";
-                toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
-            }
-        }
+	//Login表單傳送到後端
+	document.getElementById("Login").addEventListener("submit", function (event) {
+		event.preventDefault();
 
-    </script>
+		let MemberAccount = document.getElementById("MemberAccount").value;
+		let MemberPassword = document.getElementById("MemberPassword").value;
 
-        @*<script src="~/js/login.js"></script>*@
-  
+		if ((MemberAccount.trim() === "") || (MemberPassword.trim() === "")) {
+			alert("請輸入帳號和密碼!");
+			return false;
+		}
+
+		const formData =
+		{
+			memberAccount: MemberAccount,
+			memberPassword: MemberPassword
+		}
+
+		//const formData = document.getElementById("Login");
+		console.log(JSON.stringify(formData));
+
+		$.ajax({
+			type: "POST",
+			url: "/api/Members/Login",
+			data: JSON.stringify(formData),
+			contentType: "application/json"
+		}).done(data => {
+			//alert(data);
+			if (!data.success) {
+				alert("登入失敗!");
+				return;
+			}
+			window.location.href = "https://localhost:5000/Home/Index";
+
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			if (jqXHR.status === 400) {
+				const errorResponse = jqXHR.responseJSON;
+				alert(errorResponse.message);
+			} else {
+				console.error("AJAX error:", textStatus, errorThrown);
+			}
+		});
+		return false;
+	});
+
+
+</script>
+
+@*<script src="~/js/login.js"></script>*@
+

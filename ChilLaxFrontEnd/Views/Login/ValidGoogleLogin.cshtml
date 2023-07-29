@@ -49,14 +49,14 @@
             /* backdrop-filter: blur(4px); */
         }
 
-        .profile-section .form-box {
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
+    .profile-section .form-box {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
 
         .profile-section .form-box h2 {
             text-align: center;
@@ -132,8 +132,8 @@
 
     .form-group i {
         /*position: absolute;
-        top: 13px;
-        right: 0;*/
+            top: 13px;
+            right: 0;*/
         font-size: 19px;
         color: white;
     }
@@ -175,7 +175,7 @@
 </style>
 
 @using System.ComponentModel.DataAnnotations
-@model ChilLaxFrontEnd.ViewModels.LoginViewModel
+@model ChilLaxFrontEnd.ViewModels.registerViewModel
 
 <!-- LOGIN FORM CREATION -->
 <div class="background"></div>
@@ -183,99 +183,119 @@
     <div class="main container">
         <div class="row profile-section">
             <div class="form-box login col-md-12">
-                @using (Html.BeginForm("ProcessGoogleLogin", "Login", FormMethod.Post))
-                {
+                <form id="externalLogin">
                     @Html.AntiForgeryToken()
                     <h2>填寫基本資料</h2>
-                    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
                     <div class="form-group">
                         <div class="inner-input">
-                            @*<input type="text" id="f-name" class="user_input" v-model="memberName"  required>*@
-                            @Html.TextBox("memberName",Model.memberName, new { @class = "user_input",autocomplete = "off",id="memberName" })
-                            @Html.ValidationMessageFor(model => model.memberName,null,new { @class = "validation-error-message" })
+                            <input type="text" id="memberName" name="memberName" class="user_input" autocomplete="off" value="@Model.memberName" required />
                             <label><i class="fas fa-user"></i>姓名</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="inner-input">
-                            @*<input type="tel" id="phone_number" v-model="memberPhone" class="user_input" required>*@
-                            @Html.TextBox("memberPhone", null,new { type = "tel", @class = "user_input",autocomplete = "off",id="memberPhone" } )
-                            @Html.ValidationMessageFor(model => model.memberPhone,null,new { @class = "validation-error-message" })
+                            <input type="tel" id="memberTel" name="memberTel" class="user_input" autocomplete="off" required />
                             <label><i class="fa-solid fa-phone"></i>手機號碼</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="inner-input">
-                            @*<input type="email" id="email" v-model="memberEmail" class="user_input" required>*@
-                            @Html.TextBox("memberEmail",Model.memberEmail, new { type="email",@class = "user_input",autocomplete = "off",id="memberEmail" })
-                            @Html.ValidationMessageFor(model => model.memberEmail,null,new { @class = "validation-error-message" })
+                            <input type="email" id="memberEmail" name="memberEmail" class="user_input" autocomplete="off" value="@Model.memberEmail" required />
                             <label><i class="fa-solid fa-envelope"></i>信箱</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="inner-input">
-                            @*<input type="date" id="birth_date" v-model="memberBirth" placeholder=" " required>*@
-                            @*@Html.TextBox("memberBirth", new { htmlAttributes = new { type = "date",@class = "memberBirth", required = "required" } })*@
-                            @Html.TextBox("memberBirth", null, new { type = "date", @class = "memberBirth",id="memberBirth"})<br />
+                            <input type="date" id="memberBirthday" name="memberBirthday" class="memberBirth" autocomplete="off" min="1950-01-01" max="2023-08-08" required />
                             <label><i class="fa-solid fa-cake-candles"></i>生日</label>
-                            @Html.ValidationMessageFor(model => model.memberBirth,null,new { @class = "validation-error-message" })
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="inner-input">
-                            @Html.DropDownList("memberGender", new SelectList(new[]
-                        {
-                        new { Text = "男", Value = "0" },
-                        new { Text = "女", Value = "1" }
-                            }, "Value", "Text"), "-- 請選擇 --", new { @class = "form-select",id="memberGender"})
-
+                            <select id="memberSex" class="form-select user_input" name="memberSex">
+                                <option value="">-- 請選擇 --</option>
+                                <option value="1">男</option>
+                                <option value="0">女</option>
+                            </select>
                             <label><i class="fa-solid fa-children"></i>性別(選填)</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="inner-input">
-                            @*<input type="text" id="address" v-model="memberAddress" class="user_input" required>*@
-                            @Html.TextBox("memberAddress",null, new { @class = "user_input",autocomplete = "off",id="memberAddress"})
-                            <label><i class="fa-solid fa-map-location-dot"></i>通訊地址(選填)</label>
+                            <input type="text" id="memberAddress" name="memberAddress" class="user_input" autocomplete="off" />
+                            <label class="labelMove"><i class="fa-solid fa-map-location-dot"></i>通訊地址(選填)</label>
                         </div>
                     </div>
-                    <button class="btn" id="registerBtn">註冊</button>
-                }
+                    <button class="btn">註冊</button>
+                </form>
             </div>
         </div>
     </div>
 </article>
-@*<script>
-    function postMember() {
-        let memberName = $('#memberName').val();
-        let memberPhone = $('#memberPhone').val();
-        let memberEmail = $('#memberEmail').val();
-        let memberBirth = $('#memberBirth').val();
-        let memberGender = $('#memberGender').val();
-        let memberAddress = $('#memberAddress').val();
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+    //Register 表單傳送到後端
+    document.getElementById("externalLogin").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        let memberName = document.getElementById("memberName").value;
+        let memberTel = document.getElementById("memberTel").value;
+        let memberEmail = document.getElementById("memberEmail").value;
+        let memberBirthday = document.getElementById("memberBirthday").value;
+        let memberSex = document.getElementById("memberSex").value;
+        let memberAddress = document.getElementById("memberAddress").value;
+
+        if (!memberName || !memberTel || !memberEmail || !memberBirthday) {
+            alert('請輸入必填欄位!');
+            return false;
+        }
+
+        let isMale = "";
+
+        if (memberSex == "0") {
+            isMale = false;
+        } else if (memberSex == "1") {
+            isMale = true;
+        } else {
+            isMale = "";
+        }
 
 
-        let member = {
+        const formData =
+        {
+            memberId: 0,
             memberName: memberName,
-            memberPhone: memberPhone,
+            memberTel: memberTel,
             memberEmail: memberEmail,
-            memberBirth: memberBirth,
-            memberGender: memberGender,
-            memberAddress: memberAddress,
-            
-        };
+            memberBirthday: memberBirthday,
+            memberSex: isMale,
+            memberAddress: memberAddress
+        }
 
-    $.ajax({
-        type: 'POST',
-            url: '/LoginController/ValidGoogleLogin',
-            data: JSON.stringify(member),
-            contentType: 'application/json'
-    })
-    .done(data => {
-        alert(JSON.stringify(data));
-    })
-    .fail(err => {
-        alert(err.statusText);
+        console.log(JSON.stringify(formData));
+
+        $.ajax({
+            type: "POST",
+            url: "/api/Members/ProcessGoogleLogin",
+            data: JSON.stringify(formData),
+            contentType: "application/json; charset=utf-8 "
+        }).done(data => {
+            //alert(data);
+            if (!data.success) {
+                alert(data.message);
+                return false;
+            }
+            window.location.href = "https://localhost:5000/Home/Index";
+
+        }).fail((jqXHR, textStatus, errorThrown) => {
+            if (jqXHR.status === 400) {
+                const errorResponse = jqXHR.responseJSON;
+                alert("伺服器問題：" + errorResponse.message);
+            } else {
+                console.error("AJAX error:", textStatus, errorThrown);
+            }
+        });
+        return false;
     });
-}
-</script>*@
+
+</script>
