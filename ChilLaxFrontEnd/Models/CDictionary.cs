@@ -9,5 +9,7 @@
 
         // 亭新增
         public static readonly string SK_PURCHASED_PRODUCTS_LIST = "SK_PURCHASED_PRODUCTS_LIST";
+
+        public static readonly string SK_LIKED_PRODUCTS_LIST = "SK_LIKED_PRODUCTS_LIST";
     }
 }

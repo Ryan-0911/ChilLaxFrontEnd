@@ -10,6 +10,8 @@ using System.Collections.Generic; // 加入這個命名空間以使用 IEnumerab
 using System.Threading.Tasks; // 加入這個命名空間以使用非同步 Task<T> 方法
 using System;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Http;
+using System.Text;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -29,7 +31,7 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         [HttpGet]
-        public IActionResult List(CKeywordViewModel ckvm, CAddToCartViewModel cvm, int? nowpage, int? _pageCount, string? productcategory)
+        public IActionResult List(CKeywordViewModel ckvm, CAddToCartViewModel cvm, int? nowpage, int? _pageCount, string? productcategory, int? likedProductId, string? likedProductName, string? likedProductImg, int? likedProductPrice)
         {
             //取得會員ID
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
@@ -135,6 +137,42 @@ namespace ChilLaxFrontEnd.Controllers
 
             db.SaveChanges();
 
+
+
+            // 添加喜愛商品的處理
+            if (likedProductId != null && likedProductName != null && likedProductImg != null && likedProductPrice != null)
+            {
+
+                string pJson = HttpContext.Session.GetString(CDictionary.SK_LIKED_PRODUCTS_LIST);
+
+                List<LikedProductDTO> likedProductsList = JsonSerializer.Deserialize<List<LikedProductDTO>>(pJson);
+
+                if (likedProductsList == null)
+                {
+                    // 如果清單還不存在，創建一個新的清單
+                    likedProductsList = new List<LikedProductDTO>();
+                }
+
+                // 創建一個新的喜愛商品對象
+                var likedProduct = new LikedProductDTO
+                {
+                    ProductId = likedProductId.Value,
+                    ProductName = likedProductName,
+                    ProductImg = likedProductImg,
+                    ProductPrice = likedProductPrice.Value
+                };
+
+                // 將新的喜愛商品對象添加到喜愛商品清單中
+                likedProductsList.Add(likedProduct);
+
+                // 將更新後的likedProductsList清單轉換成JSON格式的字串
+                string updatedJson = JsonSerializer.Serialize(likedProductsList);
+
+                // 將JSON字串轉換為byte[]數據並保存到HttpContext.Session中
+                byte[] bytes = Encoding.UTF8.GetBytes(updatedJson);
+                HttpContext.Session.Set(CDictionary.SK_LIKED_PRODUCTS_LIST, bytes);
+            }
+
             return View();
 
 
@@ -187,14 +225,12 @@ namespace ChilLaxFrontEnd.Controllers
                 };
 
                 db.Cart.Add(cart);
+
             }
 
             db.SaveChanges();
 
-            return RedirectToAction("Details", "Carts", new { id = member.MemberId });
-
-
-
+            return RedirectToAction("Details", "Carts", new { id = member.MemberId, orderSuccess = true });
 
         }
 

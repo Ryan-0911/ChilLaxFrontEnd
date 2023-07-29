@@ -45,6 +45,9 @@ namespace ChilLaxFrontEnd.Controllers
                 .ToListAsync();
 
             if (cart == null) return NotFound();
+
+            // 將 orderSuccess 參數傳遞到視圖中
+            ViewBag.orderSuccess = true;
             return View(cart);
         }
 

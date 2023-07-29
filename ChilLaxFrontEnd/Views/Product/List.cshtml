@@ -64,8 +64,8 @@
                             <img src="~/assets/images/heart1.png" />
                             <i>喜好商品（0）</i>
                         </a>
-                        <div class="like-list">
-                            有喜歡的商品嗎？點擊愛心收藏起來吧♥
+                        <div id="like-list" class="like-list" style="display:none;">
+                            @*有喜歡的商品嗎？點擊愛心收藏起來吧♥*@
                         </div>
                     </li>
                     <li class="cart">
@@ -162,7 +162,7 @@
                             @foreach (var category in Model.FirstOrDefault().ProdCategory)
                             {
                                 <li>
-                                    <a data-toggle="tab" href="#tab1" class="no-underline category-link" name="@category">@category</a>
+                                    <a data-toggle="tab" href="#tab1" class="no-underline category-link" name="@category" data-category="@category">@category</a>
                                 </li>
                             }
 
@@ -180,30 +180,32 @@
             <!-- 類別分類 -->
             <!-- 商品呈現 start-->
             @*  @using (Html.BeginForm("AddToCart", "Product", FormMethod.Post))  *@
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
-
-                int count = 0;
-                foreach (var item in Model.SelectMany(p => p.ProductsResult))
+            <div id="productListContainer" class="row">
+                @using (Html.BeginForm())
                 {
-                    count++;
+                    @Html.AntiForgeryToken()
 
-                    <input type="hidden" name="ProductId" value="@item.ProductId" id="PId" />
+                    int count = 0;
+                    foreach (var item in Model.SelectMany(p => p.ProductsResult))
+                    {
+                        count++;
 
-                    <div id="productListContainer" class="col-md-3 mb-4">
-                        <div class="thumbnail" style="height: 450px;">
+                        <input type="hidden" name="ProductId" value="@item.ProductId" id="PId" />
+
+                        <div class="col-md-3 mb-4 thumbnail" style="height: 450px;" data-category="@item.ProductCategory">
                             <a href="@Url.Action("AddToCart", "Product", new { id = item.ProductId })">
                                 <img src="~/assets/images/@Html.DisplayFor(modelItem => item.ProductImg)" class="card-img-top img-fluid  mx-auto d-block" style="width: 230px; height: 260px;">
                             </a>
 
-                            <div class="card-body">
+                            <div class="card-body" style="padding: 15px;
+">
                                 <h4 class="card-title text-center" style="margin-top: 5px;">
                                     @Html.ActionLink(item.ProductName, "AddToCart", new { id = item.ProductId }, new { @class = "no-underline stretched-link text-dark" })
                                 </h4>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <button class="add-to-wishlist">
+                                        @*<button class="add-to-wishlist">*@
+                                        <button class="add-to-wishlist" data-product-id="@item.ProductId" data-product-name="@item.ProductName" data-product-icon="@item.ProductImg" data-product-price="@item.ProductPrice">
                                             <i class="fa fa-heart-o"></i><span class="tooltipp">加入喜愛商品</span>
                                         </button>
                                     </div>
@@ -225,7 +227,7 @@
 
                                     <div class="form-group">
                                         <div class="col-md-offset-0 col-md-10">
-                                            <button onclick="CreateCart()" value="@item.ProductId" class="btn btn-default">購買</button>
+                                            <button onclick="CreateCart()" value="@item.ProductId" class="btn btn-default btn-purchase">購買</button>
 
                                             @* <button onclick="CreateCart(this.value)" value="@item.ProductId" class="btn btn-default"> @Html.ActionLink("購買","List", new { id = item.ProductId }, new { @class = "btn btn-default" })  </button> *@
                                         </div>
@@ -233,11 +235,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
-            }
 
-            @* <!-- 商品呈現 over --> *@
+                @* <!-- 商品呈現 over --> *@
+            </div>
 
 
 
@@ -340,38 +342,51 @@
             });
         });
 
-        // 網頁載入完成後的初始化動作
+
+        // 產品類別顯示
         $(document).ready(function () {
-            // 綁定點選類別連結的事件處理函式
-            $(".category-link").click(function (e) {
-                e.preventDefault(); // 防止點選連結後的預設行為（例如跳轉頁面）
+            // 綁定點擊事件
+            $(".category-link").click(function () {
+                var selectedCategory = $(this).data("category");
 
-                // 取得點選的類別名稱
-                var category = $(this).attr("name");
-
-                // 呼叫顯示產品資料的函式
-                showCategoryProducts(category);
+                // 顯示所有商品項目
+                if (selectedCategory === "All") {
+                    $(".thumbnail").show();
+                } else {
+                    // 隱藏不符合類別的商品項目
+                    $(".thumbnail").hide();
+                    $(".thumbnail[data-category='" + selectedCategory + "']").show();
+                }
             });
         });
 
-                // 顯示特定類別的商品
-                //function showCategoryProducts(category) {
-                //    $.ajax({
-                //        type: "GET",
-                //        url: "/Product/List",
-                //        data: { productcategory: category },
-                //        dataType: "html",
-                //        success: function (data) {
-                //            // 將取得的產品資料顯示在 productListContainer 元素中
-                //            $("#productListContainer").html(data);
-                //        },
-                //        error: function () {
-                //            alert("無法取得產品資料。");
-                //            console.log(category);
-                //        }
-                //    });
-                //}
+        // 喜好商品清單
+        $(document).ready(function () {
+            $(".add-to-wishlist").click(function () {
+                var productId = $(this).data("product-id");
+                var productName = $(this).data("product-name");
+                var productImg = $(this).data("product-img");
+                var productPrice = $(this).data("product-price");
 
+                // 將產品信息傳遞給List方法
+                $.ajax({
+                    url: "@Url.Action("List", "Product")",
+                    data: {
+                        likedProductId: productId,
+                        likedProductName: productName,
+                        likedProductImg: productImg,
+                        likedProductPrice: productPrice
+                    },
+                    type: "GET",
+                    success: function (data) {
+                        // 在此處處理成功後的操作
+                    },
+                    error: function () {
+                        // 在此處處理錯誤情況
+                    }
+                });
+            });
+        });
 
     </script>
 
