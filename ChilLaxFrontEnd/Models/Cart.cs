@@ -13,5 +13,9 @@ namespace ChilLaxFrontEnd.Models
 
         public virtual Member Member { get; set; }
         public virtual Product Product { get; set; }
+
+        public string ProductName { get; set; } = null!;
+        public int ProductPrice { get; set; }
+        public string ProductImg { get; set; } = null!;
     }
 }

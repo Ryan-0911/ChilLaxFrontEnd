@@ -75,6 +75,22 @@
                         </a>
                         <div class="cart-list">
                             購物車內還沒有東西，趕緊點選商品加入購物車吧！
+                            @*@using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                int count = 0;
+                                @foreach (var cartItem in Model.SelectMany(c => c.carts))
+                                {
+                                    count++;
+                                    <input type="hidden" name="ProductId" value="@cartItem.ProductId" id="PId" />
+                                    <input type="hidden" name="MemberId" value="@cartItem.MemberId" id="MId" />
+                                    <img src="~/assets/images/@Html.DisplayFor(modelItem => cartItem.ProductImg)" class="card-img-top img-fluid  mx-auto d-block" style="width: 30px; height: 60px;">
+                                    @Html.DisplayFor(modelItem => cartItem.ProductName)
+                                    @Html.DisplayFor(modelItem => cartItem.CartProductQuantity)
+
+                                }
+                            }*@
                         </div>
                     </li>
                 </ul>
