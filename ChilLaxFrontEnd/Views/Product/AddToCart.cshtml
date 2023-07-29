@@ -26,73 +26,20 @@
     <!-- nouislider -->
     <link href="~/assets/css/product_css/nouislider.min.css" rel="stylesheet" />
 
-    <!-- Font Awesome Icon -->
-    <link href="~/assets/css/product_css/font-awesome.min.css" rel="stylesheet" />
+
 
     <!-- Custom stlylesheet -->
     <link href="~/assets/css/product_css/style.css" rel="stylesheet" />
 }
 
-<!-- p_container start -->
-<div class="p_container">
-    <!-- row -->
-    <div class="p_row">
-        <!-- 電商導覽列 -->
-        <!-- black-nav -->
-        <div class="black-nav">
-            <!-- wrap -->
-            <div class="wrap">
-
-                <!-- SEARCH BAR start -->
-                <div class="col-md-6">
-                    <div class="header-search">
-                        @using (Html.BeginForm())
-                        {
-                            @Html.TextBox("txtKeyword", null , new { style = "width: 500px; height:40px; margin-left: 160px; border-radius: 40px 40px 40px 40px; color: navy; font-weight: 900;" })
-
-                            <input class="search-btn" type="submit" value="Search" float: right />
-                        }
-                    </div>
-                </div>
-                <!-- /SEARCH BAR over -->
-                <!-- 喜好商品、購物車 -->
-                <ul class="black-nav-right">
-                    <li class="like">
-                        <a href="#">
-                            <img src="~/assets/images/heart1.png" />
-                            <i>喜好商品（0）</i>
-                        </a>
-                        <div class="like-list">
-                            有喜歡的商品嗎？點擊愛心收藏起來吧♥
-                        </div>
-                    </li>
-                    <li class="cart">
-                        <a href="#">
-                            <img src="~/assets/images/icons8-cart.gif" />
-                            <i>購物車（0）</i>
-                        </a>
-                        <div class="cart-list">
-                            購物車內還沒有東西，趕緊點選商品加入購物車吧！
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <!-- wrap -->
-    </div>
-    <!-- black-nav -->
-</div>
-<!-- row over -->
-   
-<!-- container over -->
 <div class="container">
 
     @using (Html.BeginForm("AddToCart", "Product", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         <hr />
+        <input type="hidden" name="ProductId" value="@Model.ProductId" id="PId" />
 
-        <input type="hidden" name="txtFId" value="@ViewBag.FId" />
 
         @* <!-- SECTION --> *@
         <div class="section">
@@ -101,9 +48,10 @@
             <div class="row">
                 @* <!-- Product thumb imgs --> *@
                 <div class="col-md-7">
-                    <div id="product-imgs" style="border: 2px solid #000; padding: 10px;">
+                    <div id="product-imgs">
                         <div class="product-preview">
-                            <img src="~/assets/images/@Model.ProductImg"/>
+                            <img src="~/assets/images/@Model.ProductImg" />
+
                         </div>
                     </div>
                 </div>
@@ -155,41 +103,43 @@
                         </div>
                         @*   <!-- /product tab content --> *@
                     </div>
+                    @*   <!-- /product tab --> *@
                 </div>
-                @*   <!-- /product tab --> *@
+
             </div>
             @*  <!-- /row --> *@
         </div>
         @* <!-- /SECTION --> *@
- @*  <!-- /container --> *@
 
-    <div style="margin-bottom: 1000px;" class="PageBottom">
+        @*  <!-- /container --> *@
+
+        <div style="margin-bottom: 1000px;" class="PageBottom">
             @Html.ActionLink("返回上一頁", "List")
-    </div>
+        </div>
     }
 
     @section Scripts{
-    <script>
-        $(document).ready(function () {
-            // 選擇增減按鈕和數量輸入框元素
-            var qtyUp = $(".qty-up");
-            var qtyDown = $(".qty-down");
-            var quantityInput = $(".input-number");
+        <script>
+            $(document).ready(function () {
+                // 選擇增減按鈕和數量輸入框元素
+                var qtyUp = $(".qty-up");
+                var qtyDown = $(".qty-down");
+                var quantityInput = $(".input-number");
 
-            // 設置增加數量的事件
-            qtyUp.click(function () {
-                var currentValue = parseInt(quantityInput.val());
-                quantityInput.val(currentValue + 1);
-            });
+                // 設置增加數量的事件
+                qtyUp.click(function () {
+                    var currentValue = parseInt(quantityInput.val());
+                    quantityInput.val(currentValue + 1);
+                });
 
-            // 設置減少數量的事件
-            qtyDown.click(function () {
-                var currentValue = parseInt(quantityInput.val());
-                if (currentValue > 1) {
-                    quantityInput.val(currentValue - 1);
-                }
+                // 設置減少數量的事件
+                qtyDown.click(function () {
+                    var currentValue = parseInt(quantityInput.val());
+                    if (currentValue > 1) {
+                        quantityInput.val(currentValue - 1);
+                    }
+                });
             });
-        });
-    </script>
-}
+        </script>
+    }
 
