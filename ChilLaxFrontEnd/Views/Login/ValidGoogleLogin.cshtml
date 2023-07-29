@@ -290,7 +290,7 @@
         }).fail((jqXHR, textStatus, errorThrown) => {
             if (jqXHR.status === 400) {
                 const errorResponse = jqXHR.responseJSON;
-                alert("伺服器問題：" + errorResponse.message);
+                alert(errorResponse.message);
             } else {
                 console.error("AJAX error:", textStatus, errorThrown);
             }

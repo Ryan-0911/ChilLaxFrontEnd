@@ -222,7 +222,7 @@ namespace ChilLaxFrontEnd.Controllers
 			if (formData.memberAccount != null && formData.memberPassword != null)
 			{
 				bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(formData.memberAccount));
-
+				
 				if (accountExists == false)
 				{
 					string password = formData.memberPassword;
@@ -236,6 +236,7 @@ namespace ChilLaxFrontEnd.Controllers
 					//return RedirectToAction("registerProfile");
 					return Ok(new { success = true });
 				}
+				return BadRequest(new { success = false, message = "此帳號已註冊過，請重新登入!" });
 			}
 			return BadRequest(new { success = false, message = "請輸入帳號及密碼!" });
 
@@ -245,52 +246,57 @@ namespace ChilLaxFrontEnd.Controllers
 		[HttpPost("registerProfile")]
 		public async Task<IActionResult> registerProfile([FromBody] registerViewModel formData)
 		{
+			bool emailExists = _context.Member.Any(m => m.MemberEmail.Equals(formData.memberEmail));
 			try
 			{
-				if (formData.memberName != null && formData.memberTel != null && formData.memberEmail != null && formData.memberBirthday != null)
+				if (emailExists == false)
 				{
-					Member member = new Member
+					if (ModelState.IsValid)
 					{
-						MemberName = formData.memberName,
-						MemberTel = formData.memberTel,
-						MemberEmail = formData.memberEmail,
-						MemberSex = formData.memberSex,
-						MemberBirthday = formData.memberBirthday,
-						MemberAddress = formData.memberAddress,
-						MemberPoint = 0,
-						MemberJoinTime = DateTime.Now,
-						Available = true,
-						IsValid = false
-					};
-
-					string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
-					SigninViewModel svm = JsonSerializer.Deserialize<SigninViewModel>(json);
-					if (svm != null)
-					{
-						_context.Member.Add(member);
-						await _context.SaveChangesAsync();
-
-						MemberCredential mc = new MemberCredential();
-						mc.MemberId = member.MemberId;
-						mc.MemberAccount = svm.memberAccount;
-						mc.MemberPassword = svm.memberPassword;
-
-						_context.MemberCredential.Add(mc);
-						await _context.SaveChangesAsync();
-
-						VerifyEmailViewModel emailvm = new VerifyEmailViewModel();
-						emailvm.MemberId = member.MemberId;
-						emailvm.MemberEmail = member.MemberEmail;
-
-						string toVerifyEmail = JsonSerializer.Serialize(emailvm);
-						HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, toVerifyEmail);
-						if (!HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
+						Member member = new Member
 						{
-							return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
+							MemberName = formData.memberName,
+							MemberTel = formData.memberTel,
+							MemberEmail = formData.memberEmail,
+							MemberSex = formData.memberSex,
+							MemberBirthday = formData.memberBirthday,
+							MemberAddress = formData.memberAddress,
+							MemberPoint = 0,
+							MemberJoinTime = DateTime.Now,
+							Available = true,
+							IsValid = false
+						};
+
+						string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
+						SigninViewModel svm = JsonSerializer.Deserialize<SigninViewModel>(json);
+						if (svm != null)
+						{
+							_context.Member.Add(member);
+							await _context.SaveChangesAsync();
+
+							MemberCredential mc = new MemberCredential();
+							mc.MemberId = member.MemberId;
+							mc.MemberAccount = svm.memberAccount;
+							mc.MemberPassword = svm.memberPassword;
+
+							_context.MemberCredential.Add(mc);
+							await _context.SaveChangesAsync();
+
+							VerifyEmailViewModel emailvm = new VerifyEmailViewModel();
+							emailvm.MemberId = member.MemberId;
+							emailvm.MemberEmail = member.MemberEmail;
+
+							string toVerifyEmail = JsonSerializer.Serialize(emailvm);
+							HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, toVerifyEmail);
+							if (!HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
+							{
+								return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
+							}
+							return Ok(new { success = true });
 						}
-						return Ok(new { success = true });
 					}
 				}
+				return BadRequest(new { success = false, message = "此信箱已註冊過，請重新登入或選擇別的信箱!" });
 			}
 			catch (Exception ex)
 			{
