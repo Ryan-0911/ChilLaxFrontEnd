@@ -23,6 +23,7 @@
     {
         public CartResultReq CartResultReq { get; set; }
         public MemberPick MemberPick { get; set; }
+        public int totoPrice { get; set; }
 
     }
     public class ProductOrderReq
