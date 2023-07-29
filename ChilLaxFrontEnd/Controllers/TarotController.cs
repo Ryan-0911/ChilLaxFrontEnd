@@ -4,7 +4,7 @@ namespace ChilLaxFrontEnd.Controllers
 {
     public class TarotController : Controller
     {
-        public IActionResult TarotIndax()
+        public IActionResult TarotIndex()
         {
             return View();
         }

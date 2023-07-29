@@ -230,13 +230,14 @@
                             <a asp-action="Index" asp-controller="Focus">Focus</a>
                         </li>
                         <li>
-                            <a asp-action="TarotIndax" asp-controller="Tarot">Tarot</a>
+                            <a asp-action="TarotIndex" asp-controller="Tarot">Tarot</a>
                         </li>
                         <li>
                             <a href="/Product/list" >Shop</a>
                         </li>
                         <li>
-                            <a href="#">Customer Service</a>
+                            <a asp-action="Index" asp-controller="CustomerService">Customer Service</a>
+                            @*<a href="#">Customer Service</a>*@
                         </li>
                         <li style="height: 50px; padding: 8px 15px 15px 15px">
                             <img id="user-info" src="/assets/images/user.png" style="width: 35px; border-radius: 50%" onclick="toggleMenu()" />
