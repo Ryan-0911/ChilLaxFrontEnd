@@ -3,10 +3,11 @@
     ViewData["Title"] = "Details";
 }
 <style>
-    .productimg{
+    .productimg {
         height: 150px;
     }
-    .td_txt{
+
+    .td_txt {
         height: 150px;
         line-height: 100px;
     }
@@ -46,7 +47,7 @@
         color: #666
     }
 
-    .cart-style{
+    .cart-style {
         margin: 0 auto;
         width: 60%;
         min-width: 800px;
@@ -58,7 +59,7 @@
 <div class="cart-style">
     <h4>購物車</h4>
     <hr />
-@*    <div class="alert alert-success" role="alert">刪除成功</div>*@
+    @*    <div class="alert alert-success" role="alert">刪除成功</div>*@
     <table class="table table-dark table-hover">
         <thead>
             <tr>
@@ -110,66 +111,81 @@
                     </td>
                 </tr>
             }
+
+            @{
+                // 檢查是否有訂購成功的參數
+                bool orderSuccess = ViewBag.orderSuccess ?? false;
+            }
+
+            @if (orderSuccess)
+            {
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    商品已加入購物車！
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
         </tbody>
     </table>
-    <a href=""
-    <button onclick="checkout()">結帳</button>
+    
+    <button onclick="checkout()" class="btn btn-success">結帳</button>
 </div>
 
 
 @section Scripts{
 
-<script>
+    <script>
 
-    //刪除購物車內商品
-    const baseAddress = "https://localhost:5000"
-    
+        //刪除購物車內商品
+        const baseAddress = "https://localhost:5000"
+
         function deleteCart(productId) {
-        $.ajax({
-            type:"GET",
+            $.ajax({
+                type: "GET",
                 url: `${baseAddress}/api/CartsAPI/Delete/${productId}`
-        }).done(data =>{
-            window.location.reload();
-        }).fail(err => {
-            alert(err.statusText);
-        });
-    };
+            }).done(data => {
+                window.location.reload();
+            }).fail(err => {
+                alert(err.statusText);
+            });
+        };
 
-    // 全選框的 change 事件處理函式
-    function selectAll() {
-        const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-        const checkall = document.getElementById('checkall');
+        // 全選框的 change 事件處理函式
+        function selectAll() {
+            const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            const checkall = document.getElementById('checkall');
 
-        // 將所有商品選取框的勾選狀態設置成全選框的勾選狀態
-        for (let i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = checkall.checked;
+            // 將所有商品選取框的勾選狀態設置成全選框的勾選狀態
+            for (let i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = checkall.checked;
+            }
         }
-    }
 
-    // 監聽全選框的 change 事件
-    document.getElementById('checkall').addEventListener('change', selectAll);
+        // 監聽全選框的 change 事件
+        document.getElementById('checkall').addEventListener('change', selectAll);
 
-    let action = '';
+        let action = '';
 
-    //商品數量增減事件
-    function counterClick(el) {
+        //商品數量增減事件
+        function counterClick(el) {
             console.log(el.childNodes);
-        if (action == '+') adder(el.childNodes[3]);
-        if (action == '-') minuser(el.childNodes[3]);
-    }
+            if (action == '+') adder(el.childNodes[3]);
+            if (action == '-') minuser(el.childNodes[3]);
+        }
 
-    function changeAction(el) {
-        action = el.value;
-    }
+        function changeAction(el) {
+            action = el.value;
+        }
 
-    function adder(el) {
-        el.innerHTML = parseInt(el.innerHTML) + 1;
-    }
+        function adder(el) {
+            el.innerHTML = parseInt(el.innerHTML) + 1;
+        }
 
-    function minuser(el) {
-        if (el.innerHTML <= 1) return;
-        el.innerHTML = parseInt(el.innerHTML) - 1;
-    }
+        function minuser(el) {
+            if (el.innerHTML <= 1) return;
+            el.innerHTML = parseInt(el.innerHTML) - 1;
+        }
 
     //選擇商品並結帳
     function checkout() {
@@ -185,6 +201,8 @@
                 });
             };
         }
+        
+        if (!trueCheckboxs.length) return;
         console.log(JSON.stringify({trueCheckboxs}));
         $.ajax({
             type: "POST",
@@ -200,7 +218,7 @@
             }
         });
 
-    }
+        }
 
-</script>
+    </script>
 }
