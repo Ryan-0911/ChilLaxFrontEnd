@@ -68,8 +68,9 @@ namespace ChilLaxFrontEnd.Controllers
 
             //產生隨機亂數
             string guid_num = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 13);
+            int oid = db.ProductOrder.Max(po => po.OrderId);
             string this_products = string.Empty;
-            string orderId = "ChilLax" + $"{guid_num}";
+            string orderId = "ChilLax" + $"{oid}";
             string msg = "備註欄";
             //需填入你的網址
             string website = $"https://localhost:5000";
@@ -109,9 +110,9 @@ namespace ChilLaxFrontEnd.Controllers
                 //商品名稱
                 { "ItemName",  $"{this_products}"},
                 //付款完成通知回傳網址
-                { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
+                { "ReturnURL",  $"http://yulin.win/api/Checkout/UpdatePaymentAsync"},
                 //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                { "OrderResultURL", $"{website}/Checkout/UpdatePayment/{maxOrderId}"},
+                { "OrderResultURL", $"{website}/Home/Index"},
                 //Client端返回特店的按鈕連結
                 { "ClientRedirectURL",  $"{website}"},
                 //特店編號(綠界提供測試商店編號)

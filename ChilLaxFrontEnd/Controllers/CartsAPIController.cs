@@ -268,7 +268,7 @@ namespace ChilLaxFrontEnd.Controllers
                     //付款完成通知回傳網址
                     { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},
                     //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                    { "OrderResultURL", $"{website}/Checkout/UpdatePayment/{maxOrderId}"},
+                    { "OrderResultURL", $"{website}/Home/Index"},
                     //Client端返回特店的按鈕連結
                     { "ClientRedirectURL",  $"{website}"},
                     //特店編號(綠界提供測試商店編號)
