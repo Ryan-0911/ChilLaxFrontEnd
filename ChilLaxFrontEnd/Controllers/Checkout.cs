@@ -109,9 +109,9 @@ namespace ChilLaxFrontEnd.Controllers
                 { "TradeDesc",  $"{msg}"},
                 //商品名稱
                 { "ItemName",  $"{this_products}"},
-                //付款完成通知回傳網址
-                { "ReturnURL",  $"http://yulin.win/api/Checkout/UpdatePaymentAsync"},
                 //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
+                { "ReturnURL",  $"http://yulin.win/api/Checkout/UpdatePaymentAsync"},
+                //付款完成通知回傳網址
                 { "OrderResultURL", $"{website}/Home/Index"},
                 //Client端返回特店的按鈕連結
                 { "ClientRedirectURL",  $"{website}"},
