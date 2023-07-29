@@ -292,10 +292,9 @@
 
 
         function CreateCart() {
-            console.log("CreateCart");
             let id = document.getElementById("PId").value;
             let qty = document.getElementById("PQty").value;
-            let memberId = document.getElementById("MemberId").value; // 假設有一個元素的 ID 為 MemberId，儲存了會員的 ID
+            let memberId = 1; // 假設有一個元素的 ID 為 MemberId，儲存了會員的 ID
             var PCarts = {
                 productId: id,
                 txtCount: qty,
@@ -306,7 +305,7 @@
             $.ajax({
 
                 type: "POST",
-                url: `${baseAddress}/api/CartsAPI/Create`,
+                url: `${baseAddress}/api/CartsAPI/ListCreate`,
                 data: JSON.stringify(PCarts),
                 contentType: "application/json"
             }).done(data => {
