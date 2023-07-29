@@ -48,7 +48,7 @@ namespace CoreMVC_SignalR_Chat.Hubs
             var gptResponse = string.Empty;
             await api.Completions.StreamCompletionAsync(
                 new CompletionRequest(
-                    message + $"你是一個塔羅牌占卜師，你要很熱情地回覆我想要詢問的事情，你負責幫所有人占卜任何塔羅牌相關的問題並依照這三張牌{threeCards}去回答使用者詢問的任何問題，如果我詢問非「塔羅牌占卜」相關的問題，你要說「我不太理解呢，建議您詢問占卜相關的問題哦」",
+                    message + $"你是一個塔羅牌占卜師，你要很熱情地回覆我想要詢問的事情，你負責幫所有人占卜任何塔羅牌相關的問題並依照這三張牌{threeCards}去回答使用者詢問的任何問題，如果我詢問非「塔羅牌占卜」相關的問題，你要回覆我「我不太理解呢，建議您詢問占卜相關的問題哦」",
                     model: Model.DavinciText,
                     max_tokens: 2048,
                     temperature: 0.5,

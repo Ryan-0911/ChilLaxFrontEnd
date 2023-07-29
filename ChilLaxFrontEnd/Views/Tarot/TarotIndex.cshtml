@@ -53,7 +53,7 @@
     <img src="~/assets/images/占卜師.png" />
     
 </div>
-
+<button id="Surebtn">是否開始占卜?</button>
 
 <div class="tarot-container">
     <div class="tarot-card" id="card1">
@@ -68,14 +68,14 @@
 
         <div class="card-name" id="cardName3"></div>
     </div>
-    <!-- Add more tarot cards as needed -->
+    
 </div>
 
 <div class="button-container">
     <button id="shuffleBtn" >Shuffle Tarot Cards</button>
 </div>
 
-<div class="col-md-12 chat-container">
+<div class="text-center chat-container">
     <div class="col-12">
         <h3>聊天內容</h3>
         <ul class="list-group" id="Content">
@@ -83,18 +83,15 @@
     </div>
 </div>
 
-<div class="col-md-12">
-    <div class="col-8">
-        @*<h4>個人 ID: <span id="SelfID"></span></h4>*@
+<div class="text-center">
+    <div class="col-8 mx-auto">
+        
         <div class="mb-3">
-            <label for="message" class="form-label">發送訊息 :</label>
-            <input type="text" placeholder="請輸入您的疑問" class="form-control" id="message" autocomplete="off">
+            <input type="text" placeholder="請輸入您心中的疑問" class="form-control" id="message" autocomplete="off">
         </div>
-       
+
         <button type="button" class="btn btn-primary" id="sendButton">傳送訊息</button>
     </div>
-    
-    
 </div>
 
 
@@ -142,5 +139,52 @@
                 
             });
         });
+
+        let memberPoints = 0;
+        document.getElementById("Surebtn").addEventListener("click", function () {
+
+            var TarotPointDTO = {
+                pointDetailId:0,
+                modifiedSource:"Tarot",
+                modifiedAmount:-300,
+            };
+            // 發送 GET 請求獲取會員點數
+            $.ajax({
+                type: "GET",
+                url: "https://localhost:5000/api/TarotPointHistories"
+            }).done(data => {
+                const memberPoints = data;
+                console.log(memberPoints)
+                // 檢查點數是否足夠
+                if (memberPoints >= 300) {
+                    // 足夠點數，詢問會員是否要使用點數進行占卜
+                    const confirmResult = confirm("您目前有 " + memberPoints + " 點，是否要使用 300 點進行占卜呢？");
+                    if (confirmResult) {
+                        // 使用 POST 請求新增點數記錄
+                        $.ajax({
+                            type: "POST",
+                            url: "https://localhost:5000/api/TarotPointHistories",
+                            data: JSON.stringify(TarotPointDTO),
+                            contentType: "application/json"                            
+                        }).done(result => {
+                            // 在此處理成功新增點數記錄的情況
+                            alert(data);
+                            alert("您的點數已成功扣除 300 點，可以進行占卜了！");
+                            // 啟動洗牌按鈕進行占卜
+                            shuffleTarotCards();
+                        }).fail(err => {
+                            // 在此處理新增點數記錄失敗的情況
+                            alert("新增點數記錄時發生錯誤：" + err.statusText);
+                        });
+                    }
+                } else {
+                    // 不足夠點數
+                    alert("您的點數不足，請充值後再進行占卜！");
+                }
+            }).fail(err => {
+                alert("獲取會員點數時發生錯誤：" + err.statusText);
+            });
+        });
+
     </script>
 }

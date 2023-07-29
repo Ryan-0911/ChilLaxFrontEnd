@@ -7,6 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ChilLaxFrontEnd.Models;
 using System.Text.Json;
+using static System.Collections.Specialized.BitVector32;
+using System.Diagnostics.Metrics;
+using Microsoft.Build.Framework;
+using ChilLaxFrontEnd.Models.DTO;
+using System.Text;
+using System.Web;
+using System.Security.Cryptography;
+using static ChilLaxFrontEnd.Controllers.Checkout;
 using ChilLaxFrontEnd.ViewModels;
 
 namespace ChilLaxFrontEnd.Controllers
@@ -16,14 +24,10 @@ namespace ChilLaxFrontEnd.Controllers
     public class CartsAPIController : ControllerBase
     {
         private readonly ChilLaxContext _context;
-
         public CartsAPIController(ChilLaxContext context)
         {
             _context = context;
         }
-
-
-
 
         // GET: api/CartsAPI/Delete/5
         [HttpGet("Delete/{id}")]
@@ -54,41 +58,40 @@ namespace ChilLaxFrontEnd.Controllers
 
         // 郁霖原本
         // GET: api/CartsAPI/Create/4
-        //    [HttpGet("Create/{id}")]
-        //    public async Task<string> Create(int id)
-        //    {
-        //        if (_context.Cart == null)
-        //            return "新增失敗";
+        [HttpGet("Create/{id}")]
+        public async Task<string> Create(int id)
+        {
+            if (_context.Cart == null)
+                return "新增失敗";
 
-        //        string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
-        //        Console.WriteLine(json);
-        //        Member member = JsonSerializer.Deserialize<Member>(json);
-        //        int Mid = member.MemberId;
-        //        int Cartqty = 1;
-        //        List<Cart> thisCart = _context.Cart.Where(c => c.MemberId == Mid).ToList();
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            Console.WriteLine(json);
+            Member member = JsonSerializer.Deserialize<Member>(json);
+            int Mid = member.MemberId;
+            int Cartqty = 1;
+            List<Cart> thisCart = _context.Cart.Where(c => c.MemberId == Mid).ToList();
 
-        //        for (int i = 0; i < thisCart.Count; i++)
-        //        {
-        //            if (thisCart[i].ProductId == id) 
-        //            {
-        //                thisCart[i].CartProductQuantity += Cartqty;
-        //                _context.Cart.Update(thisCart[i]);
-        //                _context.SaveChanges();
-        //                return "已有此商品，數量更新成功";
-        //            }
-        //        }
+            for (int i = 0; i < thisCart.Count; i++)
+            {
+                if (thisCart[i].ProductId == id)
+                {
+                    thisCart[i].CartProductQuantity += Cartqty;
+                    _context.Cart.Update(thisCart[i]);
+                    _context.SaveChanges();
+                    return "已有此商品，數量更新成功";
+                }
+            }
 
-        //        Cart cart = new Cart();
-        //        cart.MemberId = Mid;
-        //        cart.ProductId = id;
-        //        cart.CartProductQuantity = Cartqty;
+            Cart cart = new Cart();
+            cart.MemberId = Mid;
+            cart.ProductId = id;
+            cart.CartProductQuantity = Cartqty;
 
-        //        _context.Cart.Add(cart);
-        //        await _context.SaveChangesAsync();
+            _context.Cart.Add(cart);
+            await _context.SaveChangesAsync();
 
-        //        return "新增成功";
-        //    }
-        //}
+            return "新增成功";
+        }
 
 
         // 琬亭修改
@@ -128,130 +131,119 @@ namespace ChilLaxFrontEnd.Controllers
 
             return "新增成功";
         }
+
+        //POST: api/CartsAPI/SaveCartSession
+        [HttpPost]
+        [Route("SaveCartSession")]
+        public string SaveCartSession( CartResultReq cartResultReq)
+        {
+            string cartsJson = JsonSerializer.Serialize(cartResultReq);
+            HttpContext.Session.SetString(CDictionary.SK_CHECKOUT_DATA, cartsJson);
+
+            return "list";
+        }
+
+        //POST: api/CartsAPI/SaveProductOrder
+        [HttpPost]
+        [Route("SaveProductOrder")]
+        public async Task<ActionResult<string>> SaveProductOrder(ProductOrderReq por)
+        {
+            string memberjson = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+            string cartjson = HttpContext.Session.GetString(CDictionary.SK_CHECKOUT_DATA);
+            Member member = JsonSerializer.Deserialize<Member>(memberjson);
+            int mid = member.MemberId;
+
+            CartResultReq CartResultReq = JsonSerializer.Deserialize<CartResultReq>(cartjson);
+            int totoPrice = 0;
+            for (int i =0; i< CartResultReq.trueCheckboxs.Length; i++)
+            {
+                int pid = CartResultReq.trueCheckboxs[i].pid;
+                var product = _context.Product.Where(p => p.ProductId == pid);
+                totoPrice += product.FirstOrDefault().ProductPrice * CartResultReq.trueCheckboxs[i].qty;
+            }
+
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    //新增訂單
+                    ProductOrder productOrder = new ProductOrder();
+                    productOrder.MemberId = member.MemberId;
+                    productOrder.OrderPayment = false;
+                    productOrder.OrderTotalPrice = totoPrice;
+                    productOrder.OrderDelivery = false;
+                    productOrder.OrderAddress = member.MemberAddress;
+                    productOrder.OrderDate = DateTime.Parse(por.OrderDate);
+                    productOrder.OrderNote = por.OrderNote;
+                    productOrder.OrderState = "未出貨";
+                    _context.ProductOrder.Add(productOrder);
+                    await _context.SaveChangesAsync();
+
+                    //新增訂單詳細資料表
+                    int orderid = _context.ProductOrder.Max(p => p.OrderId);
+                    for (int i = 0; i < CartResultReq.trueCheckboxs.Length; i++)
+                    {
+                        OrderDetail orderDetail = new OrderDetail();
+                        orderDetail.OrderId = orderid;
+                        orderDetail.ProductId = CartResultReq.trueCheckboxs[i].pid;
+                        orderDetail.CartProductQuantity = CartResultReq.trueCheckboxs[i].qty;
+                        _context.OrderDetail.Add(orderDetail);
+                    }
+                    await _context.SaveChangesAsync();
+
+                    //刪除購物車內商品
+                    for (int i = 0; i < CartResultReq.trueCheckboxs.Length; i++)
+                    {
+                        Cart cart = new Cart();
+                        cart = _context.Cart.FirstOrDefault(c => c.MemberId == mid && c.ProductId == CartResultReq.trueCheckboxs[i].pid);
+                        _context.Remove(cart);
+                    }
+                    await _context.SaveChangesAsync();
+
+
+                    await transaction.CommitAsync();
+
+                    return "";
+                   
+                }
+                catch (Exception ex)
+                {
+                    // 發生例外時回滾交易
+                    await transaction.RollbackAsync();
+                    return "結帳失敗：" + ex.Message;
+                }
+            }
+
+
+           
+        }
+
+        private string GetCheckMacValue(Dictionary<string, string> order)
+        {
+            var param = order.Keys.OrderBy(x => x).Select(key => key + "=" + order[key]).ToList();
+            var checkValue = string.Join("&", param);
+            //測試用的 HashKey
+            var hashKey = "5294y06JbISpM5x9";
+            //測試用的 HashIV
+            var HashIV = "v77hoKGq4kWxNNIS";
+            checkValue = $"HashKey={hashKey}" + "&" + checkValue + $"&HashIV={HashIV}";
+            checkValue = HttpUtility.UrlEncode(checkValue).ToLower();
+            checkValue = GetSHA256(checkValue);
+            return checkValue.ToUpper();
+        }
+        private string GetSHA256(string value)
+        {
+            var result = new StringBuilder();
+            var sha256 = SHA256.Create();
+            var bts = Encoding.UTF8.GetBytes(value);
+            var hash = sha256.ComputeHash(bts);
+            for (int i = 0; i < hash.Length; i++)
+            {
+                result.Append(hash[i].ToString("X2"));
+            }
+            return result.ToString();
+        }
+
+        
     }
-
-
-
-
-
-
-
-
-
-
-
-    //    // GET: api/CartsAPI
-    //    [HttpGet]
-    //        public async Task<ActionResult<IEnumerable<Cart>>> GetCart()
-    //        {
-    //          if (_context.Cart == null)
-    //          {
-    //              return NotFound();
-    //          }
-    //            return await _context.Cart.ToListAsync();
-    //        }
-
-    //        // GET: api/CartsAPI/5
-    //        [HttpGet("{id}")]
-    //        public async Task<ActionResult<Cart>> GetCart(int id)
-    //        {
-    //          if (_context.Cart == null)
-    //          {
-    //              return NotFound();
-    //          }
-    //            var cart = await _context.Cart.FindAsync(id);
-
-    //            if (cart == null)
-    //            {
-    //                return NotFound();
-    //            }
-
-    //            return cart;
-    //        }
-
-    //        // PUT: api/CartsAPI/5
-    //        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //        [HttpPut("{id}")]
-    //        public async Task<IActionResult> PutCart(int id, Cart cart)
-    //        {
-    //            if (id != cart.MemberId)
-    //            {
-    //                return BadRequest();
-    //            }
-
-    //            _context.Entry(cart).State = EntityState.Modified;
-
-    //            try
-    //            {
-    //                await _context.SaveChangesAsync();
-    //            }
-    //            catch (DbUpdateConcurrencyException)
-    //            {
-    //                if (!CartExists(id))
-    //                {
-    //                    return NotFound();
-    //                }
-    //                else
-    //                {
-    //                    throw;
-    //                }
-    //            }
-
-    //            return NoContent();
-    //        }
-
-    //        // POST: api/CartsAPI
-    //        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //        [HttpPost]
-    //        public async Task<ActionResult<Cart>> PostCart(Cart cart)
-    //        {
-    //          if (_context.Cart == null)
-    //          {
-    //              return Problem("Entity set 'ChilLaxContext.Cart'  is null.");
-    //          }
-    //            _context.Cart.Add(cart);
-    //            try
-    //            {
-    //                await _context.SaveChangesAsync();
-    //            }
-    //            catch (DbUpdateException)
-    //            {
-    //                if (CartExists(cart.MemberId))
-    //                {
-    //                    return Conflict();
-    //                }
-    //                else
-    //                {
-    //                    throw;
-    //                }
-    //            }
-
-    //            return CreatedAtAction("GetCart", new { id = cart.MemberId }, cart);
-    //        }
-
-    //        // DELETE: api/CartsAPI/5
-    //        [HttpDelete("{id}")]
-    //        public async Task<IActionResult> DeleteCart(int id)
-    //        {
-    //            if (_context.Cart == null)
-    //            {
-    //                return NotFound();
-    //            }
-    //            var cart = await _context.Cart.FindAsync(id);
-    //            if (cart == null)
-    //            {
-    //                return NotFound();
-    //            }
-
-    //            _context.Cart.Remove(cart);
-    //            await _context.SaveChangesAsync();
-
-    //            return NoContent();
-    //        }
-
-    //        private bool CartExists(int id)
-    //        {
-    //            return (_context.Cart?.Any(e => e.MemberId == id)).GetValueOrDefault();
-    //        }
-    //    }
 }
