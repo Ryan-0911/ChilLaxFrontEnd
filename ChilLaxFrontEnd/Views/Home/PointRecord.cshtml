@@ -86,11 +86,11 @@
                     const selectedOption = ref("") // 下拉選單所選的內容
                     const startDate = ref("") // 交易起始日的值
                     const endDate = ref("") // 交易終止日的值
-                    const sortBy = ref("")       //排序的欄位
-                    const sortTypeA = ref("asc")  //升冪還是降冪
-                    const sortTypeT = ref("asc")  //升冪還是降冪
-                    const totalPages = ref()   //總共有幾頁
-                    const thePage = ref(1)       //目前是第幾頁
+                    const sortBy = ref("")       // 排序的欄位
+                    const sortTypeA = ref("asc")  // modifiedAmount是升冪還是降冪
+                    const sortTypeT = ref("asc")  // modifiedTime是升冪還是降冪
+                    const totalPages = ref()   // 總共有幾頁
+                    const thePage = ref(1)       // 目前是第幾頁
 
                     const loadPointRecords = async () => {
                         let API_URL = ''
@@ -154,17 +154,17 @@
                     // 列的顏色 (根據modifiedSource而定)---------------------------------------------------------------------------------------------
                     const getRowStyle = modifiedSource => {
                         console.log(modifiedSource);
-                        // 如果 modifiedSource 是 "focus"，設置綠色背景
+                        // 如果 modifiedSource 是 "focus"
                         if (modifiedSource === "focus") {
-                            return { backgroundColor: "#A9E4EF" };
+                            return { backgroundColor: "#DFFFFF" };
                         }
-                        // 如果 modifiedSource 是 "tarot"，設置藍色背景
+                        // 如果 modifiedSource 是 "tarot"
                         if (modifiedSource === "tarot") {
-                            return { backgroundColor: "#DDF1DD" };
+                            return { backgroundColor: "#D1FFDF" };
                         }
-                        // 如果 modifiedSource 是 "product"，設置黃色背景
+                        // 如果 modifiedSource 是 "product"
                         if (modifiedSource === "product") {
-                            return { backgroundColor: "#FFFBDB" };
+                            return { backgroundColor: "#FEFFDF" };
                         }
                         // 預設情況下，不應用任何額外的 CSS 類，保持預設的背景色
                         return {};
@@ -175,7 +175,6 @@
                         thePage.value = page
                         loadPointRecords()
                     }
-
 
                     return {
                         pointRecords,

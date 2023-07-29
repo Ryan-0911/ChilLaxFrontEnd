@@ -61,7 +61,7 @@ namespace ChilLaxFrontEnd.Controllers
             Console.WriteLine(json);
             Member member = JsonSerializer.Deserialize<Member>(json);
 
-            int pageSize = 5; // 每頁顯示的筆數
+            int pageSize = 10; // 每頁顯示的筆數
             int TotalCount = 0; // 共有多少筆資料
             int TotalPages = 0; // 共有幾頁
             List<PointRecordDTO> pointRecords; // 篩選後的點數資料
@@ -102,11 +102,11 @@ namespace ChilLaxFrontEnd.Controllers
                          {
                              ModifiedSource = pointHistory.ModifiedSource,
                              ModifiedAmount = pointHistory.ModifiedAmount,
-                             Content = $"消費總額: {(productOrder.OrderTotalPrice).ToString()}",
+                             Content = $"消費總額: NT${(productOrder.OrderTotalPrice).ToString()}",
                              ModifiedTime = productOrder.OrderDate,
                          };
 
-            // 將上面三個 PointRecordDTO 加在同一個 PointRecordDTO *先以ToList()把queryF跟queryT載入記憶體才能操作
+            // 將上面三個 PointRecordDTO 加在同一個 PointRecordDTO *先以ToList()把queryF、queryT、queryT載入記憶體才能操作
             var resultF = await queryF.ToListAsync();
             var resultT = await queryT.ToListAsync();
             var resultP = await queryP.ToListAsync();
