@@ -80,7 +80,16 @@ namespace ChilLaxFrontEnd.Controllers
             string? cartjson = HttpContext.Session.GetString(CDictionary.SK_CHECKOUT_DATA);
             cartList.MemberPick = JsonSerializer.Deserialize<MemberPick>(json);
             cartList.CartResultReq = JsonSerializer.Deserialize<CartResultReq>(cartjson);
-            
+
+            CartResultReq CartResultReq = JsonSerializer.Deserialize<CartResultReq>(cartjson);
+            int totoPrice = 0;
+            for (int i = 0; i < CartResultReq.trueCheckboxs.Length; i++)
+            {
+                int pid = CartResultReq.trueCheckboxs[i].pid;
+                var product = _context.Product.Where(p => p.ProductId == pid);
+                totoPrice += product.FirstOrDefault().ProductPrice * CartResultReq.trueCheckboxs[i].qty;
+            }
+            cartList.totoPrice = totoPrice;
             //for (int i = 0; i< productOrderDetailDTO)
             //productOrderDetailDTO.Member = _context.Member.Where(m => m.MemberId == Mid).FirstOrDefault();
 
