@@ -148,6 +148,7 @@ namespace ChilLaxFrontEnd.Controllers
         [Route("SaveProductOrder")]
         public async Task<ActionResult<string>> SaveProductOrder(ProductOrderReq por)
         {
+
             string memberjson = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
             string cartjson = HttpContext.Session.GetString(CDictionary.SK_CHECKOUT_DATA);
             Member member = JsonSerializer.Deserialize<Member>(memberjson);

@@ -379,10 +379,21 @@ namespace ChilLaxFrontEnd.Controllers
 
 					_context.Entry(member).State = EntityState.Modified;
 					await _context.SaveChangesAsync();
-					return Ok(new { success = true, message = "修改成功!" });
 
-				}
-				return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
+                    var LoginData = new
+                    {
+                        MemberId = member.MemberId,
+                        MemberName = member.MemberName,
+                        MemberPoint = member.MemberPoint
+                    };
+
+                    string Memjson = JsonSerializer.Serialize(LoginData);
+                    HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, Memjson);
+                    return Ok(new { success = true, message = "修改成功!" });
+
+
+                }
+                return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
 			}
 			return BadRequest(new { success = false, message = "請輸入必填欄位!" });
 
