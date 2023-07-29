@@ -185,6 +185,8 @@
                 });
             };
         }
+        
+        if (!trueCheckboxs.length) return;
         console.log(JSON.stringify({trueCheckboxs}));
         $.ajax({
             type: "POST",
