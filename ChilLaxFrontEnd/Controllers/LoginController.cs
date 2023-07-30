@@ -213,17 +213,7 @@ namespace ChilLaxFrontEnd.Controllers
 		}
 
 
-		public IActionResult forgetPassword()
-		{
 
-			return View();
-		}
-		[HttpPost]
-		public IActionResult forgetPassword(registerViewModel rvm)
-		{
-
-			return View();
-		}
 
 		public IActionResult editMemberProfile()
 		{
@@ -252,31 +242,17 @@ namespace ChilLaxFrontEnd.Controllers
 			return RedirectToAction("Index", "Home");
 
 		}
-		//[HttpPost]
-		//public IActionResult editMemberProfile(LoginViewModel vm)
-		//{
-		//    Member member = _context.Member.FirstOrDefault(
-		//       t => t.MemberId.Equals(vm.memberId));
-		//    if (member != null)
-		//    {
-		//        if (vm.memberName != null && vm.memberTel != null && vm.memberEmail != null && vm.memberBirthday != null)
-		//        {
-		//            member.MemberName = vm.memberName;
-		//            member.MemberTel = vm.memberTel;
-		//            member.MemberEmail = vm.memberEmail;
-		//            member.MemberSex = vm.memberSex;
-		//            member.MemberBirthday = vm.memberBirthday;
-		//            member.MemberAddress = vm.memberAddress;
 
-		//            db.Entry(member).State = EntityState.Modified;  //以防更新未被檢測到
-		//            db.SaveChanges();
-		//            return RedirectToAction("Index", "Home");
-		//        }
-		//    }
-		//    return View();
-		//}
+		public IActionResult forgetPassword()
+		{
 
+			return View();
+		}
 
+		public IActionResult ResetPwd()
+		{
+			return View();
+		}
 
 	}
 }
