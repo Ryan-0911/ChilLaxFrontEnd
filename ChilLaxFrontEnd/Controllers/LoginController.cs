@@ -11,8 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.Encodings.Web;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.AspNetCore.Cors;
-
-
+using ChilLaxFrontEnd.Models.DTO;
 
 namespace ChilLaxFrontEnd.Controllers
 {
