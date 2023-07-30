@@ -181,6 +181,10 @@
             visibility:hidden;
         }
 
+        .btn{
+            width: 120px;
+        }
+
     </style>
 }
 @model ChilLaxFrontEnd.ViewModels.LoginViewModel
@@ -283,9 +287,6 @@
                                     訂單編號
                                 </th>
                                 <th>
-                                    付款狀態
-                                </th>
-                                <th>
                                     訂單總價
                                 </th>
                                 <th>
@@ -300,6 +301,9 @@
                                 <th>
                                     訂單狀態
                                 </th>
+                                <th>
+									付款狀態
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -309,9 +313,6 @@
                                 <tr class="clickable-row">
                                     <td>
                                         @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderId)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderPayment)
                                     </td>
                                     <td>
                                         $ @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderTotalPrice)
@@ -330,8 +331,13 @@
                                     </td>
                                     <td>
                                         @if(!order.ProductOrder.FirstOrDefault().OrderPayment){
-                                            <div> @Html.ActionLink("付款", "Index", "checkout", null, new { @class = "btn btn-success" }) </div>
+                                             @Html.ActionLink("付款", "Index", "checkout", null, new { @class = "btn btn-success" })
                                         }
+                                        else
+                                        {
+                                            <button class="btn" disabled> 已付款 </button>
+                                        }
+
                                     </td>
                                 </tr>
                                 @*<tr class="details-row" id="details-row-@(order.ProductOrder.order_id)" style="display: none;">
