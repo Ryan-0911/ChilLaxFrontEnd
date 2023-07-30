@@ -33,8 +33,7 @@ namespace ChilLaxFrontEnd.Controllers
         [HttpGet("Delete/{id}")]
         public async Task<string> Delete(int id)
         {
-            if (_context.Cart == null)
-                return "刪除失敗";
+            if (_context.Cart == null) return "刪除失敗";
 
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
             Console.WriteLine(json);
@@ -60,16 +59,15 @@ namespace ChilLaxFrontEnd.Controllers
         // POST: api/CartsAPI/ListCreate
         [HttpPost]
         [Route("ListCreate")]
-        public async Task<string> ListCreate(ProductReq productReq)
+        public async Task<string> ListCreate([FromBody] ProductReq productReq)
         {
-            if (_context.Cart == null)
-                return "新增失敗";
+            if (_context.Cart == null) return "新增失敗";
 
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
             Console.WriteLine(json);
             Member member = JsonSerializer.Deserialize<Member>(json);
             int Mid = member.MemberId;
-            int Cartqty = 1;
+            int Cartqty = Convert.ToInt32(productReq.txtCount);
             List<Cart> thisCart = _context.Cart.Where(c => c.MemberId == Mid).ToList();
 
             for (int i = 0; i < thisCart.Count; i++)
