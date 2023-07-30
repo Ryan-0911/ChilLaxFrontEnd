@@ -1,137 +1,137 @@
-:root{
-  --background-dark: #2d3548;
-  --light: #ccff02;
-  --text-light: rgba(255,255,255,0.6);
-  --text-lighter: rgba(255,255,255,0.9);
-  --spacing-s: 8px;
-  --spacing-m: 16px;
-  --spacing-l: 24px;
-  --spacing-xl: 32px;
-  --spacing-xxl: 64px;
-  --width-container: 1200px;
-  --dark: #151118;
+:root {
+    --background-dark: #2d3548;
+    --light: #ccff02;
+    --text-light: rgba(255,255,255,0.6);
+    --text-lighter: rgba(255,255,255,0.9);
+    --spacing-s: 8px;
+    --spacing-m: 16px;
+    --spacing-l: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 64px;
+    --width-container: 1200px;
+    --dark: #151118;
 }
-  
-  body {
+
+body {
     background-color: rgb(224, 205, 207);
-  }
-  /*電商搜尋列*/
+}
+/*電商搜尋列*/
 
-  .container{
+.container {
     align-items: center;
-  }
+}
 
-  .black-nav .row {
+.black-nav .row {
     margin-right: -15px;
     margin-left: -15px
 }
 
-  .main-p{
+.main-p {
     position: relative;
     min-height: 1px;
     padding-right: 15px;
     padding-left: 15px
 }
-  
-  .black-nav {
+
+.black-nav {
     width: 100%;
     max-width: 100%;
-    height: 100px; 
+    height: 100px;
     color: white;
     padding-top: 15px;
-  padding-bottom: 15px;
-  background-color: #15161D;
-  }
-  
-  .black-nav .wrap {
-    width: 100%;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .header-logo {
+    padding-bottom: 15px;
+    background-color: #15161D;
+}
+
+    .black-nav .wrap {
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+.header-logo {
     margin-right: 20px;
-  }
-  
-  .search {
+}
+
+.search {
     display: flex;
     align-items: center;
-  }
-  
-  .input {
+}
+
+.input {
     margin-right: 10px;
-    width: 300px; 
-    height: 30px; 
-  }
-  
-  .search-btn  .btn-outline-success {
+    width: 300px;
+    height: 30px;
+}
+
+.search-btn .btn-outline-success {
     padding: 5px 10px;
     background-color: gray;
     color: white;
     border: none;
-    height: 30px; 
-  }
-  
-  .black-nav-right {
+    height: 30px;
+}
+
+.black-nav-right {
     list-style: none;
     display: flex;
     align-items: center;
-  }
-  
-  .black-nav-right li {
-    margin-right: 10px;
-    margin: 0 3.6px;
-    position: relative;
-  }
-  
-  .black-nav-right a {
-    color: #b0b0b0;
-    text-decoration: none;
-  }
-  /*電商搜尋列 over*/
+}
 
-  /* 喜愛商品 */
-  
-  .button-container{
+    .black-nav-right li {
+        margin-right: 10px;
+        margin: 0 3.6px;
+        position: relative;
+    }
+
+    .black-nav-right a {
+        color: #b0b0b0;
+        text-decoration: none;
+    }
+/*電商搜尋列 over*/
+
+/* 喜愛商品 */
+
+.button-container {
     padding-top: 20px;
     display: flex;
     justify-content: space-between;
 }
 
-  .like{
+.like {
     width: 150px;
     height: 40px;
     background-color: #15161D;
-  }
+}
 
-  .like img {
-    position: relative; 
-    top: 10px; 
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
-  }
+    .like img {
+        position: relative;
+        top: 10px;
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+    }
 
-  .like:hover{
-    background-color: #fff;
-  }
+    .like:hover {
+        background-color: #fff;
+    }
 
-  .like:hover>a{
-    font-weight: bold;
-    color: 	#BF0060;
-    text-align: center;
-  }
+        .like:hover > a {
+            font-weight: bold;
+            color: #BF0060;
+            text-align: center;
+        }
 
-  .like i{
-    font-style: normal;
-    padding-top: 12px;
-    margin-right: 8px;
-    position: absolute;
-  }
+    .like i {
+        font-style: normal;
+        padding-top: 12px;
+        margin-right: 8px;
+        position: absolute;
+    }
 
-  .like-list{
+.like-list {
     width: 300px;
     height: 0px;
     background-color: #fff;
@@ -142,20 +142,19 @@
     overflow: hidden;
     line-height: 100px;
     text-align: center;
-  }
-
-  .like:hover>.like-list{
-    height: 100px;
-    color: 	#984B4B;
 }
-  /* 喜愛商品 over */
-  
-  /* 購物車 */
-.cart{
+
+.like:hover > .like-list {
+    height: 100px;
+    color: #984B4B;
+}
+/* 喜愛商品 over */
+
+/* 購物車 */
+.cart {
     width: 200px;
     height: 40px;
     background-color: #15161D;
-
 }
 
 .badge-notify {
@@ -171,32 +170,32 @@
 }
 
 .cart img {
-    position: relative; 
-    top: 5px; 
-    left: 5px; 
+    position: relative;
+    top: 5px;
+    left: 5px;
     width: 30px;
     height: 30px;
     margin-right: 10px;
-  }
+}
 
-.cart:hover{
+.cart:hover {
     background-color: #fff;
 }
 
-.cart:hover>a{
-    font-weight: bold;
-    color:#ff6700;
-    text-align: center;
-}
+    .cart:hover > a {
+        font-weight: bold;
+        color: #ff6700;
+        text-align: center;
+    }
 
-.cart i{
+.cart i {
     font-style: normal;
     padding-top: 12px;
     margin-right: 8px;
     position: absolute;
 }
 
-.cart-list{
+.cart-list {
     width: 400px;
     height: 0px;
     background-color: #fff;
@@ -209,181 +208,179 @@
     text-align: center;
 }
 
-.cart:hover>.cart-list{
+.cart:hover > .cart-list {
     height: 100px;
     color: rgb(55, 106, 106);
 }
 
- /* 購物車 over */
+/* 購物車 over */
 
- /* Top Sale */
- .hero-section{
-  align-items: flex-start;
-  background: linear-gradient(60deg, rgba(16, 24, 32) 0%, rgba(96, 63, 131) 100%);
-  display: flex;
-  min-height: 100%;
-  justify-content: center;
-  padding: var(--spacing-xxl) var(--spacing-l);
+/* Top Sale */
+.hero-section {
+    align-items: flex-start;
+    background: linear-gradient(60deg, rgba(16, 24, 32) 0%, rgba(96, 63, 131) 100%);
+    display: flex;
+    min-height: 100%;
+    justify-content: center;
+    padding: var(--spacing-xxl) var(--spacing-l);
 }
 
 .top-left-text {
-  position: absolute;
-  top: 90px;
-  left: 15px;
-  padding: 5px;
-  color: rgba(215, 195, 237, 0.877);
-  font-size: 18px;
-  font-weight: bold;
+    position: absolute;
+    top: 90px;
+    left: 15px;
+    padding: 5px;
+    color: rgba(215, 195, 237, 0.877);
+    font-size: 18px;
+    font-weight: bold;
 }
 
-.top_card-grid{
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-column-gap: var(--spacing-l);
-  grid-row-gap: var(--spacing-l);
-  max-width: var(--width-container);
-  width: 100%;
+.top_card-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-column-gap: var(--spacing-l);
+    grid-row-gap: var(--spacing-l);
+    max-width: var(--width-container);
+    width: 100%;
 }
 
-@media(min-width: 540px){
-  .top_card-grid{
-    grid-template-columns: repeat(2, 1fr); 
-  }
+@media(min-width: 540px) {
+    .top_card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-@media(min-width: 960px){
-  .top_card-grid{
-    grid-template-columns: repeat(5, 1fr); 
-  }
+@media(min-width: 960px) {
+    .top_card-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
 }
 
-.top_card{
-  list-style: none;
-  position: relative;
+.top_card {
+    list-style: none;
+    position: relative;
 }
 
-.top_card:before{
-  content: '';
-  display: block;
-  padding-bottom: 150%;
-  width: 100%;
+    .top_card:before {
+        content: '';
+        display: block;
+        padding-bottom: 150%;
+        width: 100%;
+    }
+
+.top_card__background {
+    background-size: cover;
+    background-position: center;
+    border-radius: var(--spacing-l);
+    bottom: 0;
+    filter: brightness(0.75) saturate(1.2) contrast(0.85);
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform-origin: center;
+    transform: scale(1) translateZ(0);
+    transition: filter 200ms linear, transform 200ms linear;
 }
 
-.top_card__background{
-  background-size: cover;
-  background-position: center;
-  border-radius: var(--spacing-l);
-  bottom: 0;
-  filter: brightness(0.75) saturate(1.2) contrast(0.85);
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform-origin: center;
-  transform: scale(1) translateZ(0);
-  transition: 
-    filter 200ms linear,
-    transform 200ms linear;
+.top_card:hover .top_card__background {
+    transform: scale(1.05) translateZ(0);
 }
 
-.top_card:hover .top_card__background{
-  transform: scale(1.05) translateZ(0);
+.top_card-grid:hover > .top_card:not(:hover) .top_card__background {
+    filter: brightness(0.5) saturate(0) contrast(1.2) blur(20px);
 }
 
-.top_card-grid:hover > .top_card:not(:hover) .top_card__background{
-  filter: brightness(0.5) saturate(0) contrast(1.2) blur(20px);
+.top_card-grid:hover > .top_card:not(:hover) .top_card__content {
+    filter: blur(20px);
 }
 
-.top_card-grid:hover > .top_card:not(:hover) .top_card__content{
-  filter: blur(20px);
+.top_card__content {
+    left: 0;
+    padding: var(--spacing-l);
+    position: absolute;
+    top: 0;
 }
 
-.top_card__content{
-  left: 0;
-  padding: var(--spacing-l);
-  position: absolute;
-  top: 0;
+.top_card__category {
+    color: var(--text-light);
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-s);
+    text-transform: uppercase;
 }
 
-.top_card__category{
-  color: var(--text-light);
-  font-size: 1.5rem;
-  margin-bottom: var(--spacing-s);
-  text-transform: uppercase;
-}
-
-.top_card__heading{
-  color: var(--text-lighter);
-  font-size: 2.0rem;
-  line-height: 1.4;
-  word-spacing: 100vw;
+.top_card__heading {
+    color: var(--text-lighter);
+    font-size: 2.0rem;
+    line-height: 1.4;
+    word-spacing: 100vw;
 }
 
 /* Top Sale Over */
 
-.block1{
+.block1 {
     margin-top: 150px;
 }
 
 /* 類別分類 */
 .white-nav {
-  width: 100%;
-  height: 100px;
-  padding: 10px;
+    width: 100%;
+    height: 100px;
+    padding: 10px;
 }
 
-.white-nav .wrap{
-  width: 100%;
-  margin: 0 auto;
-}
+    .white-nav .wrap {
+        width: 100%;
+        margin: 0 auto;
+    }
 
 .col-auto {
-  margin: 10px;
-  flex: 1;
-  font-size: 24px;
-  font-weight: bold;
+    margin: 10px;
+    flex: 1;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .category-list-right {
-  list-style: none;
-  margin: 10px;
-  padding: 0;
-  display: flex;
-  justify-content: flex-end;
-  font-size: 16px;
+    list-style: none;
+    margin: 10px;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+    font-size: 16px;
 }
 
-.category-list-right li {
-  margin-right: 10px;
-  margin-left: 50px;
-}
+    .category-list-right li {
+        margin-right: 10px;
+        margin-left: 50px;
+    }
 
-.category-list-right li a{
-  text-decoration: none;
-  color:	#5B4B00;
-}
+        .category-list-right li a {
+            text-decoration: none;
+            color: #5B4B00;
+        }
 
-.category-list-right li:hover{
-  font-weight: bold;
-  font-size: 20px;
-}
+        .category-list-right li:hover {
+            font-weight: bold;
+            font-size: 20px;
+        }
 
-.category-list-right li a:hover{
-  color:cadetblue;
-}
+        .category-list-right li a:hover {
+            color: cadetblue;
+        }
 
 /* 類別分類 over */
 
 
 /* 商品呈現 start */
-.card_img{
-  height: 40%;
-  width: 30%;
+.card_img {
+    height: 40%;
+    width: 30%;
 }
 
 .no-underline {
     text-decoration: none;
-  }
+}
 
 
 .PageBottom {
@@ -395,7 +392,32 @@
     text-align: center;
     /* 若要使內容垂直置中，可以使用 line-height 屬性 */
     line-height: 100px;
-/*    margin-top: auto;*/
+    /*    margin-top: auto;*/
+}
+
+.btn-purchase {
+    background-color: #ECFFFF;
+    color: #613030;
+    border: none;
+    padding: 8px 15px; /* 調整padding使按鈕尺寸較小 */
+    font-size: 14px; /* 調整字體大小使按鈕尺寸較小 */
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-image: linear-gradient(45deg, #E1C4C4, #66B3FF);
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+    .btn-purchase:hover {
+        background-image: linear-gradient(45deg, #ff6b6b, #ff9b6b); /* 鼠標懸停時的漸變背景色 */
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* 鼠標懸停時的陰影效果 */
+    }
+
+.btn-purchase i {
+    margin-right: 5px;
 }
 
 
@@ -416,12 +438,12 @@
     cursor: pointer; /* 設定游標為手型，表示這是一個可點擊的按鈕 */
 }
 
-/* 設定當滑鼠移動到按鈕上時的效果 */
-.add-to-wishlist:hover {
-    font-weight: bold;
-    color: #820041; /* 設定滑鼠懸停時的字體顏色為白色 */
-    background-color: #FFECEC; /* 設定滑鼠懸停時的背景顏色為 #555 */
-}
+    /* 設定當滑鼠移動到按鈕上時的效果 */
+    .add-to-wishlist:hover {
+        font-weight: bold;
+        color: #820041; /* 設定滑鼠懸停時的字體顏色為白色 */
+        background-color: #FFECEC; /* 設定滑鼠懸停時的背景顏色為 #555 */
+    }
 
 
 /* 喜愛商品 over */
