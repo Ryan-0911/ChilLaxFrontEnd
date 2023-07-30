@@ -75,21 +75,19 @@
                         </a>
                         <div class="cart-list">
                             購物車內還沒有東西，趕緊點選商品加入購物車吧！
-                            @*@using (Html.BeginForm())
+                            @*@if (Model.FirstOrDefault().carts.Any())
                             {
-                                @Html.AntiForgeryToken()
-
-                                int count = 0;
-                                @foreach (var cartItem in Model.SelectMany(c => c.carts))
+                                @foreach (var cartItem in Model.FirstOrDefault().carts)
                                 {
-                                    count++;
-                                    <input type="hidden" name="ProductId" value="@cartItem.ProductId" id="PId" />
-                                    <input type="hidden" name="MemberId" value="@cartItem.MemberId" id="MId" />
-                                    <img src="~/assets/images/@Html.DisplayFor(modelItem => cartItem.ProductImg)" class="card-img-top img-fluid  mx-auto d-block" style="width: 30px; height: 60px;">
-                                    @Html.DisplayFor(modelItem => cartItem.ProductName)
-                                    @Html.DisplayFor(modelItem => cartItem.CartProductQuantity)
-
+                                    <div>
+                                        <img src="@cartItem.ProductImg" alt="@cartItem.ProductName" style="width: 50px; height: 50px;" />
+                                        <span>@cartItem.ProductName - $@cartItem.ProductPrice 元</span>
+                                    </div>
                                 }
+                            }
+                            else
+                            {
+                                <p>購物車內還沒有東西，趕緊點選商品加入購物車吧！</p>
                             }*@
                         </div>
                     </li>
@@ -377,32 +375,32 @@
         });
 
         // 喜好商品清單
-        $(document).ready(function () {
-            $(".add-to-wishlist").click(function () {
-                var productId = $(this).data("product-id");
-                var productName = $(this).data("product-name");
-                var productImg = $(this).data("product-img");
-                var productPrice = $(this).data("product-price");
+        //$(document).ready(function () {
+        //    $(".add-to-wishlist").click(function () {
+        //        var productId = $(this).data("product-id");
+        //        var productName = $(this).data("product-name");
+        //        var productImg = $(this).data("product-img");
+        //        var productPrice = $(this).data("product-price");
 
-                // 將產品信息傳遞給List方法
-                $.ajax({
-                    url: "@Url.Action("List", "Product")",
-                    data: {
-                        likedProductId: productId,
-                        likedProductName: productName,
-                        likedProductImg: productImg,
-                        likedProductPrice: productPrice
-                    },
-                    type: "GET",
-                    success: function (data) {
-                        // 在此處處理成功後的操作
-                    },
-                    error: function () {
-                        // 在此處處理錯誤情況
-                    }
-                });
-            });
-        });
+        //        // 將產品信息傳遞給List方法
+        //        $.ajax({
+        //            url: "@Url.Action("List", "Product")",
+        //            data: {
+        //                likedProductId: productId,
+        //                likedProductName: productName,
+        //                likedProductImg: productImg,
+        //                likedProductPrice: productPrice
+        //            },
+        //            type: "GET",
+        //            success: function (data) {
+        //                // 在此處處理成功後的操作
+        //            },
+        //            error: function () {
+        //                // 在此處處理錯誤情況
+        //            }
+        //        });
+        //    });
+        //});
 
     </script>
 

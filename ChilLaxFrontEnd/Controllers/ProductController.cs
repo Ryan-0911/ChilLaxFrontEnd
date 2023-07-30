@@ -31,7 +31,7 @@ namespace ChilLaxFrontEnd.Controllers
         }
 
         [HttpGet]
-        public IActionResult List(CKeywordViewModel ckvm, CAddToCartViewModel cvm, int? nowpage, int? _pageCount, string? productcategory, int? likedProductId, string? likedProductName, string? likedProductImg, int? likedProductPrice)
+        public IActionResult List(CKeywordViewModel ckvm, CAddToCartViewModel cvm, int? nowpage, int? _pageCount, string? productcategory, int? likedProductId, string? likedProductName, string? likedProductImg, int? likedProductPrice, Cart carts)
         {
             //取得會員ID
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
