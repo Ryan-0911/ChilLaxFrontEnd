@@ -24,6 +24,7 @@ using Microsoft.Extensions.Hosting.Internal;
 using Newtonsoft.Json.Linq;
 using Microsoft.Data.SqlClient.Server;
 using System.Diagnostics.Metrics;
+using ChilLaxFrontEnd.Models.DTO;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -468,6 +469,23 @@ t => t.MemberAccount.Equals(vm.txtRegisterAccount));
             vm.memberEmail = member.MemberEmail;
             vm.memberGender = (bool)member.MemberSex;
             vm.memberAddress = member.MemberAddress;
+
+            //新增會員訂單資料
+            List<MemberOrder> memberOrder = _context.ProductOrder
+                .Where(od => od.MemberId == member.MemberId)
+                .Join(_context.OrderDetail,
+                    po => po.OrderId,
+                    od => od.OrderId,
+                    (po, od) => new MemberOrder
+                    {
+                        ProductOrder = new List<ProductOrder> { po },
+                        orderDetails = new List<OrderDetail> { od }
+                    })
+                .ToList();
+            vm.memberOrder = memberOrder;
+
+
+
 
             return View(vm);
         }

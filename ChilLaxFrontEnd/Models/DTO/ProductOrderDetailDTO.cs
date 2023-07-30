@@ -14,4 +14,12 @@ namespace ChilLaxFrontEnd.Models.DTO
         public Cart? Cart { get; set; }
 
     }
+
+    public class MemberOrder
+    {
+        public List<ProductOrder> ProductOrder { get; set; }
+        public List<OrderDetail> orderDetails { get; set; }
+        public Product Product { get; set; }
+        public Member Member { get; set; }
+    }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ChilLaxFrontEnd.Models.DTO;
+using System.ComponentModel.DataAnnotations;
 
 namespace ChilLaxFrontEnd.ViewModels
 {
@@ -52,8 +53,7 @@ namespace ChilLaxFrontEnd.ViewModels
 
         public string ProviderUserId { get; set; }
 
-        
-
+        public List<MemberOrder> memberOrder { get; set; }
 
     }
 }
