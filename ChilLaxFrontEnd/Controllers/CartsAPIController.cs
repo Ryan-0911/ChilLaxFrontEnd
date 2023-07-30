@@ -57,9 +57,10 @@ namespace ChilLaxFrontEnd.Controllers
 
 
         // 郁霖原本
-        // GET: api/CartsAPI/Create/4
-        [HttpGet("Create/{id}")]
-        public async Task<string> Create(int id)
+        // POST: api/CartsAPI/ListCreate
+        [HttpPost]
+        [Route("ListCreate")]
+        public async Task<string> ListCreate(ProductReq productReq)
         {
             if (_context.Cart == null)
                 return "新增失敗";
@@ -73,7 +74,7 @@ namespace ChilLaxFrontEnd.Controllers
 
             for (int i = 0; i < thisCart.Count; i++)
             {
-                if (thisCart[i].ProductId == id)
+                if (thisCart[i].ProductId == productReq.productId)
                 {
                     thisCart[i].CartProductQuantity += Cartqty;
                     _context.Cart.Update(thisCart[i]);
@@ -84,7 +85,7 @@ namespace ChilLaxFrontEnd.Controllers
 
             Cart cart = new Cart();
             cart.MemberId = Mid;
-            cart.ProductId = id;
+            cart.ProductId = productReq.productId;
             cart.CartProductQuantity = Cartqty;
 
             _context.Cart.Add(cart);

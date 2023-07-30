@@ -235,15 +235,13 @@
                             <form id="addToCartForm" action="@Url.Action("AddToCart", "Product", new { id = item.ProductId })" method="post" onsubmit="return validateForm()">*@
 
                                     <div style="font-size: 16px; font-weight: bold" class="qty-label">
+                                        <input type="number" name="txtCount" value="1" min="1" style="width:120px ; height:30px" id="@($"PQty{item.ProductId}")" />
                                         數量
-
-
-                                        <input type="number" name="txtCount" value="1" min="1" style="width:120px ; height:30px" id="PQty" />
                                     </div>
 
                                     <div class="form-group">
                                         <div class="col-md-offset-0 col-md-10">
-                                            <button onclick="CreateCart()" value="@item.ProductId" class="btn btn-default btn-purchase">購買</button>
+                                            <button onclick="CreateCart('@item.ProductId')" class="btn btn-default">購買</button>
 
                                             @* <button onclick="CreateCart(this.value)" value="@item.ProductId" class="btn btn-default"> @Html.ActionLink("購買","List", new { id = item.ProductId }, new { @class = "btn btn-default" })  </button> *@
                                         </div>
@@ -309,11 +307,16 @@
 
 
 
-        function CreateCart() {
-            console.log("CreateCart");
-            let id = document.getElementById("PId").value;
-            let qty = document.getElementById("PQty").value;
-            let memberId = document.getElementById("MemberId").value; // 假設有一個元素的 ID 為 MemberId，儲存了會員的 ID
+        function CreateCart(productId) {
+            //alert("商品ID：" + productId);
+            event.preventDefault();
+            let id = productId;
+            var inputId = "PQty" + id;
+            var qty = document.getElementById(inputId).value;
+            console.log("商品ID：" + productId + "\n商品数量：" + qty);
+            //let qty = document.getElementById("PQty").value;
+            //console.log(qty);
+            let memberId = 1; // 假設有一個元素的 ID 為 MemberId，儲存了會員的 ID
             var PCarts = {
                 productId: id,
                 txtCount: qty,
@@ -321,17 +324,17 @@
             };
             console.log(JSON.stringify(PCarts));
 
-            $.ajax({
+            //$.ajax({
 
-                type: "POST",
-                url: `${baseAddress}/api/CartsAPI/Create`,
-                data: JSON.stringify(PCarts),
-                contentType: "application/json"
-            }).done(data => {
-                alert("新增成功");
-            }).fail(err => {
-                alert(/*err.statusText*/ "新增失敗");
-            });
+            //    type: "POST",
+            //    url: `${baseAddress}/api/CartsAPI/ListCreate`,
+            //    data: JSON.stringify(PCarts),
+            //    contentType: "application/json"
+            //}).done(data => {
+            //    alert("新增成功");
+            //}).fail(err => {
+            //    alert(/*err.statusText*/ "新增失敗");
+            //});
         };
 
 
