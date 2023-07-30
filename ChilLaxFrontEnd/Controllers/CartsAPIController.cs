@@ -172,7 +172,7 @@ namespace ChilLaxFrontEnd.Controllers
                     productOrder.OrderPayment = false;
                     productOrder.OrderTotalPrice = totoPrice;
                     productOrder.OrderDelivery = false;
-                    productOrder.OrderAddress = member.MemberAddress;
+                    productOrder.OrderAddress = por.OrderAddress;
                     productOrder.OrderDate = DateTime.Parse(por.OrderDate);
                     productOrder.OrderNote = por.OrderNote;
                     productOrder.OrderState = "未出貨";
