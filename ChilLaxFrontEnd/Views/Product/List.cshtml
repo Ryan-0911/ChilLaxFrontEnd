@@ -235,15 +235,13 @@
                             <form id="addToCartForm" action="@Url.Action("AddToCart", "Product", new { id = item.ProductId })" method="post" onsubmit="return validateForm()">*@
 
                                     <div style="font-size: 16px; font-weight: bold" class="qty-label">
+                                        <input type="number" name="txtCount" value="1" min="1" style="width:120px ; height:30px" id="@($"PQty{item.ProductId}")" />
                                         數量
-
-
-                                        <input type="number" name="txtCount" value="1" min="1" style="width:120px ; height:30px" id="PQty" />
                                     </div>
 
                                     <div class="form-group">
                                         <div class="col-md-offset-0 col-md-10">
-                                            <button onclick="CreateCart()" value="@item.ProductId" class="btn btn-default btn-purchase">購買</button>
+                                            <button onclick="CreateCart('@item.ProductId')" class="btn btn-default">購買</button>
 
                                             @* <button onclick="CreateCart(this.value)" value="@item.ProductId" class="btn btn-default"> @Html.ActionLink("購買","List", new { id = item.ProductId }, new { @class = "btn btn-default" })  </button> *@
                                         </div>
@@ -305,16 +303,16 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        const baseAddress = "https://localhost:5000"
 
+        function CreateCart(productId) {
+            event.preventDefault(); //阻止冒泡事件，避免http405
+            let id = productId;
+            const inputId = "PQty" + id;
+            const qty = document.getElementById(inputId).value;
+            console.log("商品ID：" + productId + "\n商品数量：" + qty);
 
-
-        function CreateCart() {
-            console.log("CreateCart");
-            let id = document.getElementById("PId").value;
-            let qty = document.getElementById("PQty").value;
-            let memberId = document.getElementById("MemberId").value; // 假設有一個元素的 ID 為 MemberId，儲存了會員的 ID
-            var PCarts = {
+            let memberId = "1"; // 假設會員ID，不過不重要，因為後端會直接去Session取得會員ID
+            const PCarts = {
                 productId: id,
                 txtCount: qty,
                 memberId: memberId  // 傳遞會員的 ID
@@ -324,13 +322,13 @@
             $.ajax({
 
                 type: "POST",
-                url: `${baseAddress}/api/CartsAPI/Create`,
+                url: `/api/CartsAPI/ListCreate`,
                 data: JSON.stringify(PCarts),
                 contentType: "application/json"
             }).done(data => {
                 alert("新增成功");
             }).fail(err => {
-                alert(/*err.statusText*/ "新增失敗");
+                alert(err.statusText);
             });
         };
 
@@ -339,19 +337,19 @@
 
         $(document).ready(function () {
             // 選擇增減按鈕和數量輸入框元素
-            var qtyUp = $(".qty-up");
-            var qtyDown = $(".qty-down");
-            var quantityInput = $(".input-number");
+            let qtyUp = $(".qty-up");
+            let qtyDown = $(".qty-down");
+            let quantityInput = $(".input-number");
 
             // 設置增加數量的事件
             qtyUp.click(function () {
-                var currentValue = parseInt(quantityInput.val());
+                let currentValue = parseInt(quantityInput.val());
                 quantityInput.val(currentValue + 1);
             });
 
             // 設置減少數量的事件
             qtyDown.click(function () {
-                var currentValue = parseInt(quantityInput.val());
+                let currentValue = parseInt(quantityInput.val());
                 if (currentValue > 1) {
                     quantityInput.val(currentValue - 1);
                 }
@@ -373,6 +371,11 @@
                     $(".thumbnail").hide();
                     $(".thumbnail[data-category='" + selectedCategory + "']").show();
                 }
+                // 取得點選的類別名稱
+                let category = $(this).attr("name");
+
+                // 呼叫顯示產品資料的函式
+                showCategoryProducts(category);
             });
         });
 

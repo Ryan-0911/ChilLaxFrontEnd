@@ -190,7 +190,11 @@
 			visibility: hidden;
 		}
 
-	</style>
+        .btn{
+            width: 120px;
+        }
+
+    </style>
 }
 @model ChilLaxFrontEnd.ViewModels.registerViewModel
 <div class="articleMC">
@@ -287,13 +291,102 @@
 				</p>
 			</div>
 
-			<div class="contentMC">
-				<h2>訂單查詢</h2>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis
-					deserunt consequuntur unde aperiam deleniti amet.
-				</p>
-			</div>
+          <div class="contentMC">
+            <h2>訂單查詢</h2>
+            <div class="productOrder">
+                    <table class="table table-primary table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    訂單編號
+                                </th>
+                                <th>
+                                    訂單總價
+                                </th>
+                                <th>
+                                    訂單日期
+                                </th>
+                                <th>
+                                    物流地址
+                                </th>
+                                <th>
+                                    訂單備註
+                                </th>
+                                <th>
+                                    訂單狀態
+                                </th>
+                                <th>
+									付款狀態
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.memberOrder)
+                            {
+
+                                <tr class="clickable-row">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderId)
+                                    </td>
+                                    <td>
+                                        $ @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderTotalPrice)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderNote)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderState)
+                                    </td>
+                                    <td>
+                                        @if(!order.ProductOrder.FirstOrDefault().OrderPayment){
+                                             @Html.ActionLink("付款", "Index", "checkout", null, new { @class = "btn btn-success" })
+                                        }
+                                        else
+                                        {
+                                            <button class="btn" disabled> 已付款 </button>
+                                        }
+
+                                    </td>
+                                </tr>
+                                @*<tr class="details-row" id="details-row-@(order.ProductOrder.order_id)" style="display: none;">
+                                    <td colspan="8">
+                                        <!-- 詳細資料區塊 -->
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>@Html.DisplayNameFor(model => model.ProductName)</th>
+                                                    <th>@Html.DisplayNameFor(model => model.OrderDetail.cart_product_quantity)</th>
+                                                    <th>@Html.DisplayNameFor(model => model.ProductPrice)</th>
+                                                    <th>@Html.DisplayNameFor(model => model.Subtotal)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var detail in Model.Where(d => d.ProductOrder.order_id == firstItem.ProductOrder.order_id))
+                                                {
+
+                                                    <tr>
+                                                        <td>@detail.ProductName</td>
+                                                        <td>@detail.OrderDetail.cart_product_quantity</td>
+                                                        <td>@detail.ProductPrice</td>
+                                                        <td>@detail.Subtotal</td>
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>*@
+                            }
+                        </tbody>
+                    </table>
+            </div>
+          </div>
 
 			<div class="contentMC">
 				<h2>客服中心</h2>

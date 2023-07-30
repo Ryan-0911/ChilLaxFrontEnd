@@ -128,28 +128,25 @@
             }
         </tbody>
     </table>
-    <a href=""
-    <button onclick="checkout()">結帳</button>
+    
+    <button onclick="checkout()" class="btn btn-success">結帳</button>
 </div>
 
 
 @section Scripts{
 
     <script>
-
-        //刪除購物車內商品
-        const baseAddress = "https://localhost:5000"
-
-        function deleteCart(productId) {
-            $.ajax({
-                type: "GET",
-                url: `${baseAddress}/api/CartsAPI/Delete/${productId}`
-            }).done(data => {
-                window.location.reload();
-            }).fail(err => {
-                alert(err.statusText);
-            });
-        };
+    //刪除購物車內商品
+    function deleteCart(productId) {
+        $.ajax({
+            type:"GET",
+                url: `/api/CartsAPI/Delete/${productId}`
+        }).done(data =>{
+            window.location.reload();
+        }).fail(err => {
+            alert(err.statusText);
+        });
+    };
 
         // 全選框的 change 事件處理函式
         function selectAll() {
@@ -201,10 +198,12 @@
                 });
             };
         }
+        
+        if (!trueCheckboxs.length) return;
         console.log(JSON.stringify({trueCheckboxs}));
         $.ajax({
             type: "POST",
-            url: `${baseAddress}/api/CartsAPI/SaveCartSession`,
+            url: `/api/CartsAPI/SaveCartSession`,
             data: JSON.stringify({ trueCheckboxs }),
             contentType: "application/json; charset=utf-8",
             dataType: "text",

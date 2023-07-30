@@ -11,8 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.Encodings.Web;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.AspNetCore.Cors;
-
-
+using ChilLaxFrontEnd.Models.DTO;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -236,6 +235,21 @@ namespace ChilLaxFrontEnd.Controllers
 				rvm.memberBirthday = memProfile.MemberBirthday;
 				rvm.memberSex = (bool)memProfile.MemberSex;
 				rvm.memberAddress = memProfile.MemberAddress;
+
+        //新增會員訂單資料
+        List<MemberOrder> memberOrder = _context.ProductOrder
+            .Where(od => od.MemberId == member.MemberId)
+            .Join(_context.OrderDetail,
+                po => po.OrderId,
+                od => od.OrderId,
+                (po, od) => new MemberOrder
+                {
+                    ProductOrder = new List<ProductOrder> { po },
+                    orderDetails = new List<OrderDetail> { od }
+                })
+            .ToList();
+        rvm.memberOrder = memberOrder;
+
 
 				return View(rvm);
 			}

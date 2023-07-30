@@ -2,7 +2,9 @@
 @{
     ViewData["Title"] = "list";
 }
+@section Styles {
 <style>
+
     .checkout-page{
         padding: 30px;
         width: 40%;
@@ -10,7 +12,35 @@
         margin: 60px auto;
         background: #bebad2;
     }
+
+    .element.style {
+        display: flex;
+        height: 600px;
+        /* position: absolute; */
+        z-index: 1;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .justify-content-center{
+        width: 100%;
+        background-color: white;
+        display: flex;
+        height: 600px;
+        z-index: 1;
+        justify-content: center;
+        align-items: center;
+    }
+
+ 
 </style>
+}
+<div class="d-flex justify-content-center" id="spinnerContainer" style="display: none;">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
 <div class="checkout-page">
 <h2>訂單確認</h2>
 <hr />
@@ -24,7 +54,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">總金額</label>
-                <p>123</p>
+                <p>@Model.totoPrice</p>
             </div>
             <div class="form-group">
                 <label for="OrderTotalPrice" class="control-label">寄送方式</label>
@@ -48,12 +78,19 @@
 </div>
 </div>
 
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 <script>
-    const baseAddress = "https://localhost:5000"
-
     function submitForm() {
         const inputAddress = document.querySelector('input[name="OrderAddress"]');
         const inputNote = document.querySelector('input[name="OrderNote"]');
+        // 取得 spinner 容器元素
+        const spinnerContainer = document.getElementById('spinnerContainer');
+        const checkoutPage = document.getElementsByClassName('checkout-page')[0];
+
+        // 在 AJAX 請求開始時，顯示 spinner
+        spinnerContainer.style.display = 'block';
+        checkoutPage.style.display = 'none';
 
         function formatDateTime(date) {
             const year = date.getFullYear();
@@ -77,16 +114,12 @@
 
         $.ajax({
             type: "POST",
-            url: `${baseAddress}/api/CartsAPI/SaveProductOrder`,
+            url: `/api/CartsAPI/SaveProductOrder`,
             data: JSON.stringify(productorderJson),
             contentType: "application/json; charset=utf-8",
             dataType: "text",
-            success: function (response) {
-                // 在此处处理后端返回的 response 值
-                console.log(response); // 可以在控制台输出 response
-                // 将 response 插入到 HTML 页面的指定位置
-                $('#targetElement').html(response); // 例如，假设目标元素的 ID 是 "targetElement"
-                const targetUrl = `${baseAddress}/checkout/Index`;
+            success: function () {
+                const targetUrl = `/checkout/Index`;
                 window.location.href = targetUrl;
             },
             error: function (xhr, status, error) {
@@ -95,3 +128,4 @@
         });
     }
 </script>
+}

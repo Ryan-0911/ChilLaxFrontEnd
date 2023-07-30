@@ -23,6 +23,7 @@
     {
         public CartResultReq CartResultReq { get; set; }
         public MemberPick MemberPick { get; set; }
+        public int totoPrice { get; set; }
 
     }
     public class ProductOrderReq
@@ -30,5 +31,11 @@
         public string OrderAddress { get; set; }
         public string OrderNote { get; set; }
         public string OrderDate { get; set; }
+    }
+    public class ProductReq
+    {
+        public int productId { get; set; }
+        public string txtCount { get; set; }
+        public string memberId { get; set; }
     }
 }
