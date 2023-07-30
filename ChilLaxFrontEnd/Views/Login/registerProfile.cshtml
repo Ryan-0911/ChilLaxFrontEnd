@@ -83,7 +83,7 @@
 		top: 50%;
 		transform: translateY(-40%);
 		width: 350px;
-		padding-left: 80px;
+		padding-left: 10px;
 		text-transform: none;
 	}
 
@@ -141,11 +141,13 @@
 
 
 	/*文字向上漂浮*/
-	.form-group input:focus ~ label {
+	.form-group input:focus ~ label,
+	.form-group input:valid ~ label {
 		top: -5px;
 	}
 
-	.form-group select:focus ~ label {
+	.form-group select:focus ~ label,
+	.form-group select:valid ~ label {
 		top: -5px;
 	}
 
@@ -231,8 +233,8 @@
 					</div>
 					<div class="form-group">
 						<div class="inner-input">
-							<input type="text" id="memberAddress" name="memberAddress" class="user_input" autocomplete="off" />
-							<label class="labelMove"><i class="fa-solid fa-map-location-dot"></i>通訊地址(選填)</label>
+							<input type="text" id="memberAddress" name="memberAddress" class="user_input" autocomplete="off" value=""/>
+							<label><i class="fa-solid fa-map-location-dot"></i>通訊地址(選填)</label>
 						</div>
 					</div>
 					<button class="btn">註冊</button>

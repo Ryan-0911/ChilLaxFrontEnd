@@ -440,7 +440,6 @@ namespace ChilLaxFrontEnd.Controllers
 		[HttpPost("ResetPwd")]
 		public async Task<IActionResult> ResetPwd([FromBody] SigninViewModel formData)
 		{
-			// 檢查是否有輸入密碼
 			if (ModelState.IsValid)
 			{
 				string json = HttpContext.Session.GetString(CDictionary.SK_RESETPWD_USER);
@@ -448,8 +447,8 @@ namespace ChilLaxFrontEnd.Controllers
 
 
 				string password = formData.memberPassword;
-				string salt = BCrypt.Net.BCrypt.GenerateSalt();// 產生隨機的鹽值
-				string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);// 將密碼和鹽值一起加密
+				string salt = BCrypt.Net.BCrypt.GenerateSalt();
+				string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
 				MemberCredential mc = await _context.MemberCredential.FirstOrDefaultAsync(mc => mc.MemberId.Equals(Convert.ToInt32(credential.MemberId)));
 				if (mc != null)
 				{

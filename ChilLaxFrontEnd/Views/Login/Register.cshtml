@@ -125,17 +125,11 @@
 		font-size: 18px;
 		position: absolute;
 		top: 50%;
-		/* left: 0; */
 		transform: translateY(-40%);
 		width: 350px;
-		padding-left: 80px;
+		padding-left: 0px;
 		text-transform: none;
 	}
-
-	.input-chkpassword input {
-		padding-left: 80px;
-	}
-
 
 	.input-box label {
 		position: absolute;
@@ -154,7 +148,8 @@
 		font-size: 19px;
 	}
 	/*文字向上漂浮*/
-	.input-box input:focus ~ label {
+	.input-box input:focus ~ label,
+	.input-box input:valid ~ label {
 		top: -5px;
 	}
 
@@ -354,7 +349,7 @@
 		</div>
 	</article>
 </div>
-<script src="~/js/login.js"></script>
+@*<script src="~/js/login.js"></script>*@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script>

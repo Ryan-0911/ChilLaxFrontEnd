@@ -1,9 +1,164 @@
 ﻿@{
 	Layout = null;
 }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<style>
+	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: "poppins",sans-serif;
+	}
+
+	.background {
+		/* 最下層背景 */
+		background: url('@Url.Content("~/images/login.jpg")');
+		/* background-color: #98979783; */
+		background-position: center;
+		background-size: cover;
+		height: 100vh;
+		width: 100%;
+		filter: blur(2px);
+	}
+
+	.main {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		width: 75%;
+		height: 700px;
+		background: url('@Url.Content("~/images/login.jpg")');
+		background-position: center;
+		background-size: cover;
+		border-radius: 20px;
+		overflow: hidden;
+	}
 
 
-<link href="~/css/accountstyle.css" rel="stylesheet" />
+/*中間白色透明背景*/
+.main .verify-section {
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%,0);
+	/* margin:0 auto; */
+	/* width: calc(100% - 58%); */
+	width: 500px;
+	height: 100%;
+	color: #fff;
+	background-color: rgba(88, 85, 85, 0.2);
+	/* backdrop-filter: blur(4px); */
+}
+
+.verify-section .form-box {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+
+.verify-section .form-box h2 {
+    text-align: center;
+    font-size: 30px;
+    margin: 20px 0 5px 0;
+}
+
+
+.verify-section .form-box h5 {
+    text-align: center;
+    font-size: 16px;
+}
+.verify-section .form-box h5{
+    color:#d9d9d9;
+    margin: 50px auto;
+    background-color: rgba(0,0,0,0.3);
+    width: 150px;
+}
+.verify-section .form-box p{
+    font-size: 14px;
+    text-align: center;
+    margin: 0 40px 30px 40px;
+}
+.form-box .input-box{
+    width: 340px;
+    height: 50px;
+    border-bottom: 2px solid#fff;
+    margin: 30px 0;
+    position: relative;
+}
+.input-box input{
+	height: 100%;
+	color: #fff;
+	background: transparent;
+	border: none;
+	outline: none;
+	font-size: 18px;
+	position: absolute;
+	top: 50%;
+	/* left: 0; */
+	transform: translateY(-40%);
+	width: 350px;
+	padding-left: 10px;
+	text-transform: none;
+}
+
+.input-box label{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 16px;
+    font-weight: 600px;
+    pointer-events: none;
+    transition: .5s ease;
+}
+.input-box .icon{
+	position: absolute;
+	top: 13px;
+	right: 0;
+	font-size: 19px;
+}
+
+.pwdVisibility {
+	color: white;
+	font-size: 16px;
+	background-color: transparent;
+	border: none;
+	margin-right: 12px;
+}
+/*文字向上漂浮*/
+.input-box input:focus~ label,
+.input-box input:valid ~ label
+{
+    top: -5px;
+}
+
+.resendBtn{
+    width: 150px;
+    height: 35px;
+    margin-top: 40px;
+    left: 50%;
+    transform: translate(-50%,0);
+    position: relative;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background:#4F9D9D	;
+    font-size: 16px;
+    color: #fff;
+    box-shadow: rgba(0,0,0,0.4);
+}
+.resendBtn:hover{
+    background-color: #D1E9E9;
+    color:black;
+}
+
+</style>
 <div class="background"></div>
 <article>
 	<div class="main container">
@@ -14,22 +169,22 @@
 					<!-- <h5>請查看email信件</h5> -->
 					<div class="input-box">
 						<span class="icon">
-							<button type="button" class="pwdVisibility" id="togglePassword" onclick="togglePasswordVisibility()">
+							<button type="button" class="pwdVisibility" id="togglePwd" onclick="togglePasswordVisibility()">
 								<i class="bi bi-eye"></i>
 							</button>
-							<i class="bx bxs-lock-alt"></i>
+							<i class="bi bi-lock-fill"></i>
 						</span>
-						<input type="password" id="memberPassword" name="memberPassword" autocomplete="off" required />
+						<input type="password" id="memberPwd" name="memberPassword" autocomplete="off" required />
 						<label>密碼</label>
 					</div>
 					<div class="input-box">
 						<span class="icon">
-							<button type="button" class="pwdVisibility" id="toggleChkPassword" onclick="toggleChkPasswordVisibility()">
+							<button type="button" class="pwdVisibility" id="toggleChkPwd" onclick="toggleChkPasswordVisibility()">
 								<i class="bi bi-eye"></i>
 							</button>
-							<i class="bx bxs-lock-alt"></i>
+							<i class="bi bi-lock-fill"></i>
 						</span>
-						<input type="password" id="memberConfirmPassword" name="memberConfirmPassword" autocomplete="off" required />
+						<input type="password" id="memberConfirmPwd" name="memberConfirmPassword" autocomplete="off" required />
 						<label>確認密碼</label>
 					</div>
 					<button class="resendBtn" type="submit">送出</button>
@@ -42,30 +197,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script>
 	function togglePasswordVisibility() {
-		let memberPassword = document.getElementById("memberPassword");
-		let toggleButton = document.getElementById("togglePassword");
+		let memberPassword = document.getElementById("memberPwd");
+		let togglePwd = document.getElementById("togglePwd");
 
 		if (memberPassword.type === "password") {
 			memberPassword.type = "text";
-			toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+			togglePwd.innerHTML = '<i class="bi bi-eye-slash"></i>';
 		} else {
 			memberPassword.type = "password";
-			toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+			togglePwd.innerHTML = '<i class="bi bi-eye"></i>';
 		}
 
 
 	}
 
 	function toggleChkPasswordVisibility() {
-		let memberConfirmPassword = document.getElementById("memberConfirmPassword");
-		let toggleChkButton = document.getElementById("toggleChkPassword");
+		let memberConfirmPassword = document.getElementById("memberConfirmPwd");
+		let toggleChkPwd = document.getElementById("toggleChkPwd");
 
 		if (memberConfirmPassword.type === "password") {
 			memberConfirmPassword.type = "text";
-			toggleChkButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+			toggleChkPwd.innerHTML = '<i class="bi bi-eye-slash"></i>';
 		} else {
 			memberConfirmPassword.type = "password";
-			toggleChkButton.innerHTML = '<i class="bi bi-eye"></i>';
+			toggleChkPwd.innerHTML = '<i class="bi bi-eye"></i>';
 
 		}
 
@@ -76,8 +231,8 @@
 	document.getElementById("ResetPwd").addEventListener("submit", function (event) {
 		event.preventDefault();
 
-		let memberPassword = document.getElementById("memberPassword").value;
-		let memberConfirmPassword = document.getElementById("memberConfirmPassword").value;
+		let memberPassword = document.getElementById("memberPwd").value;
+		let memberConfirmPassword = document.getElementById("memberConfirmPwd").value;
 
 
 		if ((memberPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
