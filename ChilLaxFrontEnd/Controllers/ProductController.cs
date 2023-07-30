@@ -173,6 +173,20 @@ namespace ChilLaxFrontEnd.Controllers
                 HttpContext.Session.Set(CDictionary.SK_LIKED_PRODUCTS_LIST, bytes);
             }
 
+
+            // 新增購物車div中列表
+            // 取得購物車商品
+            List<CShoppingCartItem> cartItems = null;
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
+            {
+                string cartJson = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
+                cartItems = JsonSerializer.Deserialize<List<CShoppingCartItem>>(cartJson);
+            }
+
+            // 將購物車商品資訊傳遞到View中
+            ViewBag.CartItems = cartItems;
+
+
             return View();
 
 
@@ -230,10 +244,23 @@ namespace ChilLaxFrontEnd.Controllers
 
             db.SaveChanges();
 
+
+            // 新增購物車div中列表
+            // 將購物車商品資訊存儲到Session中
+            //List<CShoppingCartItem> cartItems = new List<CShoppingCartItem>();
+            //CShoppingCartItem cartItem = new CShoppingCartItem
+            //{
+            //    productId = ProductId,
+            //    ProductName = cvm.ProductName,
+            //    ProductImg = cvm.ProductImg,
+            //    price = cvm.ProductPrice,
+            //};
+            //cartItems.Add(cartItem);
+
+            //string cartJson = JsonSerializer.Serialize(cartItems);
+            //HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST, cartJson);
+
             return RedirectToAction("Details", "Carts",null);
-
-
-
 
         }
 
