@@ -414,9 +414,6 @@
 		loginsec.classList.remove('active')
 	})
 
-
-
-
 	function togglePasswordVisibility() {
 		var MemberPassword = document.getElementById("MemberPassword");
 		var toggleButton = document.getElementById("togglePassword");
@@ -429,6 +426,27 @@
 			toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
 		}
 	}
+
+	//function togglePasswordVisibility() {
+	//	var MemberPassword = document.getElementById("MemberPassword");
+	//	var toggleButton = document.getElementById("togglePassword");
+
+	//	function setPasswordVisibility(type, buttonIcon) {
+	//		MemberPassword.type = type;
+	//		toggleButton.innerHTML = `<i class="bi bi-${buttonIcon}"></i>`;
+	//	}
+
+	//	if (MemberPassword.type === "password") {
+	//		setPasswordVisibility("text", "eye-slash");
+	//	} else {
+	//		setPasswordVisibility("password", "eye");
+	//	}
+	//}
+
+
+
+
+
 
 	//Login表單傳送到後端
 	document.getElementById("Login").addEventListener("submit", function (event) {
