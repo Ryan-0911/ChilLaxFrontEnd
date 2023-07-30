@@ -224,17 +224,17 @@ namespace ChilLaxFrontEnd.Controllers
 				return RedirectToAction("Login");
 			}
 			Member memProfile = _context.Member.SingleOrDefault(m => m.MemberId.Equals(member.MemberId));
-			registerViewModel rvm = new registerViewModel();
+			OrderViewModel ovm = new OrderViewModel();
 			if (member != null)
 			{
-				rvm.memberId = memProfile.MemberId;
-				rvm.memberName = memProfile.MemberName;
-				rvm.memberTel = memProfile.MemberTel;
-				rvm.memberEmail = memProfile.MemberEmail;
+				ovm.memberId = memProfile.MemberId;
+				ovm.memberName = memProfile.MemberName;
+				ovm.memberTel = memProfile.MemberTel;
+				ovm.memberEmail = memProfile.MemberEmail;
 
-				rvm.memberBirthday = memProfile.MemberBirthday;
-				rvm.memberSex = (bool)memProfile.MemberSex;
-				rvm.memberAddress = memProfile.MemberAddress;
+				ovm.memberBirthday = memProfile.MemberBirthday;
+				ovm.memberSex = (bool)memProfile.MemberSex;
+				ovm.memberAddress = memProfile.MemberAddress;
 
         //新增會員訂單資料
         List<MemberOrder> memberOrder = _context.ProductOrder
@@ -248,10 +248,10 @@ namespace ChilLaxFrontEnd.Controllers
                     orderDetails = new List<OrderDetail> { od }
                 })
             .ToList();
-        rvm.memberOrder = memberOrder;
+			ovm.memberOrder = memberOrder;
 
 
-				return View(rvm);
+				return View(ovm);
 			}
 			return RedirectToAction("Index", "Home");
 

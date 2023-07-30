@@ -283,8 +283,8 @@
 					<div class="create-account">
 						<p>
 							還沒有帳號?
-							<a href="#" class="register-link">進行會員註冊</a>
-							@*<a href="https://localhost:5000/Login/Register" class="register-link">進行會員註冊</a>*@
+							@*<a href="#" class="register-link">進行會員註冊</a>*@
+							<a href="https://localhost:5000/Login/Register" class="register-link">進行會員註冊</a>
 						</p>
 					</div>
 					<div class="input-box">
@@ -294,7 +294,8 @@
 					</div>
 					<div class="input-box">
 						<span class="icon">
-							<button type="button" class="pwdVisibility" id="togglePassword" onclick="togglePasswordVisibility()">
+							<button type="button" class="pwdVisibility" id="togglePassword">
+								@*onclick="togglePasswordVisibility()*@
 								<i class="bi bi-eye"></i>
 							</button>
 							<i class="bi bi-lock-fill"></i>
@@ -333,7 +334,7 @@
 				</form>
 			</div>
 			<!--註冊會員-->
-			<div class="form-box register col-md-12 ">
+@*			<div class="form-box register col-md-12 ">
 				<form id="Register">
 					@Html.AntiForgeryToken()
 					<h2>Sign Up</h2>
@@ -342,10 +343,10 @@
 						<p>
 							已經有帳號?
 							<a href="#" class="login-link">進入會員登入</a>
-							@*@Html.ActionLink("進入會員登入", "Login",null,new {  @class = "login-link"  })*@
+							@Html.ActionLink("進入會員登入", "Login",null,new {  @class = "login-link"  })
 						</p>
 					</div>
-					@*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 					<div class="input-box">
 						<span class="icon"><i class="bi bi-person-circle"></i></span>
@@ -396,7 +397,7 @@
 						</div>
 					</div>
 				</form>
-			</div>
+			</div>*@
 		</div>
 	</div>
 </article>
@@ -404,28 +405,28 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script>
-	const loginsec = document.querySelector('.login-section')
-	const loginlink = document.querySelector('.login-link')
-	const registerlink = document.querySelector('.register-link')
-	registerlink.addEventListener('click', () => {
-		loginsec.classList.add('active')
-	})
-	loginlink.addEventListener('click', () => {
-		loginsec.classList.remove('active')
-	})
+	//const loginsec = document.querySelector('.login-section')
+	//const loginlink = document.querySelector('.login-link')
+	//const registerlink = document.querySelector('.register-link')
+	//registerlink.addEventListener('click', () => {
+	//	loginsec.classList.add('active')
+	//})
+	//loginlink.addEventListener('click', () => {
+	//	loginsec.classList.remove('active')
+	//})
 
-	function togglePasswordVisibility() {
-		var MemberPassword = document.getElementById("MemberPassword");
-		var toggleButton = document.getElementById("togglePassword");
+	//function togglePasswordVisibility() {
+	//	var MemberPassword = document.getElementById("MemberPassword");
+	//	var toggleButton = document.getElementById("togglePassword");
 
-		if (MemberPassword.type === "password") {
-			MemberPassword.type = "text";
-			toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
-		} else {
-			MemberPassword.type = "password";
-			toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
-		}
-	}
+	//	if (MemberPassword.type === "password") {
+	//		MemberPassword.type = "text";
+	//		toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+	//	} else {
+	//		MemberPassword.type = "password";
+	//		toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+	//	}
+	//}
 
 	//function togglePasswordVisibility() {
 	//	var MemberPassword = document.getElementById("MemberPassword");
@@ -495,97 +496,97 @@
 
 
 	//註冊區塊
-	function togglePasswordVisibility() {
-		let memberPassword = document.getElementById("memberPassword");
-		let toggleButton = document.getElementById("togglePassword");
+	//function togglePasswordVisibility() {
+	//	let memberPassword = document.getElementById("memberPassword");
+	//	let toggleButton = document.getElementById("togglePassword");
 
-		if (memberPassword.type === "password") {
-			memberPassword.type = "text";
-			toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
-		} else {
-			memberPassword.type = "password";
-			toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
-		}
-
-
-	}
-
-	function toggleChkPasswordVisibility() {
-		let memberConfirmPassword = document.getElementById("memberConfirmPassword");
-		let toggleChkButton = document.getElementById("toggleChkPassword");
-
-		if (memberConfirmPassword.type === "password") {
-			memberConfirmPassword.type = "text";
-			toggleChkButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
-		} else {
-			memberConfirmPassword.type = "password";
-			toggleChkButton.innerHTML = '<i class="bi bi-eye"></i>';
-
-		}
-	}
+	//	if (memberPassword.type === "password") {
+	//		memberPassword.type = "text";
+	//		toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+	//	} else {
+	//		memberPassword.type = "password";
+	//		toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+	//	}
 
 
-	//Register 表單傳送到後端
-	document.getElementById("Register").addEventListener("submit", function (event) {
-		event.preventDefault();
+	//}
 
-		let memberAccount = document.getElementById("memberAccount").value;
-		let memberPassword = document.getElementById("memberPassword").value;
-		let memberConfirmPassword = document.getElementById("memberConfirmPassword").value;
+	//function toggleChkPasswordVisibility() {
+	//	let memberConfirmPassword = document.getElementById("memberConfirmPassword");
+	//	let toggleChkButton = document.getElementById("toggleChkPassword");
 
-		let accountPattern = /^[a-zA-Z0-9]{6,12}$/;
-		if (!accountPattern.test(memberAccount)) {
-			alert("帳號必須為6到12位的英數字組合");
-			return false; //取消預設的事件行為，阻止表單的提交。
-		} else if ((memberAccount.trim() === "") || (memberPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
-			alert("請輸入所有欄位!");
-			return false;
-		}
+	//	if (memberConfirmPassword.type === "password") {
+	//		memberConfirmPassword.type = "text";
+	//		toggleChkButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+	//	} else {
+	//		memberConfirmPassword.type = "password";
+	//		toggleChkButton.innerHTML = '<i class="bi bi-eye"></i>';
 
-		let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
-		if (!passwordPattern.test(memberPassword)) {
-			alert("密碼必須包含至少一個數字、一個小寫字母和一個大寫字母，且長度在8到20之間");
-			return false;
-		}
-
-		if (memberConfirmPassword !== memberPassword) {
-			alert("請確認密碼是否相同!")
-			return false;
-		}
+	//	}
+	//}
 
 
+	////Register 表單傳送到後端
+	//document.getElementById("Register").addEventListener("submit", function (event) {
+	//	event.preventDefault();
 
-		const formData =
-		{
-			memberAccount: memberAccount,
-			memberPassword: memberPassword
-		}
+	//	let memberAccount = document.getElementById("memberAccount").value;
+	//	let memberPassword = document.getElementById("memberPassword").value;
+	//	let memberConfirmPassword = document.getElementById("memberConfirmPassword").value;
 
-		console.log(JSON.stringify(formData));
+	//	let accountPattern = /^[a-zA-Z0-9]{6,12}$/;
+	//	if (!accountPattern.test(memberAccount)) {
+	//		alert("帳號必須為6到12位的英數字組合");
+	//		return false; //取消預設的事件行為，阻止表單的提交。
+	//	} else if ((memberAccount.trim() === "") || (memberPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
+	//		alert("請輸入所有欄位!");
+	//		return false;
+	//	}
 
-		$.ajax({
-			type: "POST",
-			url: "/api/Members/Register",
-			data: JSON.stringify(formData),
-			contentType: "application/json"
-		}).done(data => {
-			//alert(data);
-			if (!data.success) {
-				alert(data.message);
-				return false;
-			}
-			window.location.href = "https://localhost:5000/Login/registerProfile";
+	//	let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+	//	if (!passwordPattern.test(memberPassword)) {
+	//		alert("密碼必須包含至少一個數字、一個小寫字母和一個大寫字母，且長度在8到20之間");
+	//		return false;
+	//	}
 
-		}).fail((jqXHR, textStatus, errorThrown) => {
-			if (jqXHR.status === 400) {
-				const errorResponse = jqXHR.responseJSON;
-				alert(errorResponse.message);
-			} else {
-				console.error("AJAX error:", textStatus, errorThrown);
-			}
-		});
-		return false;
-	});
+	//	if (memberConfirmPassword !== memberPassword) {
+	//		alert("請確認密碼是否相同!")
+	//		return false;
+	//	}
+
+
+
+	//	const formData =
+	//	{
+	//		memberAccount: memberAccount,
+	//		memberPassword: memberPassword
+	//	}
+
+	//	console.log(JSON.stringify(formData));
+
+	//	$.ajax({
+	//		type: "POST",
+	//		url: "/api/Members/Register",
+	//		data: JSON.stringify(formData),
+	//		contentType: "application/json"
+	//	}).done(data => {
+	//		//alert(data);
+	//		if (!data.success) {
+	//			alert(data.message);
+	//			return false;
+	//		}
+	//		window.location.href = "https://localhost:5000/Login/registerProfile";
+
+	//	}).fail((jqXHR, textStatus, errorThrown) => {
+	//		if (jqXHR.status === 400) {
+	//			const errorResponse = jqXHR.responseJSON;
+	//			alert(errorResponse.message);
+	//		} else {
+	//			console.error("AJAX error:", textStatus, errorThrown);
+	//		}
+	//	});
+	//	return false;
+	//});
 
 
 

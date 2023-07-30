@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ChilLaxFrontEnd.ViewModels
 {
-	public class registerViewModel
+	public class OrderViewModel
 	{
 		public int memberId { get; set; }
 		public string memberName { get; set; }
@@ -14,7 +14,6 @@ namespace ChilLaxFrontEnd.ViewModels
 		[DataType(DataType.Date)]
 		public DateTime memberBirthday { get; set; }
 		public string memberAddress { get; set; }
-        //public List<MemberOrder> memberOrder { get; set; }
-
-    }
+		public List<MemberOrder> memberOrder { get; set; }
+	}
 }
