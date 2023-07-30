@@ -305,15 +305,13 @@
     <script>
 
         function CreateCart(productId) {
-            //alert("商品ID：" + productId);
-            event.preventDefault();
+            event.preventDefault(); //阻止冒泡事件，避免http405
             let id = productId;
             const inputId = "PQty" + id;
             const qty = document.getElementById(inputId).value;
             console.log("商品ID：" + productId + "\n商品数量：" + qty);
-            //let qty = document.getElementById("PQty").value;
-            //console.log(qty);
-            let memberId = "1"; // 假設有一個元素的 ID 為 MemberId，儲存了會員的 ID
+
+            let memberId = "1"; // 假設會員ID，不過不重要，因為後端會直接去Session取得會員ID
             const PCarts = {
                 productId: id,
                 txtCount: qty,
