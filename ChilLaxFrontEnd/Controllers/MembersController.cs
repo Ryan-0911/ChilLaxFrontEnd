@@ -464,5 +464,35 @@ namespace ChilLaxFrontEnd.Controllers
 
 		}
 
-	}
+        [HttpPost("editPwd")]
+        public async Task<IActionResult> editPwd([FromBody] PwdViewModel formData)
+        {
+            if (ModelState.IsValid)
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+                Member member = JsonSerializer.Deserialize<Member>(json);
+				MemberCredential mc = await _context.MemberCredential.FirstOrDefaultAsync(mc=>mc.MemberId.Equals(member.MemberId));
+				if (mc != null)
+				{
+                    string password = formData.memberPassword;
+                    string newPassword = formData.memberNewPassword;
+                    bool isPwdMatch = BCrypt.Net.BCrypt.Verify(formData.memberPassword, mc.MemberPassword);
+					if (isPwdMatch) {
+                        string salt = BCrypt.Net.BCrypt.GenerateSalt();
+                        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword, salt);
+                        mc.MemberPassword = hashedPassword;
+                        _context.Entry(mc).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                        return Ok(new { success = true, message = "新密碼修改完成!" });
+                    }
+                    return BadRequest(new { success = false, message = "密碼不正確，請再試一次!" });
+                }
+                return BadRequest(new { success = false, message = "請重新登入!", login = false });
+
+            }
+            return BadRequest(new { success = false, message = "請輸入密碼與確認密碼!" });
+
+        }
+
+    }
 }

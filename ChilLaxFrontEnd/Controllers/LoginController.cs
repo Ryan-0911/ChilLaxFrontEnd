@@ -268,5 +268,10 @@ namespace ChilLaxFrontEnd.Controllers
 			return View();
 		}
 
+		public IActionResult editPwd()
+		{
+			return View();
+		}
+
 	}
 }
