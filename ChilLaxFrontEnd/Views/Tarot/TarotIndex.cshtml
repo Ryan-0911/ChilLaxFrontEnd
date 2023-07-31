@@ -12,6 +12,12 @@
         .button-container {
             display: grid;
             place-items: center;
+            
+        }
+
+        .stylebtn{
+            position: relative;
+            left: 550px;
         }
         #shuffleBtn {
             margin-top: 20px;
@@ -85,8 +91,10 @@
     
 </div>
 
-<div class="button-container" id="btnContainer" style="display: none;">
-    <button id="shuffleBtn" >Shuffle Tarot Cards</button>
+<div class="button-container stylebtn" id="btnContainer" style="display: none;">
+    <div class="col-8 mx-auto">
+        <button id="shuffleBtn">Shuffle Tarot Cards</button>
+    </div>
 </div>
 
 <div class="text-center chat-container" id="chatContainer" style="display: none;">
@@ -216,6 +224,7 @@
             }).fail(err => {
                 alert("獲取會員點數時發生錯誤：" + err.statusText);
             });
+            
         });
 
     </script>
