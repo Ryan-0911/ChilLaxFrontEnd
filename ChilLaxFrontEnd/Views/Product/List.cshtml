@@ -412,33 +412,34 @@
             });
         });
 
-                                        // 喜好商品清單
-                                        //$(document).ready(function () {
-                                        //    $(".add-to-wishlist").click(function () {
-                                        //        var productId = $(this).data("product-id");
-                                        //        var productName = $(this).data("product-name");
-                                        //        var productImg = $(this).data("product-img");
-                                        //        var productPrice = $(this).data("product-price");
+            //喜好商品清單
+        $(document).ready(function () {
+            $(".add-to-wishlist").click(function () {
+                event.preventDefault();  // 阻止冒泡事件，避免http405
+                var productId = $(this).data("product-id");
+                var productName = $(this).data("product-name");
+                var productImg = $(this).data("product-img");
+                var productPrice = $(this).data("product-price");
 
-                                        //        // 將產品信息傳遞給List方法
-                                        //        $.ajax({
-                                        //            url: "@Url.Action("List", "Product")",
-                                        //            data: {
-                                        //                likedProductId: productId,
-                                        //                likedProductName: productName,
-                                        //                likedProductImg: productImg,
-                                        //                likedProductPrice: productPrice
-                                        //            },
-                                        //            type: "GET",
-                                        //            success: function (data) {
-                                        //                // 在此處處理成功後的操作
-                                        //            },
-                                        //            error: function () {
-                                        //                // 在此處處理錯誤情況
-                                        //            }
-                                        //        });
-                                        //    });
-                                        //});
+                // 將產品信息傳遞給List方法
+                $.ajax({
+                    url: "@Url.Action("List", "Product")",
+                    data: {
+                        likedProductId: productId,
+                        likedProductName: productName,
+                        likedProductImg: productImg,
+                        likedProductPrice: productPrice
+                    },
+                    type: "GET",
+                    success: function (data) {
+                        // 在此處處理成功後的操作
+                    },
+                    error: function () {
+                        // 在此處處理錯誤情況
+                    }
+                });
+            });
+        });
 
     </script>
 
