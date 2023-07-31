@@ -56,7 +56,7 @@
 			/* backdrop-filter: blur(4px); */
 		}
 
-	.login-section .form-box {
+	.login-section .form-box, .register-section .form-box {
 		position: absolute;
 		display: flex;
 		justify-content: center;
@@ -64,19 +64,19 @@
 		width: 100%;
 		height: 100%;
 	}
-
 	/* 登入註冊版面上下切換*/
-	/*        .register-section .register {
-					margin-bottom: 50px;
-					transform: translateY(100%);
-					transition: transform .6s ease;
-					transition-delay: 0s;
-				}*/
+	.login-section .register {
+		margin-bottom: 50px;
+		transform: translateY(100%);
+		/*transform: translateY(0px);*/
+		transition: transform .6s ease;
+		transition-delay: 0s;
+	}
 
-	/*        .register-section.active .register { 按註冊連結(在登入畫面)，將註冊section往上
-					transform: translateY(0px);
-					transition-delay: .7s;
-				}*/
+	.login-section.active .register { /*按註冊連結(在登入畫面)，將註冊section往上*/
+		transform: translateY(0px);
+		transition-delay: .7s;
+	}
 
 	.login-section .login {
 		margin-bottom: 50px;
@@ -84,21 +84,21 @@
 		transition: transform .6s ease;
 		transition-delay: 0.7s;
 	}
-	/*
-				.login-section.active .login { 按登入連結(在註冊畫面)，將登入section往上
-					transform: translateY(100%);
-					transition-delay: 0s;
-				}*/
+
+	.login-section.active .login { /*按登入連結(在註冊畫面)，將登入section往上*/
+		transform: translateY(100%);
+		transition-delay: 0s;
+	}
 
 
 
-	.login h2 {
+	.login h2, .register h2 {
 		text-align: center;
 		font-size: 30px;
 		margin: 20px 0 5px 0;
 	}
 
-	.login h5 {
+	.login h5, .register h5 {
 		text-align: center;
 		font-size: 16px;
 	}
@@ -107,7 +107,7 @@
 		width: 400px;
 		height: 50px;
 		border-bottom: 2px solid#fff;
-		margin: 30px 0;
+		margin: 26px 0;
 		position: relative;
 	}
 
@@ -121,10 +121,9 @@
 		font-size: 18px;
 		position: absolute;
 		top: 50%;
-		/* left: 0; */
 		transform: translateY(-40%);
 		width: 350px;
-		padding-left: 80px;
+		padding-left: 10px;
 		text-transform: none;
 	}
 
@@ -139,6 +138,8 @@
 		transition: .5s ease;
 	}
 
+
+
 	.input-box .icon {
 		position: absolute;
 		top: 13px;
@@ -146,7 +147,8 @@
 		font-size: 19px;
 	}
 	/*文字向上漂浮*/
-	.input-box input:focus ~ label {
+	.input-box input:focus ~ label,
+	.input-box input:valid ~ label {
 		top: -5px;
 	}
 
@@ -175,7 +177,7 @@
 				text-decoration: underline;
 			}
 
-	.login .btn {
+	.login .btn, .register .btn {
 		/* background: #fff; */
 		width: 100%;
 		height: 45px;
@@ -189,7 +191,7 @@
 		box-shadow: rgba(0,0,0,0.4);
 	}
 
-		.login .btn:hover {
+		.login .btn:hover, .register .btn:hover {
 			background-color: #D1E9E9;
 			color: black;
 		}
@@ -215,80 +217,44 @@
 				text-decoration: underline;
 			}
 
-	.main {
-		position: absolute;
-		left: 50%;
-		top: 53%;
-		transform: translate(-50%,-50%);
-		width: 75%;
-		height: 700px;
-		/* margin-top: 50px; */
-
-		.other-login .divider
-
-	{
-		width: 100%;
-		margin: 80px 0 30px 0;
-		text-align: center;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
+	.other-login {
+		transform: translate(0, -60%);
 	}
 
-	.other-login .divider .line {
-		display: inline-block;
-		max-width: 30%;
-		width: 30%;
-		flex: 1;
-		height: 1px;
-		background-color: #fff;
-	}
-
-	.other-login .divider .divider-text {
-		vertical-align: middle;
-		margin: 0px 20px;
-		line-height: 0;
-		display: inline-block;
-		width: 100px;
-		color: #fff;
-		font-size: 15px;
-	}
-
-	/* 登入註冊版面上下切換*/
-	/*        .register-section .register {
-							margin-bottom: 50px;
-							transform: translateY(100%);
-							transition: transform .6s ease;
-							transition-delay: 0s;
-						}*/
-	.other-login .other-login-wrapper {
-		width: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-		.other-login .other-login-wrapper .other-login-item {
-			border: 1px solid #fff;
-			padding: 8px;
+		.other-login .divider {
+			width: 100%;
+			margin: 80px 0 30px 0;
 			text-align: center;
-			border-radius: 10px;
-			cursor: pointer;
-			font-weight: 600;
-			color: rgb(51, 49, 116);
-			margin: 0 10px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
 		}
 
-			.other-login .other-login-wrapper .other-login-item:hover {
-				border: 1px solid #4F9D9D;
-				background-color: #E0E0E0;
+			.other-login .divider .line {
+				display: inline-block;
+				max-width: 30%;
+				width: 30%;
+				flex: 1;
+				height: 1px;
+				background-color: #fff;
 			}
 
-			.other-login .other-login-wrapper .other-login-item img {
-				width: 30px;
-				height: 30px;
+			.other-login .divider .divider-text {
 				vertical-align: middle;
+				margin: 0px 20px;
+				line-height: 0;
+				display: inline-block;
+				width: 100px;
+				color: #fff;
+				font-size: 15px;
 			}
+
+		.other-login .other-login-wrapper {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
 	.pwdVisibility {
 		color: white;
@@ -303,8 +269,8 @@
 @{
 	ViewData["Title"] = "Login";
 }
-@using System.ComponentModel.DataAnnotations
-@model ChilLaxFrontEnd.Models.MemberCredential
+@*@using System.ComponentModel.DataAnnotations
+@model ChilLaxFrontEnd.Models.MemberCredential*@
 <div class="background"></div>
 <article>
 	<div class="main container">
@@ -317,17 +283,13 @@
 					<div class="create-account">
 						<p>
 							還沒有帳號?
-							<a href="https://localhost:5000/Login/Register" class="register-link">進行會員註冊</a>
-							@*@Html.ActionLink("進行會員註冊", "Register", null,new { @class = "register-link" })*@
+							<a href="#" class="register-link">進行會員註冊</a>
+							@*<a href="https://localhost:5000/Login/Register" class="register-link">進行會員註冊</a>*@
 						</p>
 					</div>
-					@*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
 					<div class="input-box">
 						<span class="icon"><i class="bi bi-person-circle"></i></span>
 						<input type="text" id="MemberAccount" name="MemberAccount" class="form-control" autocomplete="off" required />
-						@*@Html.TextBox("memberAccount", null,new { @class = "form-control",autocomplete = "off",required = "required" })*@
-						@*@Html.ValidationMessageFor(model => model.MemberAccount)*@
-
 						<label>帳號</label>
 					</div>
 					<div class="input-box">
@@ -338,13 +300,12 @@
 							<i class="bi bi-lock-fill"></i>
 						</span>
 						<input type="password" id="MemberPassword" name="MemberPassword" class="form-control" autocomplete="off" required />
-						@*@Html.TextBox("memberPassword", null, new { type = "password",@class = "form-control",id = "passwordInput" ,autocomplete = "off",required = "required" })*@
-						@*@Html.ValidationMessageFor(model => model.MemberPassword)*@
 						<label>密碼</label>
 					</div>
 					<div class="remember-password">
 						<label for="checkbox"><input type="checkbox" id="checkbox" class="remeber_account" />記住帳號</label>
-						<a href="#" class="forget_password">忘記密碼</a>
+						<a href="https://localhost:5000/Login/forgetPassword" class="forget_password">忘記密碼</a>
+
 					</div>
 					<input type="submit" value="登入" id="loginButton" class="btn btn-default" />
 					<div class="other-login">
@@ -372,7 +333,70 @@
 				</form>
 			</div>
 			<!--註冊會員-->
+			<div class="form-box register col-md-12 ">
+				<form id="Register">
+					@Html.AntiForgeryToken()
+					<h2>Sign Up</h2>
+					<h5>會員註冊</h5>
+					<div class="create-account">
+						<p>
+							已經有帳號?
+							<a href="#" class="login-link">進入會員登入</a>
+							@*@Html.ActionLink("進入會員登入", "Login",null,new {  @class = "login-link"  })*@
+						</p>
+					</div>
+					@*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
 
+					<div class="input-box">
+						<span class="icon"><i class="bi bi-person-circle"></i></span>
+						<input type="text" id="memberAccount" name="memberAccount" class="form-control" autocomplete="off" required />
+						<label>帳號</label>
+					</div>
+					<div class="input-box">
+						<span class="icon">
+							<button type="button" class="pwdVisibility" id="togglePassword" onclick="togglePasswordVisibility()">
+								<i class="bi bi-eye"></i>
+							</button>
+							<i class="bi bi-lock-fill"></i>
+						</span>
+						<input type="password" id="memberPassword" name="memberPassword" class="form-control" autocomplete="off" required />
+						<label>密碼</label>
+					</div>
+					<div class="input-box input-chkpassword">
+						<span class="icon">
+							<button type="button" class="pwdVisibility" id="toggleChkPassword" onclick="toggleChkPasswordVisibility()">
+								<i class="bi bi-eye"></i>
+							</button>
+							<i class="bi bi-lock-fill"></i>
+						</span>
+						<input type="password" id="memberConfirmPassword" name="memberConfirmPassword" class="form-control chkpassword" autocomplete="off" required />
+						<label>確認密碼</label>
+					</div>
+					<button class="btn">下一步</button>
+					<div class="other-login">
+						<div class="divider">
+							<span class="line"></span>
+							<span class="divider-text">其他註冊方式</span>
+							<span class="line"></span>
+						</div>
+						<div class="other-login-wrapper">
+							<div id="g_id_onload"
+								 data-client_id="24117042909-f73r9qksf4se9ka68pgdviie2ucsl4h4.apps.googleusercontent.com"
+								 data-login_uri="https://localhost:5000/Login/ValidGoogleLogin"
+								 data-auto_prompt="false">
+							</div>
+							<div class="g_id_signin"
+								 data-type="standard"
+								 data-size="large"
+								 data-theme="outline"
+								 data-text="sign_in_with"
+								 data-shape="rectangular"
+								 data-logo_alignment="left">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 </article>
@@ -380,6 +404,16 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script>
+	const loginsec = document.querySelector('.login-section')
+	const loginlink = document.querySelector('.login-link')
+	const registerlink = document.querySelector('.register-link')
+	registerlink.addEventListener('click', () => {
+		loginsec.classList.add('active')
+	})
+	loginlink.addEventListener('click', () => {
+		loginsec.classList.remove('active')
+	})
+
 	function togglePasswordVisibility() {
 		var MemberPassword = document.getElementById("MemberPassword");
 		var toggleButton = document.getElementById("togglePassword");
@@ -392,6 +426,27 @@
 			toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
 		}
 	}
+
+	//function togglePasswordVisibility() {
+	//	var MemberPassword = document.getElementById("MemberPassword");
+	//	var toggleButton = document.getElementById("togglePassword");
+
+	//	function setPasswordVisibility(type, buttonIcon) {
+	//		MemberPassword.type = type;
+	//		toggleButton.innerHTML = `<i class="bi bi-${buttonIcon}"></i>`;
+	//	}
+
+	//	if (MemberPassword.type === "password") {
+	//		setPasswordVisibility("text", "eye-slash");
+	//	} else {
+	//		setPasswordVisibility("password", "eye");
+	//	}
+	//}
+
+
+
+
+
 
 	//Login表單傳送到後端
 	document.getElementById("Login").addEventListener("submit", function (event) {
@@ -439,7 +494,102 @@
 	});
 
 
+	//註冊區塊
+	function togglePasswordVisibility() {
+		let memberPassword = document.getElementById("memberPassword");
+		let toggleButton = document.getElementById("togglePassword");
+
+		if (memberPassword.type === "password") {
+			memberPassword.type = "text";
+			toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+		} else {
+			memberPassword.type = "password";
+			toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+		}
+
+
+	}
+
+	function toggleChkPasswordVisibility() {
+		let memberConfirmPassword = document.getElementById("memberConfirmPassword");
+		let toggleChkButton = document.getElementById("toggleChkPassword");
+
+		if (memberConfirmPassword.type === "password") {
+			memberConfirmPassword.type = "text";
+			toggleChkButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+		} else {
+			memberConfirmPassword.type = "password";
+			toggleChkButton.innerHTML = '<i class="bi bi-eye"></i>';
+
+		}
+	}
+
+
+	//Register 表單傳送到後端
+	document.getElementById("Register").addEventListener("submit", function (event) {
+		event.preventDefault();
+
+		let memberAccount = document.getElementById("memberAccount").value;
+		let memberPassword = document.getElementById("memberPassword").value;
+		let memberConfirmPassword = document.getElementById("memberConfirmPassword").value;
+
+		let accountPattern = /^[a-zA-Z0-9]{6,12}$/;
+		if (!accountPattern.test(memberAccount)) {
+			alert("帳號必須為6到12位的英數字組合");
+			return false; //取消預設的事件行為，阻止表單的提交。
+		} else if ((memberAccount.trim() === "") || (memberPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
+			alert("請輸入所有欄位!");
+			return false;
+		}
+
+		let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+		if (!passwordPattern.test(memberPassword)) {
+			alert("密碼必須包含至少一個數字、一個小寫字母和一個大寫字母，且長度在8到20之間");
+			return false;
+		}
+
+		if (memberConfirmPassword !== memberPassword) {
+			alert("請確認密碼是否相同!")
+			return false;
+		}
+
+
+
+		const formData =
+		{
+			memberAccount: memberAccount,
+			memberPassword: memberPassword
+		}
+
+		console.log(JSON.stringify(formData));
+
+		$.ajax({
+			type: "POST",
+			url: "/api/Members/Register",
+			data: JSON.stringify(formData),
+			contentType: "application/json"
+		}).done(data => {
+			//alert(data);
+			if (!data.success) {
+				alert(data.message);
+				return false;
+			}
+			window.location.href = "https://localhost:5000/Login/registerProfile";
+
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			if (jqXHR.status === 400) {
+				const errorResponse = jqXHR.responseJSON;
+				alert(errorResponse.message);
+			} else {
+				console.error("AJAX error:", textStatus, errorThrown);
+			}
+		});
+		return false;
+	});
+
+
+
 </script>
 
-@*<script src="~/js/login.js"></script>*@
+
 

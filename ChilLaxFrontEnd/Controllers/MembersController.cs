@@ -295,8 +295,9 @@ namespace ChilLaxFrontEnd.Controllers
 							return Ok(new { success = true });
 						}
 					}
-				}
-				return BadRequest(new { success = false, message = "此信箱已註冊過，請重新登入或選擇別的信箱!" });
+                    return BadRequest(new { success = false, message = "請輸入必填欄位!" });
+                }
+                return BadRequest(new { success = false, message = "此信箱已註冊過，請重新登入或選擇別的信箱!" });
 			}
 			catch (Exception ex)
 			{
@@ -305,7 +306,6 @@ namespace ChilLaxFrontEnd.Controllers
 				return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
 
 			}
-			return BadRequest(new { success = false, message = "請輸入必填欄位!" });
 
 
 		}
@@ -406,5 +406,64 @@ namespace ChilLaxFrontEnd.Controllers
 		{
 			return (_context.Member?.Any(e => e.MemberId == id)).GetValueOrDefault();
 		}
+
+
+		[HttpPost("forgetPassword")]
+		public async Task<IActionResult> forgetPassword([FromBody] SigninViewModel formData)
+		{
+			MemberCredential mc = await _context.MemberCredential.FirstOrDefaultAsync(mc => mc.MemberAccount.Equals(formData.memberAccount));
+			if (mc != null)
+			{
+				Member m = await _context.Member.FirstOrDefaultAsync(m => m.MemberId.Equals(mc.MemberId));
+
+				var data = new
+				{
+					MemberId= mc.MemberId
+				};
+				string json = JsonSerializer.Serialize(data);
+				HttpContext.Session.SetString(CDictionary.SK_RESETPWD_USER, json);
+				if (!HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_USER))
+				{
+					return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
+				}
+				string body = System.IO.File.ReadAllText(Path.Combine(_webHostEnvironment.WebRootPath, "EmailTemplate", "resendPassword.cshtml"));
+				var url = "https://localhost:5000/Login/ResetPwd";
+				body = body.Replace("@ViewBag.ResetPwdLink", url);
+				body = body.Replace("@ViewBag.UserName", m.MemberName);
+				body = body.ToString();
+				await BuildEmailAsync("驗證帳號", body, m.MemberEmail);
+				return Ok(new { success = true, message = "已發送修改密碼驗證信，請至信箱查看!" });
+			}
+			return BadRequest(new { success = false, message = "請輸入正確帳號!" });
+		}
+
+		[HttpPost("ResetPwd")]
+		public async Task<IActionResult> ResetPwd([FromBody] SigninViewModel formData)
+		{
+			if (ModelState.IsValid)
+			{
+				string json = HttpContext.Session.GetString(CDictionary.SK_RESETPWD_USER);
+				MemberCredential credential = JsonSerializer.Deserialize<MemberCredential>(json);
+
+
+				string password = formData.memberPassword;
+				string salt = BCrypt.Net.BCrypt.GenerateSalt();
+				string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
+				MemberCredential mc = await _context.MemberCredential.FirstOrDefaultAsync(mc => mc.MemberId.Equals(Convert.ToInt32(credential.MemberId)));
+				if (mc != null)
+				{
+					mc.MemberPassword = hashedPassword;
+					_context.Entry(mc).State = EntityState.Modified;
+					await _context.SaveChangesAsync();
+					return Ok(new { success = true, message = "新密碼修改完成，請重新登入!" });
+				}
+				return BadRequest(new { success = false, message = "伺服器問題，請稍後再試!" });
+
+
+			}
+			return BadRequest(new { success = false, message = "請輸入密碼與確認密碼!" });
+
+		}
+
 	}
 }
