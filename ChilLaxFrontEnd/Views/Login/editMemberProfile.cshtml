@@ -194,6 +194,11 @@
             width: 120px;
         }
 
+		.clickable-row {
+			cursor: pointer;
+		}
+
+
     </style>
 }
 @model ChilLaxFrontEnd.ViewModels.OrderViewModel
@@ -320,68 +325,54 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach (var order in Model.memberOrder)
-                            {
-
-                                <tr class="clickable-row">
-                                    <td>
-                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderId)
-                                    </td>
-                                    <td>
-                                        $ @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderTotalPrice)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderDate)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderAddress)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderNote)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderState)
-                                    </td>
-                                    <td>
-                                        @if(!order.ProductOrder.FirstOrDefault().OrderPayment){
-                                             @Html.ActionLink("付款", "Index", "checkout", null, new { @class = "btn btn-success" })
-                                        }
-                                        else
-                                        {
-                                            <button class="btn" disabled> 已付款 </button>
-                                        }
-
-                                    </td>
-                                </tr>
-                                @*<tr class="details-row" id="details-row-@(order.ProductOrder.order_id)" style="display: none;">
-                                    <td colspan="8">
-                                        <!-- 詳細資料區塊 -->
-                                        <table class="table table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>@Html.DisplayNameFor(model => model.ProductName)</th>
-                                                    <th>@Html.DisplayNameFor(model => model.OrderDetail.cart_product_quantity)</th>
-                                                    <th>@Html.DisplayNameFor(model => model.ProductPrice)</th>
-                                                    <th>@Html.DisplayNameFor(model => model.Subtotal)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var detail in Model.Where(d => d.ProductOrder.order_id == firstItem.ProductOrder.order_id))
-                                                {
-
-                                                    <tr>
-                                                        <td>@detail.ProductName</td>
-                                                        <td>@detail.OrderDetail.cart_product_quantity</td>
-                                                        <td>@detail.ProductPrice</td>
-                                                        <td>@detail.Subtotal</td>
-                                                    </tr>
-                                                }
-
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>*@
+						<tbody>
+							@foreach (var group in Model.memberOrder.GroupBy(order => order.ProductOrder.FirstOrDefault()?.OrderId).OrderByDescending(g => g.Key))
+							{
+								var firstOrder = group.FirstOrDefault(); // 獲得群組後第一筆訂單
+								<tr class="clickable-row">
+									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderId)</td>
+									<td>$ @(firstOrder.ProductOrder.FirstOrDefault()?.OrderTotalPrice)</td>
+									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderDate)</td>
+									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderAddress)</td>
+									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderNote)</td>
+									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderState)</td>
+									<td>
+										@if (firstOrder.ProductOrder.FirstOrDefault()?.OrderPayment == false)
+										{
+											@Html.ActionLink("付款", "Index", "checkout", null, new { @class = "btn btn-success" })
+										}
+										else
+										{
+											<button class="btn" disabled> 已付款 </button>
+										}
+									</td>
+								</tr>
+								<tr class="details-row" id="details-row-@(firstOrder.ProductOrder.FirstOrDefault()?.OrderId)" style="display: none;">
+									<td colspan="8">
+										<!-- 詳細資料區塊 -->
+										<table class="table table-sm">
+											<thead>
+												<tr>
+													<th>@Html.DisplayNameFor(model => firstOrder.Product.ProductName)</th>
+													<th>@Html.DisplayNameFor(model => firstOrder.orderDetails.FirstOrDefault().CartProductQuantity)</th>
+													<th>@Html.DisplayNameFor(model => firstOrder.Product.ProductPrice)</th>
+													<th>Subtotal</th>
+												</tr>
+											</thead>
+											<tbody>
+												@foreach (var detail in group)
+												{
+													<tr>
+														<td>@(detail.Product?.ProductName)</td>
+														<td>@(detail.orderDetails?.FirstOrDefault().CartProductQuantity)</td>
+														<td>@(detail.Product?.ProductPrice)</td>
+														<td>@(detail.orderDetails?.FirstOrDefault().CartProductQuantity * detail.Product?.ProductPrice)</td>
+													</tr>
+												}
+											</tbody>
+										</table>
+									</td>
+								</tr>
                             }
                         </tbody>
                     </table>
@@ -485,6 +476,15 @@
 
 		})
 
-
+		document.addEventListener("DOMContentLoaded", function () {
+			const clickableRows = document.querySelectorAll(".clickable-row");
+			clickableRows.forEach(row => {
+				row.addEventListener("click", function () {
+					const orderId = row.querySelector("td:first-child").textContent.trim();
+					const detailsRow = document.getElementById("details-row-" + orderId);
+					detailsRow.style.display = detailsRow.style.display === "none" ? "table-row" : "none";
+				});
+			});
+		});
 	</script>
 }
