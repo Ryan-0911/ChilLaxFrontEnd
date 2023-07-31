@@ -2,7 +2,7 @@
 	Layout = null;
 }
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
+<meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
 <style>
 	*{
 		margin: 0;
@@ -101,7 +101,7 @@
 	top: 50%;
 	/* left: 0; */
 	transform: translateY(-40%);
-	width: 350px;
+	width: 275px;
 	padding-left: 10px;
 	text-transform: none;
 }
@@ -116,20 +116,29 @@
     pointer-events: none;
     transition: .5s ease;
 }
-.input-box .icon{
-	position: absolute;
-	top: 13px;
-	right: 0;
-	font-size: 19px;
-}
 
-.pwdVisibility {
+	.input-box .icon i {
+		position: absolute;
+		top: 13px;
+		right: 0;
+		font-size: 19px;
+	}
+
+	.input-box i {
+		font-size: 19px;
+		color: white;
+		margin-right: 5px;
+	}
+
+
+	.pwdVisibility {
 	color: white;
 	font-size: 16px;
 	background-color: transparent;
 	border: none;
 	margin-right: 12px;
-}
+	cursor: pointer;
+	}
 /*文字向上漂浮*/
 .input-box input:focus~ label,
 .input-box input:valid ~ label
@@ -169,23 +178,21 @@
 					<!-- <h5>請查看email信件</h5> -->
 					<div class="input-box">
 						<span class="icon">
-							<button type="button" class="pwdVisibility" id="togglePwd" onclick="togglePasswordVisibility()">
+							<button type="button" class="pwdVisibility" id="togglePwd" onclick="togglePasswordVisibility('memberPwd', 'togglePwd')">
 								<i class="bi bi-eye"></i>
 							</button>
-							<i class="bi bi-lock-fill"></i>
 						</span>
 						<input type="password" id="memberPwd" name="memberPassword" autocomplete="off" required />
-						<label>密碼</label>
+						<label><i class="bi bi-lock-fill"></i>密碼</label>
 					</div>
 					<div class="input-box">
 						<span class="icon">
-							<button type="button" class="pwdVisibility" id="toggleChkPwd" onclick="toggleChkPasswordVisibility()">
+							<button type="button" class="pwdVisibility" id="toggleChkPwd" onclick="togglePasswordVisibility('memberChkPwd', 'toggleChkPwd')">
 								<i class="bi bi-eye"></i>
 							</button>
-							<i class="bi bi-lock-fill"></i>
 						</span>
-						<input type="password" id="memberConfirmPwd" name="memberConfirmPassword" autocomplete="off" required />
-						<label>確認密碼</label>
+						<input type="password" id="memberChkPwd" name="memberConfirmPassword" autocomplete="off" required />
+						<label><i class="bi bi-lock-fill"></i>確認密碼</label>
 					</div>
 					<button class="resendBtn" type="submit">送出</button>
 				</form>
@@ -193,38 +200,25 @@
 		</div>
 	</div>
 </article>
-
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
 <script>
-	function togglePasswordVisibility() {
-		let memberPassword = document.getElementById("memberPwd");
-		let togglePwd = document.getElementById("togglePwd");
+	function togglePasswordVisibility(inputId, toggleButtonId) {
+		console.log("togglePasswordVisibility");
 
-		if (memberPassword.type === "password") {
-			memberPassword.type = "text";
-			togglePwd.innerHTML = '<i class="bi bi-eye-slash"></i>';
+		var passwordInput = document.getElementById(inputId);
+		var toggleButton = document.getElementById(toggleButtonId);
+
+		if (passwordInput.type === "password") {
+			passwordInput.type = "text";
+			toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
 		} else {
-			memberPassword.type = "password";
-			togglePwd.innerHTML = '<i class="bi bi-eye"></i>';
+			passwordInput.type = "password";
+			toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
 		}
-
-
 	}
 
-	function toggleChkPasswordVisibility() {
-		let memberConfirmPassword = document.getElementById("memberConfirmPwd");
-		let toggleChkPwd = document.getElementById("toggleChkPwd");
-
-		if (memberConfirmPassword.type === "password") {
-			memberConfirmPassword.type = "text";
-			toggleChkPwd.innerHTML = '<i class="bi bi-eye-slash"></i>';
-		} else {
-			memberConfirmPassword.type = "password";
-			toggleChkPwd.innerHTML = '<i class="bi bi-eye"></i>';
-
-		}
-
-	}
 
 
 
@@ -232,7 +226,7 @@
 		event.preventDefault();
 
 		let memberPassword = document.getElementById("memberPwd").value;
-		let memberConfirmPassword = document.getElementById("memberConfirmPwd").value;
+		let memberConfirmPassword = document.getElementById("memberChkPwd").value;
 
 
 		if ((memberPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {

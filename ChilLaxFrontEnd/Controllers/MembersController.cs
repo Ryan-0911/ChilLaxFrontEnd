@@ -193,9 +193,10 @@ namespace ChilLaxFrontEnd.Controllers
 				member.MemberPoint = await _context.PointHistory
 					.Where(ph => ph.MemberId == member.MemberId)
 					.SumAsync(ph => ph.ModifiedAmount);
+                _context.Entry(member).State = EntityState.Modified;//新增兩行，修改點數
+                await _context.SaveChangesAsync();
 
-
-				var LoginData = new
+                var LoginData = new
 				{
 					MemberId = member.MemberId,
 					MemberName = member.MemberName,
@@ -224,7 +225,7 @@ namespace ChilLaxFrontEnd.Controllers
 		{
 			if (formData.memberAccount != null && formData.memberPassword != null)
 			{
-				bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(formData.memberAccount));
+				bool accountExists =await _context.MemberCredential.AnyAsync(mc => mc.MemberAccount.Equals(formData.memberAccount));
 				
 				if (accountExists == false)
 				{
