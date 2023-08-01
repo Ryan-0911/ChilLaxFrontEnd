@@ -224,34 +224,35 @@ namespace ChilLaxFrontEnd.Controllers
 				return RedirectToAction("Login");
 			}
 			Member memProfile = _context.Member.SingleOrDefault(m => m.MemberId.Equals(member.MemberId));
-			registerViewModel rvm = new registerViewModel();
+			OrderViewModel ovm = new OrderViewModel();
 			if (member != null)
 			{
-				rvm.memberId = memProfile.MemberId;
-				rvm.memberName = memProfile.MemberName;
-				rvm.memberTel = memProfile.MemberTel;
-				rvm.memberEmail = memProfile.MemberEmail;
+				ovm.memberId = memProfile.MemberId;
+				ovm.memberName = memProfile.MemberName;
+				ovm.memberTel = memProfile.MemberTel;
+				ovm.memberEmail = memProfile.MemberEmail;
 
-				rvm.memberBirthday = memProfile.MemberBirthday;
-				rvm.memberSex = (bool)memProfile.MemberSex;
-				rvm.memberAddress = memProfile.MemberAddress;
+				ovm.memberBirthday = memProfile.MemberBirthday;
+				ovm.memberSex = (bool)memProfile.MemberSex;
+				ovm.memberAddress = memProfile.MemberAddress;
 
-        //新增會員訂單資料
-        List<MemberOrder> memberOrder = _context.ProductOrder
-            .Where(od => od.MemberId == member.MemberId)
-            .Join(_context.OrderDetail,
-                po => po.OrderId,
-                od => od.OrderId,
-                (po, od) => new MemberOrder
-                {
-                    ProductOrder = new List<ProductOrder> { po },
-                    orderDetails = new List<OrderDetail> { od }
-                })
-            .ToList();
-        rvm.memberOrder = memberOrder;
+                //新增會員訂單資料
+                List<MemberOrder> memberOrder = (from po in _context.ProductOrder
+                    join od in _context.OrderDetail on po.OrderId equals od.OrderId
+                    join p in _context.Product on od.ProductId equals p.ProductId
+                    where po.MemberId == 17
+                    select new MemberOrder
+                    {
+                        ProductOrder = new List<ProductOrder> { po },
+                        orderDetails = new List<OrderDetail> { od },
+                        Product = p
+                    }).ToList();
 
 
-				return View(rvm);
+                ovm.memberOrder = memberOrder;
+
+
+				return View(ovm);
 			}
 			return RedirectToAction("Index", "Home");
 
@@ -264,6 +265,11 @@ namespace ChilLaxFrontEnd.Controllers
 		}
 
 		public IActionResult ResetPwd()
+		{
+			return View();
+		}
+
+		public IActionResult editPwd()
 		{
 			return View();
 		}

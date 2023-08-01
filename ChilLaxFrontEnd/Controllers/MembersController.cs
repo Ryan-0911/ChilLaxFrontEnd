@@ -18,6 +18,9 @@ using Microsoft.AspNetCore.Cors;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using BCrypt.Net;
+using System.Security.Cryptography;
+using Microsoft.Data.SqlClient;
+using System.Diagnostics.Metrics;
 
 
 
@@ -190,9 +193,10 @@ namespace ChilLaxFrontEnd.Controllers
 				member.MemberPoint = await _context.PointHistory
 					.Where(ph => ph.MemberId == member.MemberId)
 					.SumAsync(ph => ph.ModifiedAmount);
+                _context.Entry(member).State = EntityState.Modified;//新增兩行，修改點數
+                await _context.SaveChangesAsync();
 
-
-				var LoginData = new
+                var LoginData = new
 				{
 					MemberId = member.MemberId,
 					MemberName = member.MemberName,
@@ -221,7 +225,7 @@ namespace ChilLaxFrontEnd.Controllers
 		{
 			if (formData.memberAccount != null && formData.memberPassword != null)
 			{
-				bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(formData.memberAccount));
+				bool accountExists =await _context.MemberCredential.AnyAsync(mc => mc.MemberAccount.Equals(formData.memberAccount));
 				
 				if (accountExists == false)
 				{
@@ -246,58 +250,52 @@ namespace ChilLaxFrontEnd.Controllers
 		[HttpPost("registerProfile")]
 		public async Task<IActionResult> registerProfile([FromBody] registerViewModel formData)
 		{
-			bool emailExists = _context.Member.Any(m => m.MemberEmail.Equals(formData.memberEmail));
 			try
 			{
-				if (emailExists == false)
+				if (ModelState.IsValid)
 				{
-					if (ModelState.IsValid)
+					Member member = new Member
 					{
-						Member member = new Member
+						MemberName = formData.memberName,
+						MemberTel = formData.memberTel,
+						MemberEmail = formData.memberEmail,
+						MemberSex = formData.memberSex,
+						MemberBirthday = formData.memberBirthday,
+						MemberAddress = formData.memberAddress,
+						MemberPoint = 0,
+						MemberJoinTime = DateTime.Now,
+						Available = true,
+						IsValid = false
+					};
+
+					string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
+					SigninViewModel svm = JsonSerializer.Deserialize<SigninViewModel>(json);
+					if (svm != null)
+					{
+						_context.Member.Add(member);
+						await _context.SaveChangesAsync();
+
+						MemberCredential mc = new MemberCredential();
+						mc.MemberId = member.MemberId;
+						mc.MemberAccount = svm.memberAccount;
+						mc.MemberPassword = svm.memberPassword;
+
+						_context.MemberCredential.Add(mc);
+						await _context.SaveChangesAsync();
+
+						VerifyEmailViewModel emailvm = new VerifyEmailViewModel();
+						emailvm.MemberId = member.MemberId;
+						emailvm.MemberEmail = member.MemberEmail;
+
+						string toVerifyEmail = JsonSerializer.Serialize(emailvm);
+						HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, toVerifyEmail);
+						if (!HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
 						{
-							MemberName = formData.memberName,
-							MemberTel = formData.memberTel,
-							MemberEmail = formData.memberEmail,
-							MemberSex = formData.memberSex,
-							MemberBirthday = formData.memberBirthday,
-							MemberAddress = formData.memberAddress,
-							MemberPoint = 0,
-							MemberJoinTime = DateTime.Now,
-							Available = true,
-							IsValid = false
-						};
-
-						string json = HttpContext.Session.GetString(CDictionary.SK_REGISTER_USER);  //取session註冊的帳號密碼資料
-						SigninViewModel svm = JsonSerializer.Deserialize<SigninViewModel>(json);
-						if (svm != null)
-						{
-							_context.Member.Add(member);
-							await _context.SaveChangesAsync();
-
-							MemberCredential mc = new MemberCredential();
-							mc.MemberId = member.MemberId;
-							mc.MemberAccount = svm.memberAccount;
-							mc.MemberPassword = svm.memberPassword;
-
-							_context.MemberCredential.Add(mc);
-							await _context.SaveChangesAsync();
-
-							VerifyEmailViewModel emailvm = new VerifyEmailViewModel();
-							emailvm.MemberId = member.MemberId;
-							emailvm.MemberEmail = member.MemberEmail;
-
-							string toVerifyEmail = JsonSerializer.Serialize(emailvm);
-							HttpContext.Session.SetString(CDictionary.SK_REGISTER_USER, toVerifyEmail);
-							if (!HttpContext.Session.Keys.Contains(CDictionary.SK_REGISTER_USER))
-							{
-								return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
-							}
-							return Ok(new { success = true });
+							return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
 						}
+						return Ok(new { success = true });
 					}
-                    return BadRequest(new { success = false, message = "請輸入必填欄位!" });
-                }
-                return BadRequest(new { success = false, message = "此信箱已註冊過，請重新登入或選擇別的信箱!" });
+				}
 			}
 			catch (Exception ex)
 			{
@@ -306,6 +304,7 @@ namespace ChilLaxFrontEnd.Controllers
 				return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
 
 			}
+			return BadRequest(new { success = false, message = "請輸入必填欄位!" });
 
 
 		}
@@ -445,7 +444,6 @@ namespace ChilLaxFrontEnd.Controllers
 				string json = HttpContext.Session.GetString(CDictionary.SK_RESETPWD_USER);
 				MemberCredential credential = JsonSerializer.Deserialize<MemberCredential>(json);
 
-
 				string password = formData.memberPassword;
 				string salt = BCrypt.Net.BCrypt.GenerateSalt();
 				string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
@@ -458,12 +456,40 @@ namespace ChilLaxFrontEnd.Controllers
 					return Ok(new { success = true, message = "新密碼修改完成，請重新登入!" });
 				}
 				return BadRequest(new { success = false, message = "伺服器問題，請稍後再試!" });
-
-
 			}
 			return BadRequest(new { success = false, message = "請輸入密碼與確認密碼!" });
 
 		}
 
-	}
+        [HttpPost("editPwd")]
+        public async Task<IActionResult> editPwd([FromBody] PwdViewModel formData)
+        {
+            if (ModelState.IsValid)
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+                Member member = JsonSerializer.Deserialize<Member>(json);
+				MemberCredential mc = await _context.MemberCredential.FirstOrDefaultAsync(mc=>mc.MemberId.Equals(member.MemberId));
+				if (mc != null)
+				{
+                    string password = formData.memberPassword;
+                    string newPassword = formData.memberNewPassword;
+                    bool isPwdMatch = BCrypt.Net.BCrypt.Verify(formData.memberPassword, mc.MemberPassword);
+					if (isPwdMatch) {
+                        string salt = BCrypt.Net.BCrypt.GenerateSalt();
+                        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword, salt);
+                        mc.MemberPassword = hashedPassword;
+                        _context.Entry(mc).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                        return Ok(new { success = true, message = "新密碼修改完成!" });
+                    }
+                    return BadRequest(new { success = false, message = "密碼不正確，請再試一次!" });
+                }
+                return BadRequest(new { success = false, message = "請重新登入!", login = false });
+
+            }
+            return BadRequest(new { success = false, message = "請輸入密碼與確認密碼!" });
+
+        }
+
+    }
 }
