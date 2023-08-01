@@ -123,7 +123,7 @@
     <script src="~/js/Tarot/Tarot.js"></script>
     
     <script>
-        let pointAdd = 0;
+        let pointAdd = -300;
 
         var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
@@ -229,7 +229,7 @@
                 alert("獲取會員點數時發生錯誤：" + err.statusText);
             });
 
-            let pointAdd = -300;
+            
 
             // 更新使用者 session 及 Member 資料表中的總點數
             fetch(`/api/SessionData/UpdatePoint/${pointAdd}`, {
