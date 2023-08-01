@@ -347,7 +347,6 @@ namespace ChilLaxFrontEnd.Controllers
 						return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
 					}
 					return Ok(new { success = true });
-
 				}
 			}
 			catch (Exception ex)
@@ -485,7 +484,6 @@ namespace ChilLaxFrontEnd.Controllers
                     return BadRequest(new { success = false, message = "密碼不正確，請再試一次!" });
                 }
                 return BadRequest(new { success = false, message = "請重新登入!", login = false });
-
             }
             return BadRequest(new { success = false, message = "請輸入密碼與確認密碼!" });
 
