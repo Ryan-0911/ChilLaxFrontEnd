@@ -36,26 +36,25 @@ namespace ChilLaxFrontEnd.Controllers
             Member member = JsonSerializer.Deserialize<Member>(json);
             member.MemberPoint += num;
 
-            // 在交易中進行資料庫更新操作
-            using (var transaction = _context.Database.BeginTransaction())
-            {
-                try
-                {
-                    // 更新會員資料
-                    _context.Entry(member).State = EntityState.Modified;
-                    _context.SaveChanges();
+            //// 在交易中進行資料庫更新操作
+            //using (var transaction = _context.Database.BeginTransaction())
+            //{
+            //    try
+            //    {
+            //        // 更新會員資料
+            //        _context.Entry(member).State = EntityState.Modified;
+            //        _context.SaveChanges();
 
-                    // 提交交易
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    // 發生錯誤時回滾交易
-                    transaction.Rollback();
-                    return BadRequest("更新失敗：" + ex.Message);
-                }
-            }
-
+            //        // 提交交易
+            //        transaction.Commit();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        // 發生錯誤時回滾交易
+            //        transaction.Rollback();
+            //        return BadRequest("更新失敗：" + ex.Message);
+            //    }
+            //}
             json = JsonSerializer.Serialize(member);
             HttpContext.Session.SetString(CDictionary.SK_LOINGED_USER, json);
             return Ok("更新成功");
