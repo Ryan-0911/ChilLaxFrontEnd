@@ -339,7 +339,7 @@
 									<td>
 										@if (firstOrder.ProductOrder.FirstOrDefault()?.OrderPayment == false)
 										{
-											@Html.ActionLink("付款", "Index", "checkout", null, new { @class = "btn btn-success" })
+											@Html.ActionLink("付款", "Index2", "checkout", null, new { @class = "btn btn-success" })
 										}
 										else
 										{
