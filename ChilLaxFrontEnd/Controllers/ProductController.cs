@@ -65,19 +65,20 @@ namespace ChilLaxFrontEnd.Controllers
             productsPagingDTO.carts = _context.Cart.Where(c => c.MemberId == id).ToList();
 
             // 取得購物車商品與商品項目的聯結結果
-            List<CartProductItem> cartList = _context.Cart
-                .Where(c => c.MemberId == id)
-                .Join(_context.Product,
-                    c => c.ProductId,
-                    p => p.ProductId,
-                    (c, p) => new CartProductItem
-                    {
-                        cartList = new List<Cart> { c },
-                        products = new List<Product> { p }
-                    }).ToList();
+            CartProductItem cartProductItem = new CartProductItem
+            {
+                cartList = _context.Cart.Where(c => c.MemberId == id).ToList(),
+                products = _context.Product
+                    .Join(
+                        _context.Cart,
+                        p => p.ProductId,
+                        c => c.ProductId,
+                        (p, c) => p)
+                    .Where(c => c.Cart.FirstOrDefault().MemberId == id)
+                    .ToList()
+                };
 
-            // 將購物車商品與商品項目存入 productsPagingDTO 的 CartListItem 屬性
-            productsPagingDTO.CartListItem = cartList;
+            productsPagingDTO.CartListItem = new List<CartProductItem> { cartProductItem };
 
 
 

@@ -104,8 +104,7 @@
                             <i>購物車（@Model.FirstOrDefault().carts.Count()）</i>
                         </a>
                         <div class="cart-list">
-
-                            @if (ViewBag.carts == null || ViewBag.carts.Count == 0)
+                            @if (Model.FirstOrDefault().CartListItem == null || !Model.FirstOrDefault().CartListItem.Any())
                             {
                                 <p>購物車內還沒有東西，趕緊點選商品加入購物車吧！</p>
                             }
@@ -120,18 +119,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var item in ViewBag.CartItems)
+                                        @foreach (var cartProductItem in Model.FirstOrDefault().CartListItem)
                                         {
-                                            <tr>
-                                                <td><img src="~/assets/images/@item.ProductImg"  alt="@item.ProductName" style="width: 50px; height: 50px;"></td>
-                                                <td>@item.ProductName</td>
-                                                <td>@item.ProductPrice</td>
-                                            </tr>
+                                            @foreach (var item in cartProductItem.products)
+                                            {
+                                                <tr>
+                                                    <td><img src="~/assets/images/@cartProductItem.products.FirstOrDefault().ProductImg" alt="@item.ProductName" style="width: 50px; height: 50px;"></td>
+                                                    <td>@cartProductItem.products.FirstOrDefault().ProductName</td>
+                                                    <td>@cartProductItem.products.FirstOrDefault().ProductPrice</td>
+                                                </tr>
+                                            }
                                         }
                                     </tbody>
                                 </table>
                             }
                         </div>
+
                     </li>
                 </ul>
             </div>
