@@ -123,6 +123,8 @@
     <script src="~/js/Tarot/Tarot.js"></script>
     
     <script>
+        let pointAdd = 0;
+
         var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
         //與Server建立連線
@@ -176,6 +178,7 @@
         let memberPoints = 0;
         document.getElementById("Surebtn").addEventListener("click", function () {
             let potID = _uuid();
+            let pointAdd = -300;
 
             var TarotPointDTO = {
                 pointDetailId: potID,
@@ -193,6 +196,7 @@
                 // 檢查點數是否足夠
                 if (memberPoints >= 300) {
                     // 足夠點數，詢問會員是否要使用點數進行占卜
+                    
                     const confirmResult = confirm("您目前有 " + memberPoints + " 點，是否要使用 300 點進行占卜呢？");
                     if (confirmResult) {
                         // 使用 POST 請求新增點數記錄
@@ -224,7 +228,27 @@
             }).fail(err => {
                 alert("獲取會員點數時發生錯誤：" + err.statusText);
             });
-            
+
+            let pointAdd = -300;
+
+            // 更新使用者 session 及 Member 資料表中的總點數
+            fetch(`/api/SessionData/UpdatePoint/${pointAdd}`, {
+                method: 'POST',
+                credentials: 'same-origin' // 確保携帶相同的cookie信息
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('網路錯誤，無法更新點數');
+                    }
+                    return response.text();
+                })
+                .then(result => {
+                    console.log(result); // 在控制台印出更新成功的訊息
+                })
+                .catch(error => {
+                    console.error('發生錯誤：', error); // 如果發生錯誤，印出錯誤訊息
+                });
+
         });
 
     </script>
