@@ -1,196 +1,213 @@
 ﻿@section Styles{
-	<style>
-		body {
-			background-color: #deeeff;
-		}
+    @*點數紀錄---------------------------------------------------------------------------------------------------*@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-		.articleMC {
-			display: flex;
-			justify-content: center;
-			/*align-items: center;*/
-			/*height: 100vh; 確認分頁高度再調*/
-			padding: 50px 0;
-		}
+    <style>
+        body {
+            caret-color: transparent;
+        }
 
-		.containerMC {
-			width: 1000px;
-			background-color: #fff;
-			padding: 10px 30px;
-			box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
-			border-radius: 20px;
-		}
+        th, td {
+            font-size: 1.3rem;
+        }
 
-		.tabMC_box {
-			width: 100%;
-			display: flex;
-			justify-content: space-around;
-			align-items: center;
-			border-bottom: 2px solid rgba(229, 229, 229);
-			font-size: 18px;
-			font-weight: 600;
-			position: relative;
-		}
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    @*點數紀錄---------------------------------------------------------------------------------------------------*@
+    <style>
+        body {
+            background-color: #deeeff;
+        }
 
-			.tabMC_box .tab_btn {
-				font-size: 18px;
-				font-weight: 600;
-				color: #919191;
-				background: none;
-				border: none;
-				padding: 18px;
-				cursor: pointer;
-			}
+        .articleMC {
+            display: flex;
+            justify-content: center;
+            /*align-items: center;*/
+            /*height: 100vh; 確認分頁高度再調*/
+            padding: 50px 0;
+        }
 
-				.tabMC_box .tab_btn.active {
-					color: #7360ff;
-				}
+        .containerMC {
+            width: 1000px;
+            background-color: #fff;
+            padding: 10px 30px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+        }
 
-		.contentMC_box {
-			padding: 10px;
-		}
+        .tabMC_box {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-bottom: 2px solid rgba(229, 229, 229);
+            font-size: 18px;
+            font-weight: 600;
+            position: relative;
+        }
 
-			.contentMC_box .contentMC {
-				display: none;
-				animation: moving 0.5s ease;
-			}
+            .tabMC_box .tab_btn {
+                font-size: 18px;
+                font-weight: 600;
+                color: #919191;
+                background: none;
+                border: none;
+                padding: 18px;
+                cursor: pointer;
+            }
 
-		@@keyframes moving {
-			from {
-				transform: translateX(50px);
-				opacity: 0;
-			}
+                .tabMC_box .tab_btn.active {
+                    color: #7360ff;
+                }
 
-			to {
-				transform: translateX(0px);
-				opacity: 1;
-			}
-		}
+        .contentMC_box {
+            padding: 10px;
+        }
 
-		.contentMC_box .contentMC.active {
-			display: block;
-		}
+            .contentMC_box .contentMC {
+                display: none;
+                animation: moving 0.5s ease;
+            }
 
-		.contentMC_box .contentMC h2 {
-			margin-bottom: 10px;
-		}
+        @@keyframes moving {
+            from {
+                transform: translateX(50px);
+                opacity: 0;
+            }
 
-		.line {
-			position: absolute;
-			top: 66px;
-			left: 21px;
-			width: 108px;
-			height: 5px;
-			background-color: #7360ff;
-			border-radius: 10px;
-			transition: all 0.3s ease-in-out;
-		}
+            to {
+                transform: translateX(0px);
+                opacity: 1;
+            }
+        }
 
-		/*個人資料*/
-		.profile-mc .form-mc label {
-			display: inline-block;
-			width: 120px;
-			font-size: 18px;
-			/* font-weight: bold; */
-			/* text-align: center; */
-			color: #000000;
-			margin-left: 5px;
-			margin-right: 50px;
-		}
+        .contentMC_box .contentMC.active {
+            display: block;
+        }
 
-		.profile-mc .form-mc .span-mc {
-			display: inline-block;
-			width: 120px;
-			font-size: 20px;
-			font-weight: bold;
-			color: #000000;
-			margin-left: 5px;
-		}
+        .contentMC_box .contentMC h2 {
+            margin-bottom: 10px;
+        }
+
+        .line {
+            position: absolute;
+            top: 66px;
+            left: 21px;
+            width: 108px;
+            height: 5px;
+            background-color: #7360ff;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /*個人資料*/
+        .profile-mc .form-mc label {
+            display: inline-block;
+            width: 120px;
+            font-size: 18px;
+            /* font-weight: bold; */
+            /* text-align: center; */
+            color: #000000;
+            margin-left: 5px;
+            margin-right: 50px;
+        }
+
+        .profile-mc .form-mc .span-mc {
+            display: inline-block;
+            width: 120px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #000000;
+            margin-left: 5px;
+        }
 
 
 
-		.profile-mc .form-mc {
-			width: 600px;
-			height: 40px;
-			margin: 20px auto;
-			position: relative;
-		}
+        .profile-mc .form-mc {
+            width: 600px;
+            height: 40px;
+            margin: 20px auto;
+            position: relative;
+        }
 
-		.profile-mc .form-mc input, .profile-mc .form-mc .genderMC {
-			height: 90%;
-			width: 50%;
-			border: 1px solid #ddd;
-			font-size: 18px;
-			padding-right: 20px;
-			transition: border-color 0.3s;
-			text-align: center;
-		}
+            .profile-mc .form-mc input, .profile-mc .form-mc .genderMC {
+                height: 90%;
+                width: 50%;
+                border: 1px solid #ddd;
+                font-size: 18px;
+                padding-right: 20px;
+                transition: border-color 0.3s;
+                text-align: center;
+            }
 
-		.profile-mc .form-mc input:focus, .profile-mc .form-mc .genderMC:focus {
-			border-color: #5CADAD;
-			outline: none;
-			box-shadow: 0 0 5px #5CADAD;
-		}
+                .profile-mc .form-mc input:focus, .profile-mc .form-mc .genderMC:focus {
+                    border-color: #5CADAD;
+                    outline: none;
+                    box-shadow: 0 0 5px #5CADAD;
+                }
 
-		.profile-mc .form-mc a {
-			color: #1961af;
-			text-decoration: none;
-			font-size: 18px;
-		}
+            .profile-mc .form-mc a {
+                color: #1961af;
+                text-decoration: none;
+                font-size: 18px;
+            }
 
-		.profile-mc .form-mc a:hover {
-			color: rgb(34, 46, 69);
-			text-decoration: underline;
-		}
+                .profile-mc .form-mc a:hover {
+                    color: rgb(34, 46, 69);
+                    text-decoration: underline;
+                }
 
-		.profile-mc .form-mc .btn-mc {
-			position: absolute;
-			right: 0;
-			bottom: 10px;
-		}
+            .profile-mc .form-mc .btn-mc {
+                position: absolute;
+                right: 0;
+                bottom: 10px;
+            }
 
-		.profile-mc .form-mc .btn-mc button {
-			display: inline-block;
-			width: 120px;
-			border-radius: 4px;
-			margin-left: 12px;
-			text-align: center;
-			padding: 6px 12px;
-			border: none;
-			cursor: pointer;
-			font-size: 14px;
-		}
+                .profile-mc .form-mc .btn-mc button {
+                    display: inline-block;
+                    width: 120px;
+                    border-radius: 4px;
+                    margin-left: 12px;
+                    text-align: center;
+                    padding: 6px 12px;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 14px;
+                }
 
-		.profile-mc .form-mc .btn-mc .cancelBtn {
-			background-color: #fff;
-			color: #000000;
-			border: 1px solid #d3d3d3b3;
-		}
+                .profile-mc .form-mc .btn-mc .cancelBtn {
+                    background-color: #fff;
+                    color: #000000;
+                    border: 1px solid #d3d3d3b3;
+                }
 
-		.profile-mc .form-mc .btn-mc .cancelBtn:hover {
-			border: 1px solid #000000;
-		}
+                    .profile-mc .form-mc .btn-mc .cancelBtn:hover {
+                        border: 1px solid #000000;
+                    }
 
-		.profile-mc .form-mc .btn-mc .saveBtn {
-			background-color: #4F9D9D;
-			color: #fff;
-		}
+                .profile-mc .form-mc .btn-mc .saveBtn {
+                    background-color: #4F9D9D;
+                    color: #fff;
+                }
 
-		.profile-mc .form-mc .btn-mc .saveBtn:hover {
-			background-color: #fff;
-			color: #4F9D9D;
-			border: 1px solid #4F9D9D;
-		}
+                    .profile-mc .form-mc .btn-mc .saveBtn:hover {
+                        background-color: #fff;
+                        color: #4F9D9D;
+                        border: 1px solid #4F9D9D;
+                    }
 
-		.validation-error-message {
-			color: red;
-			font-size: 12px;
-		}
+        .validation-error-message {
+            color: red;
+            font-size: 12px;
+        }
 
-		.hidden {
-			visibility: hidden;
-		}
+        .hidden {
+            visibility: hidden;
+        }
 
-        .btn{
+        .btn {
             width: 120px;
         }
 
@@ -198,102 +215,150 @@
 }
 @model ChilLaxFrontEnd.ViewModels.registerViewModel
 <div class="articleMC">
-	<div class="containerMC">
-		<div class="tabMC_box">
-			<button class="tab_btn active">個人資料</button>
-			<button class="tab_btn">點數查詢</button>
-			<button class="tab_btn">訂單查詢</button>
-			<button class="tab_btn">客服中心</button>
-			<div class="line"></div>
-		</div>
-		<div class="contentMC_box">
-			<div class="contentMC active">
-				<form id="editMemberProfile">
-					<div class="profile-mc">
-						<div class="form-mc">
-							<i class="fa-sharp fa-regular fa-pen-to-square"></i>
-							<span class="span-mc">編輯會員資料</span>
-							<input type="text" id="memberId" name="memberId" class="hidden" value="@Model.memberId" />
-							@*@Html.TextBoxFor(model => model.memberId, new { @class = "hidden" })*@
-						</div>
-						<div class="form-mc">
-							<i class="fas fa-user"></i>
-							<label>姓名</label>
-							<input type="text" id="memberName" name="memberName" value="@Model.memberName" autocomplete="off" required />
-						</div>
-						<div class="form-mc">
-							<i class="fa-solid fa-phone"></i>
-							<label>手機號碼</label>
-							<input type="tel" id="memberTel" name="memberTel" value="@Model.memberTel" autocomplete="off" required />
-						</div>
-						<div class="form-mc">
-							<i class="fa-solid fa-envelope"></i>
-							<label>信箱</label>
-							<input type="email" id="memberEmail" name="memberEmail" value="@Model.memberEmail" autocomplete="off" required readonly/>
-						</div>
-						<div class="form-mc">
-							<i class="fa-solid fa-children"></i>
-							<label>性別(選填)</label>
-							<select id="memberSex" name="memberSex" class="genderMC" value="@Model.memberSex">
-								@if (Model.memberSex == true)
-								{
-									<option>-- 請選擇 --</option>
-									<option value="1" selected>男</option>
-									<option value="0">女</option>
-								}
-								else if (Model.memberSex == false)
-								{
-									<option>-- 請選擇 --</option>
-									<option value="1">男</option>
-									<option value="0" selected>女</option>
-								}
-								else
-								{
-									<option selected>-- 請選擇 --</option>
-									<option value="1">男</option>
-									<option value="0">女</option>
-								}
-							</select>
-						</div>
-						<div class="form-mc">
-							<i class="fa-solid fa-cake-candles"></i>
-							<label>出生年月日</label>
-							@*<input type="date" id="memberBirthday" name="memberBirthday" value="@Model.memberBirthday" required />*@
-							@Html.EditorFor(model => model.memberBirthday, new { type = "date",id="memberBirthday" ,name="memberBirthday",required = "required"})
-						</div>
-						<div class="form-mc">
-							<i class="fa-solid fa-map-location-dot"></i>
-							<label>通訊地址(選填)</label>
-							<input type="text" id="memberAddress" name="memberAddress" value="@Model.memberAddress" autocomplete="off" />
-						</div>
-						<div class="form-mc">
-							<i class="fa-solid fa-lock"></i>
-							<label>密碼</label>
-							<a href="#">設定新密碼</a>
-						</div>
-						<div class="form-mc col-md-12">
-							<div class="btn-mc">
-								<button class="cancelBtn">取消</button>
-								<button class="saveBtn" type="submit">儲存變更</button>
-							</div>
-						</div>
+    <div class="containerMC">
+        <div class="tabMC_box">
+            <button class="tab_btn active">個人資料</button>
+            <button class="tab_btn">點數查詢</button>
+            <button class="tab_btn">訂單查詢</button>
+            <button class="tab_btn">客服中心</button>
+            <div class="line"></div>
+        </div>
+        <div class="contentMC_box">
+            <div class="contentMC active">
+                <form id="editMemberProfile">
+                    <div class="profile-mc">
+                        <div class="form-mc">
+                            <i class="fa-sharp fa-regular fa-pen-to-square"></i>
+                            <span class="span-mc">編輯會員資料</span>
+                            <input type="text" id="memberId" name="memberId" class="hidden" value="@Model.memberId" />
+                            @*@Html.TextBoxFor(model => model.memberId, new { @class = "hidden" })*@
+                        </div>
+                        <div class="form-mc">
+                            <i class="fas fa-user"></i>
+                            <label>姓名</label>
+                            <input type="text" id="memberName" name="memberName" value="@Model.memberName" autocomplete="off" required />
+                        </div>
+                        <div class="form-mc">
+                            <i class="fa-solid fa-phone"></i>
+                            <label>手機號碼</label>
+                            <input type="tel" id="memberTel" name="memberTel" value="@Model.memberTel" autocomplete="off" required />
+                        </div>
+                        <div class="form-mc">
+                            <i class="fa-solid fa-envelope"></i>
+                            <label>信箱</label>
+                            <input type="email" id="memberEmail" name="memberEmail" value="@Model.memberEmail" autocomplete="off" required readonly />
+                        </div>
+                        <div class="form-mc">
+                            <i class="fa-solid fa-children"></i>
+                            <label>性別(選填)</label>
+                            <select id="memberSex" name="memberSex" class="genderMC" value="@Model.memberSex">
+                                @if (Model.memberSex == true)
+                                {
+                                    <option>-- 請選擇 --</option>
+                                    <option value="1" selected>男</option>
+                                    <option value="0">女</option>
+                                }
+                                else if (Model.memberSex == false)
+                                {
+                                    <option>-- 請選擇 --</option>
+                                    <option value="1">男</option>
+                                    <option value="0" selected>女</option>
+                                }
+                                else
+                                {
+                                    <option selected>-- 請選擇 --</option>
+                                    <option value="1">男</option>
+                                    <option value="0">女</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-mc">
+                            <i class="fa-solid fa-cake-candles"></i>
+                            <label>出生年月日</label>
+                            @*<input type="date" id="memberBirthday" name="memberBirthday" value="@Model.memberBirthday" required />*@
+                            @Html.EditorFor(model => model.memberBirthday, new { type = "date",id="memberBirthday" ,name="memberBirthday",required = "required"})
+                        </div>
+                        <div class="form-mc">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <label>通訊地址(選填)</label>
+                            <input type="text" id="memberAddress" name="memberAddress" value="@Model.memberAddress" autocomplete="off" />
+                        </div>
+                        <div class="form-mc">
+                            <i class="fa-solid fa-lock"></i>
+                            <label>密碼</label>
+                            <a href="#">設定新密碼</a>
+                        </div>
+                        <div class="form-mc col-md-12">
+                            <div class="btn-mc">
+                                <button class="cancelBtn">取消</button>
+                                <button class="saveBtn" type="submit">儲存變更</button>
+                            </div>
+                        </div>
 
-					</div>
-				</form>
-			</div>
+                    </div>
+                </form>
+            </div>
 
-			<div class="contentMC">
-				<h2>點數查詢</h2>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi sed
-					iure perferendis deleniti possimus consequatur ducimus officia
-					sunt minima amet!
-				</p>
-			</div>
+            <div class="contentMC">
+                <h2>點數查詢</h2>
+                <div id="app" style="margin-top: 50px">
+                    <div class="container" style="width: 95%" v-cloak >
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="dropdown">
+                                    <span>交易來源</span>&nbsp&nbsp
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="border-radius: 10px">
+                                        {{ selectedOption }}
+                                        <span class="caret"></span>
+                                    </button>
 
-          <div class="contentMC">
-            <h2>訂單查詢</h2>
-            <div class="productOrder">
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('All')">All</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Focus')">Focus</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Tarot')">Tarot</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Product')">Product</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <span>交易起始日</span>&nbsp
+                                <input type="date" name="start" v-model="startDate" style="border-radius: 10px; padding: 5px" /> ~
+                                <span>交易終止日</span>&nbsp
+                                <input type="date" name="end" v-model="endDate" style="border-radius: 10px; padding: 5px" />
+                            </div>
+
+                            <table class="table table-hover" style="margin-top: 30px">
+                                <thead>
+                                    <tr>
+                                        <th>交易來源</th>
+                                        <th>交易內容</th>
+                                        <th>異動數量 <i :class="{'bi':true, 'bi-sort-up': sortTypeA==='asc', 'bi-sort-down':sortTypeA !== 'asc'}" @@click="sortHandler('modifiedAmount')"></i></th>
+                                        <th>交易時間 <i :class="{'bi':true, 'bi-sort-up': sortTypeT==='asc', 'bi-sort-down':sortTypeT !== 'asc'}" @@click="sortHandler('modifiedTime')"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="{modifiedSource, content, modifiedAmount, modifiedTime} in pointRecords" :style="getRowStyle(modifiedSource)">
+                                        <td>{{modifiedSource}}</td>
+                                        <td>{{content}}</td>
+                                        <td>{{modifiedAmount}}</td>
+                                        <td>{{modifiedTime}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <nav aria-label="Page navigation" style="text-align: center">
+                                <ul class="pagination">
+                                    <li class="page-item" v-for="page in totalPages"><a class="page-link" href="#" @@click="pagingHandler(page)">{{ page }}</a></li>
+                                </ul>
+                            </nav>
+                            @*  {{pointRecords}}*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contentMC">
+                <h2>訂單查詢</h2>
+                <div class="productOrder">
                     <table class="table table-primary table-striped table-hover">
                         <thead>
                             <tr>
@@ -316,7 +381,7 @@
                                     訂單狀態
                                 </th>
                                 <th>
-									付款狀態
+                                    付款狀態
                                 </th>
                             </tr>
                         </thead>
@@ -344,8 +409,9 @@
                                         @Html.DisplayFor(modelItem => order.ProductOrder.FirstOrDefault().OrderState)
                                     </td>
                                     <td>
-                                        @if(!order.ProductOrder.FirstOrDefault().OrderPayment){
-                                             @Html.ActionLink("付款", "Index", "checkout", null, new { @class = "btn btn-success" })
+                                        @if (!order.ProductOrder.FirstOrDefault().OrderPayment)
+                                        {
+                                            @Html.ActionLink("付款", "Index", "checkout", null, new { @class = "btn btn-success" })
                                         }
                                         else
                                         {
@@ -355,136 +421,253 @@
                                     </td>
                                 </tr>
                                 @*<tr class="details-row" id="details-row-@(order.ProductOrder.order_id)" style="display: none;">
-                                    <td colspan="8">
-                                        <!-- 詳細資料區塊 -->
-                                        <table class="table table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>@Html.DisplayNameFor(model => model.ProductName)</th>
-                                                    <th>@Html.DisplayNameFor(model => model.OrderDetail.cart_product_quantity)</th>
-                                                    <th>@Html.DisplayNameFor(model => model.ProductPrice)</th>
-                                                    <th>@Html.DisplayNameFor(model => model.Subtotal)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var detail in Model.Where(d => d.ProductOrder.order_id == firstItem.ProductOrder.order_id))
-                                                {
+                            <td colspan="8">
+                            <!-- 詳細資料區塊 -->
+                            <table class="table table-sm">
+                            <thead>
+                            <tr>
+                            <th>@Html.DisplayNameFor(model => model.ProductName)</th>
+                            <th>@Html.DisplayNameFor(model => model.OrderDetail.cart_product_quantity)</th>
+                            <th>@Html.DisplayNameFor(model => model.ProductPrice)</th>
+                            <th>@Html.DisplayNameFor(model => model.Subtotal)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var detail in Model.Where(d => d.ProductOrder.order_id == firstItem.ProductOrder.order_id))
+                            {
 
-                                                    <tr>
-                                                        <td>@detail.ProductName</td>
-                                                        <td>@detail.OrderDetail.cart_product_quantity</td>
-                                                        <td>@detail.ProductPrice</td>
-                                                        <td>@detail.Subtotal</td>
-                                                    </tr>
-                                                }
+                            <tr>
+                            <td>@detail.ProductName</td>
+                            <td>@detail.OrderDetail.cart_product_quantity</td>
+                            <td>@detail.ProductPrice</td>
+                            <td>@detail.Subtotal</td>
+                            </tr>
+                            }
 
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>*@
+                            </tbody>
+                            </table>
+                            </td>
+                            </tr>*@
                             }
                         </tbody>
                     </table>
+                </div>
             </div>
-          </div>
 
-			<div class="contentMC">
-				<h2>客服中心</h2>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi sed
-					iure perferendis deleniti possimus consequatur ducimus officia
-					sunt minima amet!
-				</p>
-			</div>
-		</div>
-	</div>
+            <div class="contentMC">
+                <h2>客服中心</h2>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi sed
+                    iure perferendis deleniti possimus consequatur ducimus officia
+                    sunt minima amet!
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 @section Scripts{
-	<script>
-		const tabs = document.querySelectorAll(".tab_btn");
-		const all_content = document.querySelectorAll(".contentMC");
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const tabs = document.querySelectorAll(".tab_btn");
+        const all_content = document.querySelectorAll(".contentMC");
 
-		tabs.forEach((tab, index) => {
-			tab.addEventListener("click", (e) => {
-				tab.classList.toggle("active");
+        tabs.forEach((tab, index) => {
+            tab.addEventListener("click", (e) => {
+                tab.classList.toggle("active");
 
-				tabs.forEach((otherTab) => {
-					if (otherTab !== tab) {
-						otherTab.classList.remove("active");
-					}
-				});
+                tabs.forEach((otherTab) => {
+                    if (otherTab !== tab) {
+                        otherTab.classList.remove("active");
+                    }
+                });
 
-				var line = document.querySelector(".line");
-				line.style.width = e.target.offsetWidth + "px"; // 被點擊的 tab 的寬度來設定
-				line.style.left = e.target.offsetLeft + "px"; // 被點擊的 tab 的左側位置來設定
+                var line = document.querySelector(".line");
+                line.style.width = e.target.offsetWidth + "px"; // 被點擊的 tab 的寬度來設定
+                line.style.left = e.target.offsetLeft + "px"; // 被點擊的 tab 的左側位置來設定
 
-				all_content.forEach((content) => {
-					content.classList.remove("active");
-				});
-				all_content[index].classList.add("active");
-			});
-		});
+                all_content.forEach((content) => {
+                    content.classList.remove("active");
+                });
+                all_content[index].classList.add("active");
+            });
+        });
 
-		document.getElementById("editMemberProfile").addEventListener("submit", function (event) {
-			event.preventDefault();
-			let memberId = document.getElementById("memberId").value;
-			let memberName = document.getElementById("memberName").value;
-			let memberTel = document.getElementById("memberTel").value;
-			let memberEmail = document.getElementById("memberEmail").value;
-			let memberSex = document.getElementById("memberSex").value;
-			let memberBirthday = document.getElementById("memberBirthday").value;
-			let memberAddress = document.getElementById("memberAddress").value;
+        document.getElementById("editMemberProfile").addEventListener("submit", function (event) {
+            event.preventDefault();
+            let memberId = document.getElementById("memberId").value;
+            let memberName = document.getElementById("memberName").value;
+            let memberTel = document.getElementById("memberTel").value;
+            let memberEmail = document.getElementById("memberEmail").value;
+            let memberSex = document.getElementById("memberSex").value;
+            let memberBirthday = document.getElementById("memberBirthday").value;
+            let memberAddress = document.getElementById("memberAddress").value;
 
-			if (!memberName || !memberTel || !memberEmail || !memberBirthday) {
-				alert("請輸入必填欄位!");
-				return false;
-			}
-			let isMale = "";
+            if (!memberName || !memberTel || !memberEmail || !memberBirthday) {
+                alert("請輸入必填欄位!");
+                return false;
+            }
+            let isMale = "";
 
-			if (memberSex == "0") {
-				isMale = false;
-			} else if (memberSex == "1") {
-				isMale = true;
-			} else {
-				isMale = null;
-			}
-			const formData = {
-				memberId: memberId,
-				memberName: memberName,
-				memberTel: memberTel,
-				memberEmail: memberEmail,
-				memberSex: isMale,
-				memberBirthday: memberBirthday,
-				memberAddress: memberAddress
-			}
-			console.log(JSON.stringify(formData));
+            if (memberSex == "0") {
+                isMale = false;
+            } else if (memberSex == "1") {
+                isMale = true;
+            } else {
+                isMale = null;
+            }
+            const formData = {
+                memberId: memberId,
+                memberName: memberName,
+                memberTel: memberTel,
+                memberEmail: memberEmail,
+                memberSex: isMale,
+                memberBirthday: memberBirthday,
+                memberAddress: memberAddress
+            }
+            console.log(JSON.stringify(formData));
 
-			$.ajax({
-				type: "POST",
-				url: "/api/Members/editMemberProfile",
-				data: JSON.stringify(formData),
-				contentType: "application/json; charset=utf-8 ",
-			}).done(data => {
-				if (!data.success) {
-					alert(data.message);
-					return false;
-				}
-				alert(data.message);
-				window.location.href = "https://localhost:5000/Home/Index";
-			}).fail((jqXHR, textStatus, errorThrown) => {
-				if (jqXHR.status === 400) {
-					const errorResponse = jqXHR.responseJSON;
-					alert(errorResponse.message);
-				} else {
-					console.error("AJAX error:", textStatus, errorThrown);
-				}
-			});
+            $.ajax({
+                type: "POST",
+                url: "/api/Members/editMemberProfile",
+                data: JSON.stringify(formData),
+                contentType: "application/json; charset=utf-8 ",
+            }).done(data => {
+                if (!data.success) {
+                    alert(data.message);
+                    return false;
+                }
+                alert(data.message);
+                window.location.href = "https://localhost:5000/Home/Index";
+            }).fail((jqXHR, textStatus, errorThrown) => {
+                if (jqXHR.status === 400) {
+                    const errorResponse = jqXHR.responseJSON;
+                    alert(errorResponse.message);
+                } else {
+                    console.error("AJAX error:", textStatus, errorThrown);
+                }
+            });
+        })
+    </script>
 
 
-		})
+    <script>
+        //點數紀錄-柏翔的部分
+        const { createApp, ref, watch } = Vue
+        createApp({
+            setup() {
+                const pointRecords = ref([]) // 點數紀錄
+                const selectedOption = ref("") // 下拉選單所選的內容
+                const startDate = ref("") // 交易起始日的值
+                const endDate = ref("") // 交易終止日的值
+                const sortBy = ref("")       // 排序的欄位
+                const sortTypeA = ref("asc")  // modifiedAmount是升冪還是降冪
+                const sortTypeT = ref("asc")  // modifiedTime是升冪還是降冪
+                const totalPages = ref()   // 總共有幾頁
+                const thePage = ref(1)       // 目前是第幾頁
+
+                const loadPointRecords = async () => {
+                    let API_URL = ''
+                    if (sortBy.value == "modifiedAmount") {
+                        API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}&page=${thePage.value}`
+                    }
+                    else {
+                        API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}&page=${thePage.value}`
+
+                    }
+                    const response = await fetch(API_URL, {
+                        method: "POST",
+                    })
+                    const datas = await response.json()
+                    pointRecords.value = datas.pointRecords
+                    totalPages.value = datas.totalPages
+                }
+                loadPointRecords()
 
 
-	</script>
+                // 下拉選單功能---------------------------------------------------------------------------------------------
+                // 按下選項就觸發方法
+                const updateSelected = (option) => {
+                    selectedOption.value = option
+                    console.log(option)
+                }
+
+                // 監看交易來源有沒有改變
+                watch(selectedOption, () => {
+                    loadPointRecords()
+                })
+
+                // 日期區段功能---------------------------------------------------------------------------------------------
+                // 監看起始日有沒有改變
+                watch(startDate, (newValue) => {
+                    console.log(newValue)
+                    loadPointRecords()
+                })
+                // 監看終止日有沒有改變
+                watch(endDate, (newValue) => {
+                    console.log(newValue)
+                    loadPointRecords()
+                })
+
+                // 排序功能---------------------------------------------------------------------------------------------
+                // 按下異動數量欄位的排序icon就觸發方法
+                const sortHandler = type => {
+                    sortBy.value = type
+                    if (type == "modifiedAmount") {
+                        sortTypeA.value = sortTypeA.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
+                    }
+                    else {
+                        sortTypeT.value = sortTypeT.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
+                    }
+
+                    console.log(sortBy.value, sortTypeA.value, sortTypeT.value)
+                    //thePage.value = 1
+                    loadPointRecords()
+                }
+
+                // 列的顏色 (根據modifiedSource而定)---------------------------------------------------------------------------------------------
+                const getRowStyle = modifiedSource => {
+                    console.log(modifiedSource);
+                    // 如果 modifiedSource 是 "focus"
+                    if (modifiedSource === "focus") {
+                        return { backgroundColor: "#DFFFFF" };
+                    }
+                    // 如果 modifiedSource 是 "tarot"
+                    if (modifiedSource === "tarot") {
+                        return { backgroundColor: "#D1FFDF" };
+                    }
+                    // 如果 modifiedSource 是 "product"
+                    if (modifiedSource === "product") {
+                        return { backgroundColor: "#FEFFDF" };
+                    }
+                    // 預設情況下，不應用任何額外的 CSS 類，保持預設的背景色
+                    return {};
+                };
+
+                //分頁功能---------------------------------------------------------------------------------------------
+                const pagingHandler = page => {
+                    thePage.value = page
+                    loadPointRecords()
+                }
+
+                return {
+                    pointRecords,
+                    updateSelected,
+                    selectedOption,
+                    startDate,
+                    endDate,
+                    sortHandler,
+                    sortTypeA,
+                    sortTypeT,
+                    sortBy,
+                    getRowStyle,
+                    totalPages,
+                    pagingHandler,
+                    thePage
+                }
+            }
+        }).mount('#app')
+    </script>
 }

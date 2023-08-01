@@ -22,9 +22,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowMyOrigin", builder =>
     {
         builder
-            .AllowAnyOrigin() // ¤¹³\¥ô·N¨Ó·½
-            .AllowAnyHeader() // ¤¹³\¥ô·N¼ÐÀY
-            .AllowAnyMethod(); // ¤¹³\¥ô·N HTTP ¤èªk
+            .AllowAnyOrigin() // ï¿½ï¿½ï¿½\ï¿½ï¿½Nï¿½Ó·ï¿½
+            .AllowAnyHeader() // ï¿½ï¿½ï¿½\ï¿½ï¿½Nï¿½ï¿½ï¿½Y
+            .AllowAnyMethod(); // ï¿½ï¿½ï¿½\ï¿½ï¿½N HTTP ï¿½ï¿½k
     });
 });
 
