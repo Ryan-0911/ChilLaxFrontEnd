@@ -57,7 +57,7 @@ namespace CoreMVC_SignalR_Chat.Hubs
                 res => gptResponse += res.ToString());
 
             // 將 GPT 機器人的回應發送到聊天室
-            await Clients.All.SendAsync("UpdContent", "AI占卜師:" + gptResponse);
+            await Clients.All.SendAsync("UpdContent", "Chillen:" + gptResponse);
         }
 
 
