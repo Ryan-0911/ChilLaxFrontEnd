@@ -193,9 +193,10 @@ namespace ChilLaxFrontEnd.Controllers
 				member.MemberPoint = await _context.PointHistory
 					.Where(ph => ph.MemberId == member.MemberId)
 					.SumAsync(ph => ph.ModifiedAmount);
+                _context.Entry(member).State = EntityState.Modified;//新增兩行，修改點數
+                await _context.SaveChangesAsync();
 
-
-				var LoginData = new
+                var LoginData = new
 				{
 					MemberId = member.MemberId,
 					MemberName = member.MemberName,
@@ -224,7 +225,7 @@ namespace ChilLaxFrontEnd.Controllers
 		{
 			if (formData.memberAccount != null && formData.memberPassword != null)
 			{
-				bool accountExists = _context.MemberCredential.Any(mc => mc.MemberAccount.Equals(formData.memberAccount));
+				bool accountExists =await _context.MemberCredential.AnyAsync(mc => mc.MemberAccount.Equals(formData.memberAccount));
 				
 				if (accountExists == false)
 				{
@@ -443,7 +444,6 @@ namespace ChilLaxFrontEnd.Controllers
 				string json = HttpContext.Session.GetString(CDictionary.SK_RESETPWD_USER);
 				MemberCredential credential = JsonSerializer.Deserialize<MemberCredential>(json);
 
-
 				string password = formData.memberPassword;
 				string salt = BCrypt.Net.BCrypt.GenerateSalt();
 				string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
@@ -456,12 +456,40 @@ namespace ChilLaxFrontEnd.Controllers
 					return Ok(new { success = true, message = "新密碼修改完成，請重新登入!" });
 				}
 				return BadRequest(new { success = false, message = "伺服器問題，請稍後再試!" });
-
-
 			}
 			return BadRequest(new { success = false, message = "請輸入密碼與確認密碼!" });
 
 		}
 
-	}
+        [HttpPost("editPwd")]
+        public async Task<IActionResult> editPwd([FromBody] PwdViewModel formData)
+        {
+            if (ModelState.IsValid)
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
+                Member member = JsonSerializer.Deserialize<Member>(json);
+				MemberCredential mc = await _context.MemberCredential.FirstOrDefaultAsync(mc=>mc.MemberId.Equals(member.MemberId));
+				if (mc != null)
+				{
+                    string password = formData.memberPassword;
+                    string newPassword = formData.memberNewPassword;
+                    bool isPwdMatch = BCrypt.Net.BCrypt.Verify(formData.memberPassword, mc.MemberPassword);
+					if (isPwdMatch) {
+                        string salt = BCrypt.Net.BCrypt.GenerateSalt();
+                        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword, salt);
+                        mc.MemberPassword = hashedPassword;
+                        _context.Entry(mc).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                        return Ok(new { success = true, message = "新密碼修改完成!" });
+                    }
+                    return BadRequest(new { success = false, message = "密碼不正確，請再試一次!" });
+                }
+                return BadRequest(new { success = false, message = "請重新登入!", login = false });
+
+            }
+            return BadRequest(new { success = false, message = "請輸入密碼與確認密碼!" });
+
+        }
+
+    }
 }
