@@ -758,7 +758,7 @@
                     Toastify({
                         text: `${data}!`,
                         className: "info",
-                        duration: 3500,
+                        duration: 3000,
                         style: {
                             background: "linear-gradient(to right, #00b09b, #96c93d)",
                             fontSize: "1.5rem",
@@ -795,7 +795,7 @@
                 coin.classList.add('fade-out-element');
             }, 3000);
 
-            // 5秒後執行
+            // 7秒後執行
             setTimeout(() => {
                 // 關閉情境音效
                 sound[current].pause();
@@ -807,7 +807,7 @@
                 // 淡入時間設定方塊
                 timeSetter.classList.remove('fade-out-element');
                 timeSetter.classList.add('fade-in-element');
-            }, 5000)
+            }, 7000)
 
 
             // 更新使用者 session 及 Member 資料表中的總點數
