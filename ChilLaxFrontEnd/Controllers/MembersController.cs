@@ -444,7 +444,6 @@ namespace ChilLaxFrontEnd.Controllers
 				string json = HttpContext.Session.GetString(CDictionary.SK_RESETPWD_USER);
 				MemberCredential credential = JsonSerializer.Deserialize<MemberCredential>(json);
 
-
 				string password = formData.memberPassword;
 				string salt = BCrypt.Net.BCrypt.GenerateSalt();
 				string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
@@ -457,8 +456,6 @@ namespace ChilLaxFrontEnd.Controllers
 					return Ok(new { success = true, message = "新密碼修改完成，請重新登入!" });
 				}
 				return BadRequest(new { success = false, message = "伺服器問題，請稍後再試!" });
-
-
 			}
 			return BadRequest(new { success = false, message = "請輸入密碼與確認密碼!" });
 
