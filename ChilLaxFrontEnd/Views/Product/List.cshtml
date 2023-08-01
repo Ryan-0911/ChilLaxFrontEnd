@@ -103,25 +103,35 @@
                             <img src="~/assets/images/icons8-cart.gif" />
                             <i>購物車（@Model.FirstOrDefault().carts.Count()）</i>
                         </a>
-                        @*<div class="cart-list">
+                        <div class="cart-list">
 
-                        @if (ViewBag.carts == null || ViewBag.carts.Count == 0)
-                        {
-                        <p>購物車內還沒有東西，趕緊點選商品加入購物車吧！</p>
-                        }
-                        else
-                        {
-                        <ul>
-                        @foreach (var item in ViewBag.CartItems)
-                        {
-                        <li>
-                        <img src="@item.ProductImg" alt="@item.ProductName" style="width: 50px; height: 50px;">
-                        <span>@item.ProductName - 價格: @item.ProductPrice</span>
-                        </li>
-                        }
-                        </ul>
-                        }
-                        </div>*@
+                            @if (ViewBag.carts == null || ViewBag.carts.Count == 0)
+                            {
+                                <p>購物車內還沒有東西，趕緊點選商品加入購物車吧！</p>
+                            }
+                            else
+                            {
+                                <table id="cartTable">
+                                    <thead>
+                                        <tr>
+                                            <th>商品圖片</th>
+                                            <th>商品名稱</th>
+                                            <th>價格</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in ViewBag.CartItems)
+                                        {
+                                            <tr>
+                                                <td><img src="~/assets/images/@item.ProductImg"  alt="@item.ProductName" style="width: 50px; height: 50px;"></td>
+                                                <td>@item.ProductName</td>
+                                                <td>@item.ProductPrice</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -212,13 +222,6 @@
                                 </li>
                             }
 
-                            @*@foreach (var category in Model.SelectMany(p => p.ProdCategory)
-                            .Distinct())
-                            {
-                            <li>
-                            <a data-toggle="tab" href="#tab1" class="no-underline" onclick="showCategoryProducts('@category')" name="@category">@category</a>
-                            </li>
-                            }*@
                         </ul>
                     </div>
                 </div>
@@ -251,8 +254,9 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         @*<button class="add-to-wishlist">*@
-                                        <button class="add-to-wishlist" data-product-id="@item.ProductId" data-product-name="@item.ProductName" data-product-icon="@item.ProductImg" data-product-price="@item.ProductPrice">
-                                            <i class="fa fa-heart-o"></i><span class="tooltipp">加入喜愛商品</span>
+                                        @*<button class="add-to-wishlist" data-product-id="@item.ProductId" data-product-name="@item.ProductName" data-product-icon="@item.ProductImg" data-product-price="@item.ProductPrice">*@
+                                        <button class="btn-like" onclick="getProductDetails('@item.ProductId')">
+                                            <i class="fa fa-hand-point-up "></i><span class="tooltipp">加入喜愛商品</span>
                                         </button>
                                     </div>
                                     <div class="col-md-6">
@@ -361,7 +365,7 @@
             }).done(data => {
                 alert("商品成功加入購物車");
             }).fail(err => {
-                alert(err.statusText);
+                alert("商品新增購物車失敗");
             });
         };
 
@@ -440,6 +444,14 @@
                 });
             });
         });
+
+
+        $(document).ready(function () {
+            // 初始化 DataTable
+            $('#cartTable').DataTable();
+        });
+
+
 
     </script>
 
