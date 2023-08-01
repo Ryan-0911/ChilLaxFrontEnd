@@ -89,21 +89,21 @@
                 <!-- /SEARCH BAR over -->
                 <!-- 喜好商品、購物車 -->
                 <ul class="black-nav-right">
-                    <li class="like">
+                    @* <li class="like">
                         <a href="#">
                             <img src="~/assets/images/heart1.png" />
                             <i>喜好商品（0）</i>
                         </a>
                         <div id="like-list" class="like-list" style="display:none;">
-                            @*有喜歡的商品嗎？點擊愛心收藏起來吧♥*@
+                            有喜歡的商品嗎？點擊愛心收藏起來吧♥
                         </div>
-                    </li>
+                    </li>*@
                     <li class="cart">
                         <a asp-action="Details" asp-controller="Carts">
                             <img src="~/assets/images/icons8-cart.gif" />
                             <i>購物車（@Model.FirstOrDefault().carts.Count()）</i>
                         </a>
-                        <div class="cart-list">
+                        @*<div class="cart-list">
 
                             @if (ViewBag.carts == null || ViewBag.carts.Count == 0)
                             {
@@ -131,7 +131,7 @@
                                     </tbody>
                                 </table>
                             }
-                        </div>
+                        </div>*@
                     </li>
                 </ul>
             </div>
@@ -255,9 +255,9 @@
                                     <div class="col-md-6">
                                         @*<button class="add-to-wishlist">*@
                                         @*<button class="add-to-wishlist" data-product-id="@item.ProductId" data-product-name="@item.ProductName" data-product-icon="@item.ProductImg" data-product-price="@item.ProductPrice">*@
-                                        <button class="btn-like" onclick="getProductDetails('@item.ProductId')">
+                                        @*<button class="btn-like" onclick="getProductDetails('@item.ProductId')">
                                             <i class="fa fa-hand-point-up "></i><span class="tooltipp">加入喜愛商品</span>
-                                        </button>
+                                        </button>*@
                                     </div>
                                     <div class="col-md-6">
                                         <h5 class="product-price" style="text-align:right; font-size:larger">$ @Html.DisplayFor(modelItem => item.ProductPrice) 元</h5>
