@@ -68,15 +68,17 @@ namespace ChilLaxFrontEnd.Controllers
             CartProductItem cartProductItem = new CartProductItem
             {
                 cartList = _context.Cart.Where(c => c.MemberId == id).ToList(),
-                products = _context.Product
-                    .Join(
-                        _context.Cart,
-                        p => p.ProductId,
-                        c => c.ProductId,
-                        (p, c) => p)
-                    .Where(c => c.Cart.FirstOrDefault().MemberId == id)
-                    .ToList()
-                };
+                products = _context.Cart
+                  .Where(c => c.MemberId == id)
+                  .Join(
+                      _context.Product,
+                      c => c.ProductId,
+                      p => p.ProductId,
+                      (c, p) => p
+                  )
+                  .ToList()
+            };
+
 
             productsPagingDTO.CartListItem = new List<CartProductItem> { cartProductItem };
 
