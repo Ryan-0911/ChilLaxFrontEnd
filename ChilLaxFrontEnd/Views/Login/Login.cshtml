@@ -127,7 +127,6 @@
 		text-transform: none;
 	}
 
-
 	.input-box label {
 		position: absolute;
 		top: 50%;
@@ -138,13 +137,20 @@
 		transition: .5s ease;
 	}
 
-
-
-	.input-box .icon {
+	.input-box .icon i{
 		position: absolute;
 		top: 13px;
 		right: 0;
 		font-size: 19px;
+	}
+
+	.input-box i {
+		/*position: absolute;
+		top: 13px;
+		right: 0;*/
+		font-size: 19px;
+		color: white;
+		margin-right: 5px;
 	}
 	/*文字向上漂浮*/
 	.input-box input:focus ~ label,
@@ -189,11 +195,14 @@
 		font-size: 16px;
 		color: #fff;
 		box-shadow: rgba(0,0,0,0.4);
+		font-weight: bolder;
 	}
 
 		.login .btn:hover, .register .btn:hover {
-			background-color: #D1E9E9;
-			color: black;
+			background: transparent;
+			border: 1px solid #4f9d9d;
+			border-radius: 2px;
+			color: #4f9d9d;
 		}
 
 	.create-account {
@@ -254,6 +263,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			
 		}
 
 	.pwdVisibility {
@@ -262,6 +272,7 @@
 		background-color: transparent;
 		border: none;
 		margin-right: 12px;
+		cursor: pointer;
 	}
 
 </style>
@@ -283,30 +294,27 @@
 					<div class="create-account">
 						<p>
 							還沒有帳號?
-							@*<a href="#" class="register-link">進行會員註冊</a>*@
-							<a href="https://localhost:5000/Login/Register" class="register-link">進行會員註冊</a>
+							<a href="#register" class="register-link">進行會員註冊</a>
+							@*<a href="https://localhost:5000/Login/Register" class="register-link">進行會員註冊</a>*@
 						</p>
 					</div>
 					<div class="input-box">
-						<span class="icon"><i class="bi bi-person-circle"></i></span>
-						<input type="text" id="MemberAccount" name="MemberAccount" class="form-control" autocomplete="off" required />
-						<label>帳號</label>
+						@*<span class="icon"><i class="bi bi-person-circle"></i></span>*@
+						<input type="text" id="MemberLoginAccount" name="MemberAccount" class="form-control" autocomplete="off" required />
+						<label><i class="bi bi-person-circle"></i>帳號</label>
 					</div>
 					<div class="input-box">
 						<span class="icon">
-							<button type="button" class="pwdVisibility" id="togglePassword">
-								@*onclick="togglePasswordVisibility()*@
+							<button type="button" class="pwdVisibility" id="toggleLoginPassword" onclick="togglePasswordVisibility('MemberLoginPassword', 'toggleLoginPassword')">
 								<i class="bi bi-eye"></i>
 							</button>
-							<i class="bi bi-lock-fill"></i>
 						</span>
-						<input type="password" id="MemberPassword" name="MemberPassword" class="form-control" autocomplete="off" required />
-						<label>密碼</label>
+						<input type="password" id="MemberLoginPassword" name="MemberPassword" class="form-control" autocomplete="off" required />
+						<label><i class="bi bi-lock-fill"></i>密碼</label>
 					</div>
 					<div class="remember-password">
 						<label for="checkbox"><input type="checkbox" id="checkbox" class="remeber_account" />記住帳號</label>
 						<a href="https://localhost:5000/Login/forgetPassword" class="forget_password">忘記密碼</a>
-
 					</div>
 					<input type="submit" value="登入" id="loginButton" class="btn btn-default" />
 					<div class="other-login">
@@ -334,7 +342,7 @@
 				</form>
 			</div>
 			<!--註冊會員-->
-@*			<div class="form-box register col-md-12 ">
+			<div class="form-box register col-md-12 ">
 				<form id="Register">
 					@Html.AntiForgeryToken()
 					<h2>Sign Up</h2>
@@ -342,36 +350,33 @@
 					<div class="create-account">
 						<p>
 							已經有帳號?
-							<a href="#" class="login-link">進入會員登入</a>
-							@Html.ActionLink("進入會員登入", "Login",null,new {  @class = "login-link"  })
+							<a href="#login" class="login-link">進入會員登入</a>
+							@*@Html.ActionLink("進入會員登入", "Login",null,new {  @class = "login-link"  })*@
 						</p>
 					</div>
 					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 					<div class="input-box">
-						<span class="icon"><i class="bi bi-person-circle"></i></span>
-						<input type="text" id="memberAccount" name="memberAccount" class="form-control" autocomplete="off" required />
-						<label>帳號</label>
+						<input type="text" id="memberRegisterAccount" name="memberAccount" class="form-control" autocomplete="off" required />
+						<label><i class="bi bi-person-circle"></i>帳號</label>
 					</div>
 					<div class="input-box">
 						<span class="icon">
-							<button type="button" class="pwdVisibility" id="togglePassword" onclick="togglePasswordVisibility()">
+							<button type="button" class="pwdVisibility" id="toggleRegisterPassword" onclick="togglePasswordVisibility('memberRegisterPassword', 'toggleRegisterPassword')">
 								<i class="bi bi-eye"></i>
 							</button>
-							<i class="bi bi-lock-fill"></i>
 						</span>
-						<input type="password" id="memberPassword" name="memberPassword" class="form-control" autocomplete="off" required />
-						<label>密碼</label>
+						<input type="password" id="memberRegisterPassword" name="memberPassword" class="form-control" autocomplete="off" required />
+						<label><i class="bi bi-lock-fill"></i>密碼</label>
 					</div>
 					<div class="input-box input-chkpassword">
 						<span class="icon">
-							<button type="button" class="pwdVisibility" id="toggleChkPassword" onclick="toggleChkPasswordVisibility()">
+							<button type="button" class="pwdVisibility" id="toggleConfirmPassword" onclick="togglePasswordVisibility('memberConfirmPassword', 'toggleConfirmPassword')">
 								<i class="bi bi-eye"></i>
 							</button>
-							<i class="bi bi-lock-fill"></i>
 						</span>
 						<input type="password" id="memberConfirmPassword" name="memberConfirmPassword" class="form-control chkpassword" autocomplete="off" required />
-						<label>確認密碼</label>
+						<label><i class="bi bi-lock-fill"></i>確認密碼</label>
 					</div>
 					<button class="btn">下一步</button>
 					<div class="other-login">
@@ -397,7 +402,7 @@
 						</div>
 					</div>
 				</form>
-			</div>*@
+			</div>
 		</div>
 	</div>
 </article>
@@ -405,44 +410,31 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script>
-	//const loginsec = document.querySelector('.login-section')
-	//const loginlink = document.querySelector('.login-link')
-	//const registerlink = document.querySelector('.register-link')
-	//registerlink.addEventListener('click', () => {
-	//	loginsec.classList.add('active')
-	//})
-	//loginlink.addEventListener('click', () => {
-	//	loginsec.classList.remove('active')
-	//})
+	const loginsec = document.querySelector('.login-section')
+	const loginlink = document.querySelector('.login-link')
+	const registerlink = document.querySelector('.register-link')
+	registerlink.addEventListener('click', () => {
+		loginsec.classList.add('active')
+	})
+	loginlink.addEventListener('click', () => {
+		loginsec.classList.remove('active')
+	})
 
-	//function togglePasswordVisibility() {
-	//	var MemberPassword = document.getElementById("MemberPassword");
-	//	var toggleButton = document.getElementById("togglePassword");
 
-	//	if (MemberPassword.type === "password") {
-	//		MemberPassword.type = "text";
-	//		toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
-	//	} else {
-	//		MemberPassword.type = "password";
-	//		toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
-	//	}
-	//}
+	function togglePasswordVisibility(inputId, toggleButtonId) {
+		var passwordInput = document.getElementById(inputId);
+		var toggleButton = document.getElementById(toggleButtonId);
 
-	//function togglePasswordVisibility() {
-	//	var MemberPassword = document.getElementById("MemberPassword");
-	//	var toggleButton = document.getElementById("togglePassword");
+		if (passwordInput.type === "password") {
+			passwordInput.type = "text";
+			toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+		} else {
+			passwordInput.type = "password";
+			toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+		}
+	}
 
-	//	function setPasswordVisibility(type, buttonIcon) {
-	//		MemberPassword.type = type;
-	//		toggleButton.innerHTML = `<i class="bi bi-${buttonIcon}"></i>`;
-	//	}
-
-	//	if (MemberPassword.type === "password") {
-	//		setPasswordVisibility("text", "eye-slash");
-	//	} else {
-	//		setPasswordVisibility("password", "eye");
-	//	}
-	//}
+	
 
 
 
@@ -453,8 +445,8 @@
 	document.getElementById("Login").addEventListener("submit", function (event) {
 		event.preventDefault();
 
-		let MemberAccount = document.getElementById("MemberAccount").value;
-		let MemberPassword = document.getElementById("MemberPassword").value;
+		let MemberAccount = document.getElementById("MemberLoginAccount").value;
+		let MemberPassword = document.getElementById("MemberLoginPassword").value;
 
 		if ((MemberAccount.trim() === "") || (MemberPassword.trim() === "")) {
 			alert("請輸入帳號和密碼!");
@@ -527,66 +519,66 @@
 
 
 	////Register 表單傳送到後端
-	//document.getElementById("Register").addEventListener("submit", function (event) {
-	//	event.preventDefault();
+	document.getElementById("Register").addEventListener("submit", function (event) {
+		event.preventDefault();
 
-	//	let memberAccount = document.getElementById("memberAccount").value;
-	//	let memberPassword = document.getElementById("memberPassword").value;
-	//	let memberConfirmPassword = document.getElementById("memberConfirmPassword").value;
+		let memberAccount = document.getElementById("memberRegisterAccount").value;
+		let memberPassword = document.getElementById("memberRegisterPassword").value;
+		let memberConfirmPassword = document.getElementById("memberConfirmPassword").value;
 
-	//	let accountPattern = /^[a-zA-Z0-9]{6,12}$/;
-	//	if (!accountPattern.test(memberAccount)) {
-	//		alert("帳號必須為6到12位的英數字組合");
-	//		return false; //取消預設的事件行為，阻止表單的提交。
-	//	} else if ((memberAccount.trim() === "") || (memberPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
-	//		alert("請輸入所有欄位!");
-	//		return false;
-	//	}
+		let accountPattern = /^[a-zA-Z0-9]{6,12}$/;
+		if (!accountPattern.test(memberAccount)) {
+			alert("帳號必須為6到12位的英數字組合");
+			return false; //取消預設的事件行為，阻止表單的提交。
+		} else if ((memberAccount.trim() === "") || (memberPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
+			alert("請輸入所有欄位!");
+			return false;
+		}
 
-	//	let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
-	//	if (!passwordPattern.test(memberPassword)) {
-	//		alert("密碼必須包含至少一個數字、一個小寫字母和一個大寫字母，且長度在8到20之間");
-	//		return false;
-	//	}
+		let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+		if (!passwordPattern.test(memberPassword)) {
+			alert("密碼必須包含至少一個數字、一個小寫字母和一個大寫字母，且長度在8到20之間");
+			return false;
+		}
 
-	//	if (memberConfirmPassword !== memberPassword) {
-	//		alert("請確認密碼是否相同!")
-	//		return false;
-	//	}
+		if (memberConfirmPassword !== memberPassword) {
+			alert("請確認密碼是否相同!")
+			return false;
+		}
 
 
 
-	//	const formData =
-	//	{
-	//		memberAccount: memberAccount,
-	//		memberPassword: memberPassword
-	//	}
+		const formData =
+		{
+			memberAccount: memberAccount,
+			memberPassword: memberPassword
+		}
 
-	//	console.log(JSON.stringify(formData));
+		console.log(JSON.stringify(formData));
 
-	//	$.ajax({
-	//		type: "POST",
-	//		url: "/api/Members/Register",
-	//		data: JSON.stringify(formData),
-	//		contentType: "application/json"
-	//	}).done(data => {
-	//		//alert(data);
-	//		if (!data.success) {
-	//			alert(data.message);
-	//			return false;
-	//		}
-	//		window.location.href = "https://localhost:5000/Login/registerProfile";
+		$.ajax({
+			type: "POST",
+			url: "/api/Members/Register",
+			data: JSON.stringify(formData),
+			contentType: "application/json"
+		}).done(data => {
+			//alert(data);
+			if (!data.success) {
+				alert(data.message);
+				return false;
+			}
+			window.location.href = "https://localhost:5000/Login/registerProfile";
 
-	//	}).fail((jqXHR, textStatus, errorThrown) => {
-	//		if (jqXHR.status === 400) {
-	//			const errorResponse = jqXHR.responseJSON;
-	//			alert(errorResponse.message);
-	//		} else {
-	//			console.error("AJAX error:", textStatus, errorThrown);
-	//		}
-	//	});
-	//	return false;
-	//});
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			if (jqXHR.status === 400) {
+				const errorResponse = jqXHR.responseJSON;
+				alert(errorResponse.message);
+			} else {
+				console.error("AJAX error:", textStatus, errorThrown);
+			}
+		});
+		return false;
+	});
 
 
 
