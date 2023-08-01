@@ -12,6 +12,7 @@ using System;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.Http;
 using System.Text;
+using static ChilLaxFrontEnd.Models.DTO.ProductsPagingDTO;
 
 namespace ChilLaxFrontEnd.Controllers
 {
@@ -60,7 +61,28 @@ namespace ChilLaxFrontEnd.Controllers
             }
 
             //取的購物車商品
+            //
             productsPagingDTO.carts = _context.Cart.Where(c => c.MemberId == id).ToList();
+
+            // 取得購物車商品與商品項目的聯結結果
+            CartProductItem cartProductItem = new CartProductItem
+            {
+                cartList = _context.Cart.Where(c => c.MemberId == id).ToList(),
+                products = _context.Cart
+                  .Where(c => c.MemberId == id)
+                  .Join(
+                      _context.Product,
+                      c => c.ProductId,
+                      p => p.ProductId,
+                      (c, p) => p
+                  )
+                  .ToList()
+            };
+
+
+            productsPagingDTO.CartListItem = new List<CartProductItem> { cartProductItem };
+
+
 
             // 頁數
             if (nowpage == null)
@@ -78,24 +100,24 @@ namespace ChilLaxFrontEnd.Controllers
 
             // 處理類別之分頁
 
-            if(productcategory == null)
+            if (productcategory == null)
             {
                 productsPagingDTO.ProductsResult = datas
                     .Skip(8 * ((int)nowpage - 1))
                     .Take(8)
                     .ToList();
                 productsPagingDTO.pageCount = pageCount;
-                productsPagingDTO.nowpage = nowpage; 
-                
+                productsPagingDTO.nowpage = nowpage;
+
                 return View(new List<ProductsPagingDTO> { productsPagingDTO });
             }
 
-            var prod = db.Product.Where(p => p.ProductCategory == productcategory )
+            var prod = db.Product.Where(p => p.ProductCategory == productcategory)
                                 .OrderByDescending(p => p.ProductCategory)
-                                .Skip(8*((int)nowpage)-1)
+                                .Skip(8 * ((int)nowpage) - 1)
                                 .Take(8)
                                 .ToList();
-            
+
             productsPagingDTO.ProductsResult = prod;
             productsPagingDTO.pageCount = pageCount;
             productsPagingDTO.nowpage = nowpage;
@@ -201,7 +223,7 @@ namespace ChilLaxFrontEnd.Controllers
 
             Product product = db.Product.FirstOrDefault(p => p.ProductId == id);
 
-            if (product == null || id == null) 
+            if (product == null || id == null)
             {
                 // 若找不到對應的產品，重新導向至產品列表頁面或顯示錯誤訊息
                 return RedirectToAction("List");
@@ -245,8 +267,8 @@ namespace ChilLaxFrontEnd.Controllers
             db.SaveChanges();
 
 
-            // 新增購物車div中列表
-            // 將購物車商品資訊存儲到Session中
+            //新增購物車div中列表
+            //將購物車商品資訊存儲到Session中
             //List<CShoppingCartItem> cartItems = new List<CShoppingCartItem>();
             //CShoppingCartItem cartItem = new CShoppingCartItem
             //{
@@ -260,7 +282,7 @@ namespace ChilLaxFrontEnd.Controllers
             //string cartJson = JsonSerializer.Serialize(cartItems);
             //HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST, cartJson);
 
-            return RedirectToAction("Details", "Carts",null);
+            return RedirectToAction("Details", "Carts", null);
 
         }
 
@@ -292,14 +314,14 @@ namespace ChilLaxFrontEnd.Controllers
         // 檢視購物車
         public IActionResult CartView()
         {
-            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
             {
                 return RedirectToAction("List");
             }
 
             string json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
             List<CShoppingCartItem> cart = JsonSerializer.Deserialize<List<CShoppingCartItem>>(json);
-            if (cart == null) 
+            if (cart == null)
                 return RedirectToAction("List");
             return View(cart);
 
