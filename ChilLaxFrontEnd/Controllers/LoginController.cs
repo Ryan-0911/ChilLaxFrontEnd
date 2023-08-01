@@ -236,19 +236,20 @@ namespace ChilLaxFrontEnd.Controllers
 				ovm.memberSex = (bool)memProfile.MemberSex;
 				ovm.memberAddress = memProfile.MemberAddress;
 
-        //新增會員訂單資料
-        List<MemberOrder> memberOrder = _context.ProductOrder
-            .Where(od => od.MemberId == member.MemberId)
-            .Join(_context.OrderDetail,
-                po => po.OrderId,
-                od => od.OrderId,
-                (po, od) => new MemberOrder
-                {
-                    ProductOrder = new List<ProductOrder> { po },
-                    orderDetails = new List<OrderDetail> { od }
-                })
-            .ToList();
-			ovm.memberOrder = memberOrder;
+                //新增會員訂單資料
+                List<MemberOrder> memberOrder = (from po in _context.ProductOrder
+                    join od in _context.OrderDetail on po.OrderId equals od.OrderId
+                    join p in _context.Product on od.ProductId equals p.ProductId
+                    where po.MemberId == 17
+                    select new MemberOrder
+                    {
+                        ProductOrder = new List<ProductOrder> { po },
+                        orderDetails = new List<OrderDetail> { od },
+                        Product = p
+                    }).ToList();
+
+
+                ovm.memberOrder = memberOrder;
 
 
 				return View(ovm);
