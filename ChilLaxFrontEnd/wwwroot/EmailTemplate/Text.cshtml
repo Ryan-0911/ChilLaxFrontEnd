@@ -10,7 +10,7 @@
         <p>感謝您註冊成為我們的會員。</p>
         <p>請點擊以下連結來驗證您的帳號：</p>
         <input style="display:none;" id="regID" value="@ViewBag.regID" />
-    <a href="http://20.89.169.61:5000/Login/Verify/?regId=@ViewBag.regID" target="_self" onclick="closeCurrentWindow()">點擊這裡</a>
+    <a href="https://localhost:5000/Login/Verify/?regId=@ViewBag.regID" target="_self" onclick="closeCurrentWindow()">點擊這裡</a>
 </body>
 </html>
 <script>
@@ -36,7 +36,7 @@
     //        const data = await response.json();
     //        alert(data.message);
     //        window.closePage(data.closePageUrl); // 呼叫自訂函式關閉特定頁面
-        //        window.location.href = "http://20.89.169.61:5000/Login/Login";
+        //        window.location.href = "https://localhost:5000/Login/Login";
     //    } catch (error) {
     //        alert("ajax呼叫失敗：" + error);
     //        console.log(error);
