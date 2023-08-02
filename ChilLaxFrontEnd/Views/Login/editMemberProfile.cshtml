@@ -311,7 +311,7 @@
 
         .resendBtn {
             width: 200px;
-            height: 58px;
+            height: 65px;
             margin-top: 20px;
             position: relative;
             outline: none;
@@ -595,7 +595,7 @@
     <div class="popup-box transform-out">
         <div class="contentMcPwd">
             <h3>編輯密碼</h3>
-            <form id="ResetPwd">
+            <form id="editPwd">
                 <div class="input-box">
                     <i class="bi bi-key"></i>
                     <input type="password"
@@ -723,7 +723,7 @@
                     return false;
                 }
                 alert(data.message);
-                window.location.href = "https://localhost:5000/Home/Index";
+                window.location.href = "http://20.89.169.61:5000/Home/Index";
             }).fail((jqXHR, textStatus, errorThrown) => {
                 if (jqXHR.status === 400) {
                     const errorResponse = jqXHR.responseJSON;
@@ -736,6 +736,22 @@
     </script>
     <script>
         //修改密碼
+        function togglePasswordVisibility(inputId, toggleButtonId) {
+            console.log("togglePasswordVisibility");
+
+            var passwordInput = document.getElementById(inputId);
+            var toggleButton = document.getElementById(toggleButtonId);
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                passwordInput.type = "password";
+                toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        }
+
+
         $(".popup-btn").click(function () {
             var href = $(this).attr("href");
             $(href).fadeIn(250);
@@ -759,24 +775,26 @@
         }
 
 
-        document.getElementById("ResetPwd").addEventListener("submit", function (event) {
+        document.getElementById("editPwd").addEventListener("submit", function (event) {
             event.preventDefault();
 
             let memberPassword = document.getElementById("memberPwd").value;
+            let memberNewPassword = document.getElementById("memberNewPwd").value;
             let memberConfirmPassword = document.getElementById("memberChkPwd").value;
 
 
-            if ((memberPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
-                alert("請輸入新密碼和確認密碼!");
+
+            if ((memberPassword.trim() === "") || (memberNewPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
+                alert("請輸入所有欄位!");
                 return false;
             }
             let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
-            if (!passwordPattern.test(memberPassword)) {
+            if (!passwordPattern.test(memberNewPassword)) {
                 alert("密碼必須包含至少一個數字、一個小寫字母和一個大寫字母，且長度在8到20之間");
                 return false;
             }
 
-            if (memberConfirmPassword !== memberPassword) {
+            if (memberConfirmPassword !== memberNewPassword) {
                 alert("請確認密碼是否相同!")
                 return false;
             }
@@ -784,24 +802,27 @@
 
             const formData =
             {
-                memberAccount: "",
-                memberPassword: memberPassword
+                memberPassword: memberPassword,
+                memberNewPassword: memberNewPassword
             }
 
             console.log(JSON.stringify(formData));
 
             $.ajax({
                 type: "POST",
-                url: "/api/Members/ResetPwd",
+                url: "/api/Members/editPwd",
                 data: JSON.stringify(formData),
                 contentType: "application/json"
             }).done(data => {
                 if (!data.success) {
                     alert(data.message);
                     return false;
+                } else if (data.login == false) {
+                    alert(data.message);
+                    window.location.href = "http://20.89.169.61:5000/Login/Login";
                 }
                 alert(data.message);
-                window.location.href = "https://localhost:5000/Login/Login";
+                window.location.href = "http://20.89.169.61:5000/Login/editMemberProfile";
 
             }).fail((jqXHR, textStatus, errorThrown) => {
                 if (jqXHR.status === 400) {
@@ -835,10 +856,10 @@
                 const loadPointRecords = async () => {
                     let API_URL = ''
                     if (sortBy.value == "modifiedAmount") {
-                        API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}&page=${thePage.value}`
+                        API_URL = `http://20.89.169.61:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}&page=${thePage.value}`
                     }
                     else {
-                        API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}&page=${thePage.value}`
+                        API_URL = `http://20.89.169.61:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}&page=${thePage.value}`
 
                     }
                     const response = await fetch(API_URL, {
