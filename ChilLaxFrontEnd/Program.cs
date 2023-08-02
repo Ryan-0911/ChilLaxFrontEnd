@@ -39,7 +39,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowMyOrigin");
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
