@@ -975,7 +975,8 @@
 			var table = $("#customerServiceTable").DataTable({
 				ajax: {
 					type: "GET",
-                    url: "http://20.89.169.61:5000/api/CustomerServicesApi",
+                    url: "@Url.Content("~/api/CustomerServicesApi")",
+                    //url: "/api/CustomerServicesApi",
 					dataSrc: function (data) { return data; }
 				},
 				columns: [
