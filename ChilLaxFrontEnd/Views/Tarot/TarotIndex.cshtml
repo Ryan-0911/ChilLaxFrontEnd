@@ -306,7 +306,7 @@
             // 發送 GET 請求獲取會員點數
             $.ajax({
                 type: "GET",
-                url: "https://localhost:5000/api/TarotPointHistories"
+                url: "/api/TarotPointHistories"
             }).done(data => {
                 const memberPoints = data;
                 console.log(memberPoints)
@@ -321,7 +321,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "https://localhost:5000/api/TarotPointHistories",
+                            url: "/api/TarotPointHistories",
                             data: JSON.stringify(TarotPointDTO),
                             contentType: "application/json"                            
                         }).done(result => {
