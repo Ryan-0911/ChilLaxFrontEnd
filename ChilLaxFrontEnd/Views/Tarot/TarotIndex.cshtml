@@ -306,7 +306,8 @@
             // 發送 GET 請求獲取會員點數
             $.ajax({
                 type: "GET",
-                url: "/api/TarotPointHistories"
+                url: "@Url.Content("~/api/TarotPointHistories")",
+                //url: "/api/TarotPointHistories"
             }).done(data => {
                 const memberPoints = data;
                 console.log(memberPoints)
@@ -321,7 +322,8 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "/api/TarotPointHistories",
+                            url: "@Url.Content("~/api/TarotPointHistories")",
+                            //url: "/api/TarotPointHistories",
                             data: JSON.stringify(TarotPointDTO),
                             contentType: "application/json"                            
                         }).done(result => {
@@ -350,7 +352,12 @@
             
 
             // 更新使用者 session 及 Member 資料表中的總點數
-            fetch(`/api/SessionData/UpdatePoint/${pointAdd}`, {
+            var pointAddValue = pointAdd; // 將 Razor 變數傳遞給 JavaScript 變數
+            var apiUrl = "@Url.Content("~/api/TarotPointHistories")";
+            //fetch(`/api/SessionData/UpdatePoint/${pointAdd}`
+
+            fetch(`${apiUrl}/${pointAddValue}`, {
+            
                 method: 'POST',
                 credentials: 'same-origin' // 確保携帶相同的cookie信息
             })
