@@ -311,7 +311,7 @@
 
         .resendBtn {
             width: 200px;
-            height: 58px;
+            height: 65px;
             margin-top: 20px;
             position: relative;
             outline: none;
@@ -723,7 +723,7 @@
                     return false;
                 }
                 alert(data.message);
-                window.location.href = "https://localhost:5000/Home/Index";
+                window.location.href = "http://20.89.169.61:5000/Home/Index";
             }).fail((jqXHR, textStatus, errorThrown) => {
                 if (jqXHR.status === 400) {
                     const errorResponse = jqXHR.responseJSON;
@@ -819,10 +819,10 @@
                     return false;
                 } else if (data.login == false) {
                     alert(data.message);
-                    window.location.href = "https://localhost:5000/Login/Login";
+                    window.location.href = "http://20.89.169.61:5000/Login/Login";
                 }
                 alert(data.message);
-                window.location.href = "https://localhost:5000/Login/editMemberProfile";
+                window.location.href = "http://20.89.169.61:5000/Login/editMemberProfile";
 
             }).fail((jqXHR, textStatus, errorThrown) => {
                 if (jqXHR.status === 400) {
@@ -856,10 +856,10 @@
                 const loadPointRecords = async () => {
                     let API_URL = ''
                     if (sortBy.value == "modifiedAmount") {
-                        API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}&page=${thePage.value}`
+                        API_URL = `http://20.89.169.61:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}&page=${thePage.value}`
                     }
                     else {
-                        API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}&page=${thePage.value}`
+                        API_URL = `http://20.89.169.61:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}&page=${thePage.value}`
 
                     }
                     const response = await fetch(API_URL, {
@@ -975,7 +975,7 @@
 			var table = $("#customerServiceTable").DataTable({
 				ajax: {
 					type: "GET",
-					url: "https://localhost:5000/api/CustomerServicesApi",
+                    url: "http://20.89.169.61:5000/api/CustomerServicesApi",
 					dataSrc: function (data) { return data; }
 				},
 				columns: [
