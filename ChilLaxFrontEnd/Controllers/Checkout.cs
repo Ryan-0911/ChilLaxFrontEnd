@@ -134,13 +134,14 @@ namespace ChilLaxFrontEnd.Controllers
             return View(order);
         }
 
-        public async Task<ActionResult<string>> Index2()
+        public async Task<ActionResult<string>> Index2(string orderid)
         {
             ChilLaxContext db = new ChilLaxContext();
 
             //產生隨機亂數
             string guid_num = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 7);
-            int oid = db.ProductOrder.Max(po => po.OrderId);
+            //int oid = db.ProductOrder.Max(po => po.OrderId);
+            int oid = Convert.ToInt32(orderid);
             string this_products = string.Empty;
             string orderId = "ChilLax" + $"{oid}" +$"{guid_num}";
             string msg = "備註欄";
