@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "Details";
 }
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+}
 <style>
     .productimg {
         height: 150px;
@@ -10,7 +13,11 @@
     .td_txt {
         height: 150px;
         line-height: 100px;
+        font-weight: bolder;
+        font-size: 14px;
     }
+
+
 
     ul, li {
         margin: 0;
@@ -51,6 +58,70 @@
         margin: 0 auto;
         width: 60%;
         min-width: 800px;
+    }
+
+    /*亭新增*/
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* 購物車結帳按鈕樣式調整 */
+    .btn-success {
+        background-color: #DCBF85;
+        color: #03254E;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+    }
+        /* 當滑鼠移到按鈕上時的效果 */
+        .btn-success:hover {
+            background-color: #D5C67A;
+            color: #4B1939;
+        }
+
+        /* 當按鈕被點擊時的效果 */
+        .btn-success:active {
+            background-color: #45a245;
+        }
+
+    td input[type="button"] {
+        text-align: center;
+    }
+
+
+    .KeepShopping:hover > a {
+        font-size: 20px;
+        font-weight: bold;
+        /*color: #788BFF;*/
+        color: #EF476F;
+        text-align: center;
+    }
+
+
+
+    .GoCheckout:hover > a {
+        font-size: 20px;
+        font-weight: bold;
+        color: #ff6700;
+        text-align: center;
+    }
+
+    span {
+        font-style: normal;
+        font-weight: bold;
+    }
+
+    /* 標題文字樣式 */
+    h4 {
+        text-align: center;
+        font-size: 26px;
+        font-weight: bold;
+        color: #4C4C47;
     }
 
 </style>
@@ -128,25 +199,50 @@
             }
         </tbody>
     </table>
-    
-    <button onclick="checkout()" class="btn btn-success">結帳</button>
+    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        @* <!-- 左侧按钮，继续购物 -->
+        <button class="btn-continue-shopping">繼續購物</button>
+
+        <!-- 右侧按钮，去结账 -->
+        <button class="btn-success" onclick="checkout()">結帳去</button>
+
+        *@
+        <div class="KeepShopping">
+            <a asp-action="List" asp-controller="Product">
+                <img src="~/assets/images/cart.png" style="width:50px; height:50px" />
+                <span style="font-style: normal;">繼續購物</span>
+            </a>
+        </div>
+
+        <div class="GoCheckout">
+            <a asp-action="Index" asp-controller="Checkout">
+                <img src="~/assets/images/checkout.jpg" style="width:50px; height:50px" />
+                <span style="font-style: normal;">結帳去</span>
+            </a>
+        </div>
+    </div>
 </div>
 
 
 @section Scripts{
 
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <script>
-    //刪除購物車內商品
-    function deleteCart(productId) {
-        $.ajax({
-            type:"GET",
-                url: `/api/CartsAPI/Delete/${productId}`
-        }).done(data =>{
-            window.location.reload();
-        }).fail(err => {
-            alert(err.statusText);
-        });
-    };
+
+        //刪除購物車內商品
+        const baseAddress = "https://localhost:5000"
+
+        function deleteCart(productId) {
+            $.ajax({
+                type: "GET",
+                url: `${baseAddress}/api/CartsAPI/Delete/${productId}`
+            }).done(data => {
+                window.location.reload();
+            }).fail(err => {
+                alert(err.statusText);
+            });
+        };
 
         // 全選框的 change 事件處理函式
         function selectAll() {
@@ -184,36 +280,34 @@
             el.innerHTML = parseInt(el.innerHTML) - 1;
         }
 
-    //選擇商品並結帳
-    function checkout() {
-        const checkboxes = document.querySelectorAll('tbody tr');
-        console.log(checkboxes);
-        const trueCheckboxs = [];
+        //選擇商品並結帳
+        function checkout() {
+            const checkboxes = document.querySelectorAll('tbody tr');
+            console.log(checkboxes);
+            const trueCheckboxs = [];
 
-        for (let i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].childNodes[1].childNodes[1].checked){
-                trueCheckboxs.push({
-                    pid: parseInt(checkboxes[i].children[0].children[1].value),
-                    qty: parseInt(checkboxes[i].children[4].children[0].innerText)
-                });
-            };
-        }
-        
-        if (!trueCheckboxs.length) return;
-        console.log(JSON.stringify({trueCheckboxs}));
-        $.ajax({
-            type: "POST",
-            url: `/api/CartsAPI/SaveCartSession`,
-            data: JSON.stringify({ trueCheckboxs }),
-            contentType: "application/json; charset=utf-8",
-            dataType: "text",
-            success: function (response) {
-                    window.location.replace(response)
-            },
-            error: function (xhr, status, error) {
-                    //alert(error);
+            for (let i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].childNodes[1].childNodes[1].checked) {
+                    trueCheckboxs.push({
+                        pid: parseInt(checkboxes[i].children[0].children[1].value),
+                        qty: parseInt(checkboxes[i].children[4].children[0].innerText)
+                    });
+                };
             }
-        });
+            console.log(JSON.stringify({ trueCheckboxs }));
+            $.ajax({
+                type: "POST",
+                url: `${baseAddress}/api/CartsAPI/SaveCartSession`,
+                data: JSON.stringify({ trueCheckboxs }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (response) {
+                    window.location.replace(response)
+                },
+                error: function (xhr, status, error) {
+                    //alert(error);
+                }
+            });
 
         }
 

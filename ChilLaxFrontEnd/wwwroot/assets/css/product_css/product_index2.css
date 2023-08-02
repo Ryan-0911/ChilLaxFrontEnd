@@ -197,6 +197,7 @@ body {
 
 .cart-list {
     width: 300px;
+/*    width:0;*/
     height: 0;
     background-color: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
