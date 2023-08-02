@@ -61,6 +61,12 @@
         .btn-purchase i {
             margin-right: 5px;
         }
+
+    td {
+        /*padding: 15px;  調整單元格內容的間距，可根據需要進行微調 */
+        text-align: center; /* 文字置中 */
+        
+    }
 </style>
 
 
@@ -89,18 +95,10 @@
                 <!-- /SEARCH BAR over -->
                 <!-- 喜好商品、購物車 -->
                 <ul class="black-nav-right">
-                    @* <li class="like">
-                    <a href="#">
-                    <img src="~/assets/images/heart1.png" />
-                    <i>喜好商品（0）</i>
-                    </a>
-                    <div id="like-list" class="like-list" style="display:none;">
-                    有喜歡的商品嗎？點擊愛心收藏起來吧♥
-                    </div>
-                    </li>*@
+                    
                     <li class="cart">
                         <a asp-action="Details" asp-controller="Carts">
-                            <img src="~/assets/images/icons8-cart.gif" />
+                            <img src="~/assets/images/cart.png" />
                             <i>購物車（@Model.FirstOrDefault().carts.Count()）</i>
                         </a>
                         <div class="cart-list">
@@ -110,20 +108,20 @@
                             }
                             else
                             {
-                                <table id="cartTable">
-                                        @foreach (var cartProductItem in Model.FirstOrDefault().CartListItem)
+                                <table id="cartTable" style="width: 100%; border-collapse:collapse">
+                                    @foreach (var cartProductItem in Model.FirstOrDefault().CartListItem)
+                                    {
+                                        @foreach (var item in cartProductItem.products)
                                         {
-                                            @foreach (var item in cartProductItem.products)
-                                            {
-                                                <tr>
-                                                    <td><img src="~/assets/images/@item.ProductImg" alt="@item.ProductName" style="width: 50px; height: 50px;"></td>
-                                                    <td>@item.ProductName</td>
-                                                    <td>@item.ProductPrice</td>
-                                                </tr>
-                                            }
-                                           
+                                            <tr>
+                                                <td><img src="~/assets/images/@item.ProductImg" alt="@item.ProductName" style="width: 50px; height: 50px;"></td>
+                                                <td>@item.ProductName</td>
+                                                <td style="color: #C6A300"> $ @item.ProductPrice 元</td>
+                                            </tr>
                                         }
-                                 
+
+                                    }
+
                                 </table>
                             }
                         </div>
@@ -250,14 +248,13 @@
                                 </h4>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        @*<button class="add-to-wishlist">*@
-                                        @*<button class="add-to-wishlist" data-product-id="@item.ProductId" data-product-name="@item.ProductName" data-product-icon="@item.ProductImg" data-product-price="@item.ProductPrice">*@
-                                        @*<button class="btn-like" onclick="getProductDetails('@item.ProductId')">
-                                <i class="fa fa-hand-point-up "></i><span class="tooltipp">加入喜愛商品</span>
-                                </button>*@
+                                        
                                     </div>
                                     <div class="col-md-6">
-                                        <h5 class="product-price" style="text-align:right; font-size:larger">$ @Html.DisplayFor(modelItem => item.ProductPrice) 元</h5>
+                                        @*<h5 class="product-price" style="text-align:right; font-size:larger">$ @Html.DisplayFor(modelItem => item.ProductPrice) 元</h5>*@
+                                        <h5 class="product-price" style="text-align:right; font-size:larger">
+                                            $ @string.Format("{0:N0}", item.ProductPrice) 元
+                                        </h5>
                                     </div>
                                 </div>
 
