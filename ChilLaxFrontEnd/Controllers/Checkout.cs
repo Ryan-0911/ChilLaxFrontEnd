@@ -73,7 +73,8 @@ namespace ChilLaxFrontEnd.Controllers
             string orderId = "ChilLax" + $"{oid}";
             string msg = "備註欄";
             //需填入你的網址
-            string website = $"http://20.89.169.61:5000/";
+            //string website = $"https://localhost:5000";
+            string website = $"http://20.89.169.61:5000";
 
             //取得最新一筆訂單
             int maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
@@ -133,6 +134,81 @@ namespace ChilLaxFrontEnd.Controllers
             order["CheckMacValue"] = GetCheckMacValue(order);
             return View(order);
         }
+
+        public async Task<ActionResult<string>> Index2(string orderid)
+        {
+            ChilLaxContext db = new ChilLaxContext();
+
+            //產生隨機亂數
+            string guid_num = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 7);
+            //int oid = db.ProductOrder.Max(po => po.OrderId);
+            int oid = Convert.ToInt32(orderid);
+            string this_products = string.Empty;
+            string orderId = "ChilLax" + $"{oid}" +$"{guid_num}";
+            string msg = "備註欄";
+            //需填入你的網址
+            //string website = $"https://localhost:5000";
+            string website = $"http://20.89.169.61:5000";
+
+            //取得最新一筆訂單
+            int maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
+            //ProductOrder? this_order = db.ProductOrders.FirstOrDefault(p => p.OrderId == maxOrderId);
+            List<ProductOrderDetailDTO> productOrderDetails = await db.ProductOrder
+               .Where(o => o.OrderId == maxOrderId)
+               .Join(db.OrderDetail, po => po.OrderId, od => od.OrderId, (po, od) => new { ProductOrder = po, OrderDetail = od })
+               .Join(db.Product, od => od.OrderDetail.ProductId, p => p.ProductId, (od, p) => new ProductOrderDetailDTO
+               {
+                   ProductOrder = od.ProductOrder,
+                   OrderDetail = od.OrderDetail,
+                   Product = p
+               }).ToListAsync();
+
+            foreach (var productOrderDetail in productOrderDetails)
+            {
+                this_products += $"{productOrderDetail.Product?.ProductName}/";
+            }
+
+
+
+            var order = new Dictionary<string, string>
+            {
+                //綠界需要的參數
+
+                //訂單編號，測試階段為避免重複以亂數產稱
+                { "MerchantTradeNo",  orderId},
+                //交易時間
+                { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
+                //交易金額
+                { "TotalAmount",  $"{productOrderDetails.FirstOrDefault() ?.ProductOrder?.OrderTotalPrice}"},
+                //交易描述
+                { "TradeDesc",  $"{msg}"},
+                //商品名稱
+                { "ItemName",  $"{this_products}"},
+                //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
+                { "ReturnURL",  $"http://yulin.win/api/Checkout/UpdatePaymentAsync"},
+                //付款完成通知回傳網址
+                { "OrderResultURL", $"{website}"},
+                //Client端返回特店的按鈕連結
+                { "ClientRedirectURL",  $"{website}"},
+                //特店編號(綠界提供測試商店編號)
+                { "MerchantID",  "2000132"},
+                //付款方式
+                { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},
+                //交易類型(固定填aio)
+                { "PaymentType",  "aio"},
+                //預設付款方式
+                { "ChoosePayment",  "ALL"},
+                //CheckMacValue加密類型(固定填1)
+                { "EncryptType",  "1"},
+                //是否需要額外的付款資訊(Y/N)
+                { "NeedExtraPaidInfo", "Y"}
+            };
+
+            //檢查碼
+            order["CheckMacValue"] = GetCheckMacValue(order);
+            return View(order);
+        }
+
         //Checkout/UpdatePayment/1
         [HttpGet]
         public async Task<string> UpdatePaymentAsync(int? id)

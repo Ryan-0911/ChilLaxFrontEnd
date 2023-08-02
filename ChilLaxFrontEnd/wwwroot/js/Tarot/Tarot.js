@@ -38,7 +38,7 @@ $('#sendButton').on('click', function () {
         // imgElement.src = '~/'; // 背面圖片的URL
         cardElement.appendChild(imgElement);
     });
-
+    
     document.getElementById("message").addEventListener("keydown", function (event) {
         //按下了ENTER鍵（keyCode為13）
         if (event.keyCode === 13) {
@@ -157,6 +157,7 @@ function showNextCard() {
     } else {
         currentIndex = 0;
         shuffleBtn.classList.add("fadeOutButton");
+        
         // 隱藏按鈕，使按鈕只需按一次後就會消失
     }
     

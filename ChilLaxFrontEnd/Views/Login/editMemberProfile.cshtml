@@ -531,14 +531,14 @@
 									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderNote)</td>
 									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderState)</td>
 									<td>
-										@if (firstOrder.ProductOrder.FirstOrDefault()?.OrderPayment == false)
-										{
-											@Html.ActionLink("付款", "Index", "checkout", null, new { @class = "btn btn-success" })
-										}
-										else
-										{
-											<button class="btn" disabled> 已付款 </button>
-										}
+                                        @if (firstOrder.ProductOrder.FirstOrDefault()?.OrderPayment == false)
+                                        {
+                                            @Html.ActionLink("付款", "Index2", "checkout", new { orderId = firstOrder.ProductOrder.FirstOrDefault()?.OrderId }, new { @class = "btn btn-success" })
+                                        }
+                                        else
+                                        {
+                                            <button class="btn" disabled> 已付款 </button>
+                                        }
 									</td>
 								</tr>
 								<tr class="details-row" id="details-row-@(firstOrder.ProductOrder.FirstOrDefault()?.OrderId)" style="display: none;">
