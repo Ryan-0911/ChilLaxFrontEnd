@@ -551,7 +551,7 @@
             document.documentElement.classList.add("htmlMask")
 
             // 取得 session 中的使用者資訊
-            fetch('/api/SessionData/SK_LOINGED_USER', {
+            fetch('http://20.89.169.61:5000/api/SessionData/SK_LOINGED_USER', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -565,7 +565,7 @@
                     //console.log(userInfo.MemberId);
 
                     // 發送 Fetch API 呼叫，檢查使用者今日是否已經專注超過60分
-                    fetch(`/api/FocusDetails/${userInfo.MemberId}`)
+                    fetch(`http://20.89.169.61:5000/api/FocusDetails/${userInfo.MemberId}`)
                         .then(response => response.json())
                         .then(result => {
                             // 成功接收到回傳的結果
@@ -740,7 +740,7 @@
             console.log(JSON.stringify(requestBody));
 
             // 將資料寫進 FocusDetail 和 PointHistory 資料表
-            fetch('/api/FocusDetails', {
+            fetch('http://20.89.169.61:5000/api/FocusDetails', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -811,7 +811,7 @@
 
 
             // 更新使用者 session 及 Member 資料表中的總點數
-            fetch(`/api/SessionData/UpdatePoint/${pointAdd}`, {
+            fetch(`http://20.89.169.61:5000/api/SessionData/UpdatePoint/${pointAdd}`, {
                 method: 'POST',
                 credentials: 'same-origin' // 確保携帶相同的cookie信息
             })
