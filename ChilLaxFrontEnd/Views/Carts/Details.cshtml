@@ -2,6 +2,12 @@
 @{
     ViewData["Title"] = "Details";
 }
+<<<<<<< Updated upstream
+=======
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+>>>>>>> Stashed changes
 <style>
     .productimg {
         height: 150px;
@@ -54,7 +60,7 @@
     }
 
 </style>
-
+}
 
 <div class="cart-style">
     <h4>購物車</h4>
@@ -136,6 +142,7 @@
 @section Scripts{
 
     <script>
+<<<<<<< Updated upstream
     //刪除購物車內商品
     function deleteCart(productId) {
         $.ajax({
@@ -147,6 +154,21 @@
             alert(err.statusText);
         });
     };
+=======
+
+        //刪除購物車內商品
+
+        function deleteCart(productId) {
+            $.ajax({
+                type: "GET",
+                url: `/api/CartsAPI/Delete/${productId}`
+            }).done(data => {
+                window.location.reload();
+            }).fail(err => {
+                alert(err.statusText);
+            });
+        };
+>>>>>>> Stashed changes
 
         // 全選框的 change 事件處理函式
         function selectAll() {
@@ -190,6 +212,7 @@
         console.log(checkboxes);
         const trueCheckboxs = [];
 
+<<<<<<< Updated upstream
         for (let i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].childNodes[1].childNodes[1].checked){
                 trueCheckboxs.push({
@@ -208,6 +231,24 @@
             contentType: "application/json; charset=utf-8",
             dataType: "text",
             success: function (response) {
+=======
+            for (let i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].childNodes[1].childNodes[1].checked) {
+                    trueCheckboxs.push({
+                        pid: parseInt(checkboxes[i].children[0].children[1].value),
+                        qty: parseInt(checkboxes[i].children[4].children[0].innerText)
+                    });
+                };
+            }
+            console.log(JSON.stringify({ trueCheckboxs }));
+            $.ajax({
+                type: "POST",
+                url: `/api/CartsAPI/SaveCartSession`,
+                data: JSON.stringify({ trueCheckboxs }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (response) {
+>>>>>>> Stashed changes
                     window.location.replace(response)
             },
             error: function (xhr, status, error) {

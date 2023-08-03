@@ -65,8 +65,8 @@ namespace ChilLaxFrontEnd.Controllers
 
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
             Console.WriteLine(json);
-            Member member = JsonSerializer.Deserialize<Member>(json);
-            int Mid = member.MemberId;
+            Member memberJson = JsonSerializer.Deserialize<Member>(json);
+            int Mid = memberJson.MemberId;
             int Cartqty = Convert.ToInt32(productReq.txtCount);
             List<Cart> thisCart = _context.Cart.Where(c => c.MemberId == Mid).ToList();
 
