@@ -77,7 +77,8 @@
 
             $.ajax({
                 type: "POST",
-                url: "https://localhost:5000/api/CustomerServicesApi",
+                url: "@Url.Content("~/api/CustomerServicesApi")",
+                //url: "/api/CustomerServicesApi",
                 data: JSON.stringify(cusDTO),
                 contentType: "application/json"
             }).done(data => {
@@ -99,7 +100,8 @@
             var table = $("#customerServiceTable").DataTable({
                 ajax: {
                     type: "GET",
-                    url: "https://localhost:5000/api/CustomerServicesApi",
+                    url: "@Url.Content("~/api/CustomerServicesApi")",
+                    //url: "/api/CustomerServicesApi",
                     dataSrc: function (data) { return data; }
                 },
                 columns: [

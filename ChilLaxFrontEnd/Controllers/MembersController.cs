@@ -86,23 +86,23 @@ namespace ChilLaxFrontEnd.Controllers
 				throw ex;
 			}
 
-			//string body = $@"
-			//            <html>
-			//            <head>
-			//                <title>驗證帳號</title>
-			//            </head>
-			//            <body>
-			//                <h1>歡迎您，@ViewBag.UserName</h1>
-			//                <p>感謝您註冊成為我們的會員。</p>
-			//                <p>請點擊以下連結來驗證您的帳號：</p>
-			//                <a href=""https://localhost:5000/api/Members/Verify/{regID}"">點擊這裡</a>
-			//            </body>
-			//            </html>
-			//        ";
-			var regInfo = _context.Member.Where(x => x.MemberId == regID).FirstOrDefault();
-			//var url = "https://localhost:5000/Login/Verify?regID=" + regID;
-			//body = body.Replace("@ViewBag.ConfirmationLink", url);
-			string UserName = regInfo.MemberName;
+            //string body = $@"
+            //            <html>
+            //            <head>
+            //                <title>驗證帳號</title>
+            //            </head>
+            //            <body>
+            //                <h1>歡迎您，@ViewBag.UserName</h1>
+            //                <p>感謝您註冊成為我們的會員。</p>
+            //                <p>請點擊以下連結來驗證您的帳號：</p>
+            //                <a href=""https://localhost:5000/api/Members/Verify/{regID}"">點擊這裡</a>
+            //            </body>
+            //            </html>
+            //        ";
+            var regInfo = _context.Member.Where(x => x.MemberId == regID).FirstOrDefault();
+            //var url = "https://localhost:5000/Login/Verify?regID=" + regID;
+            //body = body.Replace("@ViewBag.ConfirmationLink", url);
+            string UserName = regInfo.MemberName;
 			body = body.Replace("@ViewBag.UserName", UserName);
 			body = body.Replace("@ViewBag.regID", regID.ToString());
 
@@ -347,7 +347,6 @@ namespace ChilLaxFrontEnd.Controllers
 						return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
 					}
 					return Ok(new { success = true });
-
 				}
 			}
 			catch (Exception ex)
@@ -485,7 +484,6 @@ namespace ChilLaxFrontEnd.Controllers
                     return BadRequest(new { success = false, message = "密碼不正確，請再試一次!" });
                 }
                 return BadRequest(new { success = false, message = "請重新登入!", login = false });
-
             }
             return BadRequest(new { success = false, message = "請輸入密碼與確認密碼!" });
 

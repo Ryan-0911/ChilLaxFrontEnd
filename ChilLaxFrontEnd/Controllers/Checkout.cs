@@ -73,6 +73,7 @@ namespace ChilLaxFrontEnd.Controllers
             string orderId = "ChilLax" + $"{oid}";
             string msg = "備註欄";
             //需填入你的網址
+            //string website = $"https://localhost:5000";
             string website = $"https://localhost:5000";
 
             //取得最新一筆訂單
@@ -146,6 +147,7 @@ namespace ChilLaxFrontEnd.Controllers
             string orderId = "ChilLax" + $"{oid}" +$"{guid_num}";
             string msg = "備註欄";
             //需填入你的網址
+            //string website = $"https://localhost:5000";
             string website = $"https://localhost:5000";
 
             //取得最新一筆訂單
