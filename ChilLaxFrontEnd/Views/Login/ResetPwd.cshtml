@@ -171,6 +171,8 @@
 }
 
 </style>
+
+<title>重設密碼</title>
 <div class="background"></div>
 <article>
 	<div class="main container">
@@ -267,7 +269,7 @@
 				return false;
 			}
 			alert(data.message);
-			window.location.href = "http://20.89.169.61:5000/Login/Login";
+			window.location.href = "https://localhost:5000/Login/Login";
 
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			if (jqXHR.status === 400) {

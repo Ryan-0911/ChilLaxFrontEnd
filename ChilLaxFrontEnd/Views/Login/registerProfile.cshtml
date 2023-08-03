@@ -181,6 +181,9 @@
 
 </style>
 
+
+<title>填寫基本資料</title>
+
 @using System.ComponentModel.DataAnnotations
 @model ChilLaxFrontEnd.ViewModels.registerViewModel
 <!-- LOGIN FORM CREATION -->
@@ -298,7 +301,7 @@
 				alert(data.message);
 				return false;
 			}
-			window.location.href = "http://20.89.169.61:5000/Login/verifyEmail";
+			window.location.href = "https://localhost:5000/Login/verifyEmail";
 
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			if (jqXHR.status === 400) {

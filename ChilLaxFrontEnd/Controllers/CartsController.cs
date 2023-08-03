@@ -81,7 +81,13 @@ namespace ChilLaxFrontEnd.Controllers
             CartList cartList = new CartList();
             string? json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
             string? cartjson = HttpContext.Session.GetString(CDictionary.SK_CHECKOUT_DATA);
+            Member? memberJson = JsonSerializer.Deserialize<Member>(json);
+            Member? themember = _context.Member.FirstOrDefault(m => m.MemberId == memberJson.MemberId);
             cartList.MemberPick = JsonSerializer.Deserialize<MemberPick>(json);
+            //cartList.MemberPick.MemberId = memberJson.MemberId;
+            //cartList.MemberPick.MemberName = themember.MemberName;
+            cartList.MemberPick.MemberTel = themember.MemberTel;
+            cartList.MemberPick.MemberAddress = themember.MemberAddress;
             cartList.CartResultReq = JsonSerializer.Deserialize<CartResultReq>(cartjson);
 
             CartResultReq CartResultReq = JsonSerializer.Deserialize<CartResultReq>(cartjson);

@@ -347,6 +347,7 @@
 
     </style>
 }
+<title>會員中心</title>
 @model ChilLaxFrontEnd.ViewModels.OrderViewModel
 <div class="articleMC">
 	<div class="containerMC">
@@ -723,7 +724,7 @@
                     return false;
                 }
                 alert(data.message);
-                window.location.href = "http://20.89.169.61:5000/Home/Index";
+                window.location.href = "https://localhost:5000/Home/Index";
             }).fail((jqXHR, textStatus, errorThrown) => {
                 if (jqXHR.status === 400) {
                     const errorResponse = jqXHR.responseJSON;
@@ -819,10 +820,10 @@
                     return false;
                 } else if (data.login == false) {
                     alert(data.message);
-                    window.location.href = "http://20.89.169.61:5000/Login/Login";
+                    window.location.href = "https://localhost:5000/Login/Login";
                 }
                 alert(data.message);
-                window.location.href = "http://20.89.169.61:5000/Login/editMemberProfile";
+                window.location.href = "https://localhost:5000/Login/editMemberProfile";
 
             }).fail((jqXHR, textStatus, errorThrown) => {
                 if (jqXHR.status === 400) {
@@ -856,10 +857,10 @@
                 const loadPointRecords = async () => {
                     let API_URL = ''
                     if (sortBy.value == "modifiedAmount") {
-                        API_URL = `http://20.89.169.61:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}&page=${thePage.value}`
+                        API_URL = `/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}&page=${thePage.value}`
                     }
                     else {
-                        API_URL = `http://20.89.169.61:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}&page=${thePage.value}`
+                        API_URL = `/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}&page=${thePage.value}`
 
                     }
                     const response = await fetch(API_URL, {

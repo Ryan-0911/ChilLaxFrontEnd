@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ChilLaxFrontEnd.Models;
 using System.Text.Json;
-using static System.Collections.Specialized.BitVector32;
-using System.Diagnostics.Metrics;
-using Microsoft.Build.Framework;
-using ChilLaxFrontEnd.Models.DTO;
 using System.Text;
 using System.Web;
 using System.Security.Cryptography;
-using static ChilLaxFrontEnd.Controllers.Checkout;
 using ChilLaxFrontEnd.ViewModels;
 
 namespace ChilLaxFrontEnd.Controllers
@@ -65,8 +55,8 @@ namespace ChilLaxFrontEnd.Controllers
 
             string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
             Console.WriteLine(json);
-            Member member = JsonSerializer.Deserialize<Member>(json);
-            int Mid = member.MemberId;
+            Member memberJson = JsonSerializer.Deserialize<Member>(json);
+            int Mid = memberJson.MemberId;
             int Cartqty = Convert.ToInt32(productReq.txtCount);
             List<Cart> thisCart = _context.Cart.Where(c => c.MemberId == Mid).ToList();
 

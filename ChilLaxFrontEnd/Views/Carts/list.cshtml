@@ -1,6 +1,6 @@
 ﻿@model ChilLaxFrontEnd.Models.CartList
 @{
-    ViewData["Title"] = "list";
+    ViewData["Title"] = "訂單明細";
 }
 @section Styles {
 <style>
@@ -61,6 +61,10 @@
                 <select name="OrderTotalPrice">
                     <option>宅配</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="OrderTel" class="control-label">連絡電話</label>
+                <input name="OrderTel" class="form-control" value="@Model.MemberPick.MemberTel" />
             </div>
             <div class="form-group">
                 <label for="OrderAddress" class="control-label">地址</label>
