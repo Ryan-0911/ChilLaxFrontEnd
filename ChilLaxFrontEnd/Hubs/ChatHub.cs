@@ -43,7 +43,7 @@ namespace CoreMVC_SignalR_Chat.Hubs
         public async Task SendAIBotReply(string threeCards, string message)
         {
             // 使用 GPT 機器人獲取回應
-            var api = new OpenAI_API.OpenAIAPI("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");
+            var api = new OpenAI_API.OpenAIAPI("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");
             // 提取 GPT 機器人的回應
             var gptResponse = string.Empty;
             await api.Completions.StreamCompletionAsync(
