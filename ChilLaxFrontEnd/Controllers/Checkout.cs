@@ -73,8 +73,8 @@ namespace ChilLaxFrontEnd.Controllers
             string orderId = "ChilLax" + $"{oid}";
             string msg = "備註欄";
             //需填入你的網址
-            //string website = $"http://yulin.win";
-            string website = $"http://yulin.win";
+            //string website = $"https://yulin.win";
+            string website = $"https://yulin.win";
 
             //取得最新一筆訂單
             int maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
@@ -111,7 +111,7 @@ namespace ChilLaxFrontEnd.Controllers
                 //商品名稱
                 { "ItemName",  $"{this_products}"},
                 //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                { "ReturnURL",  $"http://yulin.win/api/CartsAPI/UpdatePaymentAsync"},
+                { "ReturnURL",  $"https://yulin.win/api/CartsAPI/UpdatePaymentAsync"},
                 //付款完成通知回傳網址
                 { "OrderResultURL", $"{website}"},
                 //Client端返回特店的按鈕連結
@@ -147,8 +147,8 @@ namespace ChilLaxFrontEnd.Controllers
             string orderId = "ChilLax" + $"{oid}" +$"{guid_num}";
             string msg = "備註欄";
             //需填入你的網址
-            //string website = $"http://yulin.win";
-            string website = $"http://yulin.win";
+            //string website = $"https://yulin.win";
+            string website = $"https://yulin.win";
 
             //取得最新一筆訂單
             int maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
@@ -185,7 +185,7 @@ namespace ChilLaxFrontEnd.Controllers
                 //商品名稱
                 { "ItemName",  $"{this_products}"},
                 //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                { "ReturnURL",  $"http://yulin.win/api/CartsAPI/UpdatePaymentAsync"},
+                { "ReturnURL",  $"https://yulin.win/api/CartsAPI/UpdatePaymentAsync"},
                 //付款完成通知回傳網址
                 { "OrderResultURL", $"{website}"},
                 //Client端返回特店的按鈕連結

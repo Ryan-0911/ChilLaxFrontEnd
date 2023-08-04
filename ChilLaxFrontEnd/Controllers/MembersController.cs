@@ -95,12 +95,12 @@ namespace ChilLaxFrontEnd.Controllers
             //                <h1>歡迎您，@ViewBag.UserName</h1>
             //                <p>感謝您註冊成為我們的會員。</p>
             //                <p>請點擊以下連結來驗證您的帳號：</p>
-            //                <a href=""http://yulin.win/api/Members/Verify/{regID}"">點擊這裡</a>
+            //                <a href=""https://yulin.win/api/Members/Verify/{regID}"">點擊這裡</a>
             //            </body>
             //            </html>
             //        ";
             var regInfo = _context.Member.Where(x => x.MemberId == regID).FirstOrDefault();
-            //var url = "http://yulin.win/Login/Verify?regID=" + regID;
+            //var url = "https://yulin.win/Login/Verify?regID=" + regID;
             //body = body.Replace("@ViewBag.ConfirmationLink", url);
             string UserName = regInfo.MemberName;
 			body = body.Replace("@ViewBag.UserName", UserName);
@@ -425,7 +425,7 @@ namespace ChilLaxFrontEnd.Controllers
 					return BadRequest(new { success = false, message = "伺服器錯誤，請稍後再試!" });
 				}
 				string body = System.IO.File.ReadAllText(Path.Combine(_webHostEnvironment.WebRootPath, "EmailTemplate", "resendPassword.cshtml"));
-				var url = "http://yulin.win/Login/ResetPwd";
+				var url = "https://yulin.win/Login/ResetPwd";
 				body = body.Replace("@ViewBag.ResetPwdLink", url);
 				body = body.Replace("@ViewBag.UserName", m.MemberName);
 				body = body.ToString();

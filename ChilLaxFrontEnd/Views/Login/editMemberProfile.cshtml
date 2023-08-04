@@ -724,7 +724,7 @@
                     return false;
                 }
                 alert(data.message);
-                window.location.href = "http://yulin.win/Home/Index";
+                window.location.href = "https://yulin.win/Home/Index";
             }).fail((jqXHR, textStatus, errorThrown) => {
                 if (jqXHR.status === 400) {
                     const errorResponse = jqXHR.responseJSON;
@@ -820,10 +820,10 @@
                     return false;
                 } else if (data.login == false) {
                     alert(data.message);
-                    window.location.href = "http://yulin.win/Login/Login";
+                    window.location.href = "https://yulin.win/Login/Login";
                 }
                 alert(data.message);
-                window.location.href = "http://yulin.win/Login/editMemberProfile";
+                window.location.href = "https://yulin.win/Login/editMemberProfile";
 
             }).fail((jqXHR, textStatus, errorThrown) => {
                 if (jqXHR.status === 400) {
