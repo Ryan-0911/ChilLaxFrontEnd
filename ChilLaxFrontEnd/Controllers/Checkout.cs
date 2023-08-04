@@ -111,7 +111,7 @@ namespace ChilLaxFrontEnd.Controllers
                 //商品名稱
                 { "ItemName",  $"{this_products}"},
                 //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                { "ReturnURL",  $"http://yulin.win/api/Checkout/UpdatePaymentAsync"},
+                { "ReturnURL",  $"http://yulin.win/api/CartsAPI/UpdatePaymentAsync"},
                 //付款完成通知回傳網址
                 { "OrderResultURL", $"{website}"},
                 //Client端返回特店的按鈕連結
@@ -185,7 +185,7 @@ namespace ChilLaxFrontEnd.Controllers
                 //商品名稱
                 { "ItemName",  $"{this_products}"},
                 //Client端回傳付款結果網址(交易完成後須提供一隻API修改付款狀態，將未付款改成已付款)
-                { "ReturnURL",  $"http://yulin.win/api/Checkout/UpdatePaymentAsync"},
+                { "ReturnURL",  $"http://yulin.win/api/CartsAPI/UpdatePaymentAsync"},
                 //付款完成通知回傳網址
                 { "OrderResultURL", $"{website}"},
                 //Client端返回特店的按鈕連結
