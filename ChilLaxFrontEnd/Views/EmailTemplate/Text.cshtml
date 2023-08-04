@@ -32,7 +32,7 @@
             const data = await response.json();
             alert(data.message);
             window.closePage(data.closePageUrl); // 呼叫自訂函式關閉特定頁面
-            window.location.href = "https://localhost:5000/Login/Login";
+            window.location.href = "http://yulin.win/Login/Login";
         } catch (error) {
             alert("ajax呼叫失敗：" + error);
             console.log(error);
@@ -54,7 +54,7 @@
         //        contentType: "application/json"
         //    }).done(data => {
         //        alert(data.message);
-        //        window.location.href = "https://localhost:5000/Login/Login";
+        //        window.location.href = "http://yulin.win/Login/Login";
         //    }).fail(err => {
         //        alert("ajax呼叫失敗：" + err.responseText);
         //        console.log(err.responseText);

@@ -292,7 +292,7 @@
 						<p>
 							還沒有帳號?
 							<a href="#register" class="register-link">進行會員註冊</a>
-							@*<a href="https://localhost:5000/Login/Register" class="register-link">進行會員註冊</a>*@
+							@*<a href="http://yulin.win/Login/Register" class="register-link">進行會員註冊</a>*@
 						</p>
 					</div>
 					<div class="input-box">
@@ -311,7 +311,7 @@
 					</div>
 					<div class="remember-password">
 						<label for="checkbox"><input type="checkbox" id="checkbox" class="remeber_account" />記住帳號</label>
-						<a href="https://localhost:5000/Login/forgetPassword" class="forget_password">忘記密碼</a>
+						<a href="http://yulin.win/Login/forgetPassword" class="forget_password">忘記密碼</a>
 					</div>
 					<input type="submit" value="登入" id="loginButton" class="btn btn-default" />
 					<div class="other-login">
@@ -323,7 +323,7 @@
 						<div class="other-login-wrapper">
 							<div id="g_id_onload"
 								 data-client_id="24117042909-f73r9qksf4se9ka68pgdviie2ucsl4h4.apps.googleusercontent.com"
-								 data-login_uri="https://localhost:5000/Login/ValidGoogleLogin"
+								 data-login_uri="http://yulin.win/Login/ValidGoogleLogin"
 								 data-auto_prompt="false">
 							</div>
 							<div class="g_id_signin"
@@ -385,7 +385,7 @@
 						<div class="other-login-wrapper">
 							<div id="g_id_onload"
 								 data-client_id="24117042909-f73r9qksf4se9ka68pgdviie2ucsl4h4.apps.googleusercontent.com"
-								 data-login_uri="https://localhost:5000/Login/ValidGoogleLogin"
+								 data-login_uri="http://yulin.win/Login/ValidGoogleLogin"
 								 data-auto_prompt="false">
 							</div>
 							<div class="g_id_signin"
@@ -470,7 +470,7 @@
 				alert("登入失敗!");
 				return;
 			}
-			window.location.href = "https://localhost:5000/Home/Index";
+			window.location.href = "http://yulin.win/Home/Index";
 
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			if (jqXHR.status === 400) {
@@ -564,7 +564,7 @@
 				alert(data.message);
 				return false;
 			}
-			window.location.href = "https://localhost:5000/Login/registerProfile";
+			window.location.href = "http://yulin.win/Login/registerProfile";
 
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			if (jqXHR.status === 400) {

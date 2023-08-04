@@ -73,8 +73,8 @@ namespace ChilLaxFrontEnd.Controllers
             string orderId = "ChilLax" + $"{oid}";
             string msg = "備註欄";
             //需填入你的網址
-            //string website = $"https://localhost:5000";
-            string website = $"https://localhost:5000";
+            //string website = $"http://yulin.win";
+            string website = $"http://yulin.win";
 
             //取得最新一筆訂單
             int maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
@@ -147,8 +147,8 @@ namespace ChilLaxFrontEnd.Controllers
             string orderId = "ChilLax" + $"{oid}" +$"{guid_num}";
             string msg = "備註欄";
             //需填入你的網址
-            //string website = $"https://localhost:5000";
-            string website = $"https://localhost:5000";
+            //string website = $"http://yulin.win";
+            string website = $"http://yulin.win";
 
             //取得最新一筆訂單
             int maxOrderId = await db.ProductOrder.MaxAsync(p => p.OrderId);
