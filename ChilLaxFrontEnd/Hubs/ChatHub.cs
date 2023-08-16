@@ -8,33 +8,10 @@ namespace CoreMVC_SignalR_Chat.Hubs
 {
     public class ChatHub : Hub
     {
-        // 用戶連線 ID 列表
-        public static List<int?> ConnIDList = new List<int?>();
-        PointHistory db=new PointHistory();
-        /// <summary>
-        /// 連線事件
-        /// </summary>
-        /// <returns></returns>
-        public override async Task OnConnectedAsync()
-        {
-            Member db = new Member();
-            db.MemberId = 2;
-            if (ConnIDList.Where(p => p == db.MemberId).FirstOrDefault() == null)
-            {
-                ConnIDList.Add(db.MemberId);
-            }
-            // 更新連線 ID 列表
-            string jsonString = JsonConvert.SerializeObject(ConnIDList);
-            await Clients.All.SendAsync("UpdList", jsonString);
+        
+        
+        
 
-            // 更新個人 ID
-            await Clients.Client(Context.ConnectionId).SendAsync("UpdSelfID", db.MemberId);
-
-            // 更新聊天內容
-            //await Clients.All.SendAsync("UpdContent", "新連線 ID: " + db.MemberId);
-
-            await base.OnConnectedAsync();
-        }
         public async Task SendUserMessage(string selfID, string message)
         {
             await Clients.All.SendAsync("UpdContent", selfID + " 你說: " + message);
@@ -43,7 +20,7 @@ namespace CoreMVC_SignalR_Chat.Hubs
         public async Task SendAIBotReply(string threeCards, string message)
         {
             // 使用 GPT 機器人獲取回應
-            var api = new OpenAI_API.OpenAIAPI("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");
+            var api = new OpenAI_API.OpenAIAPI("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");
             // 提取 GPT 機器人的回應
             var gptResponse = string.Empty;
             await api.Completions.StreamCompletionAsync(
@@ -68,19 +45,10 @@ namespace CoreMVC_SignalR_Chat.Hubs
         /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception ex)
         {
-            Member db = new Member();
-            db.MemberId = 2;
-            int? id = ConnIDList.Where(p => p == db.MemberId).FirstOrDefault();
-            if (id != null)
-            {
-                ConnIDList.Remove(id);
-            }
-            // 更新連線 ID 列表
-            string jsonString = JsonConvert.SerializeObject(ConnIDList);
-            await Clients.All.SendAsync("UpdList", jsonString);
+            
 
             // 更新聊天內容
-            await Clients.All.SendAsync("UpdContent", "已離線 ID: " + db.MemberId);
+            //await Clients.All.SendAsync("UpdContent", "已離線 ID: ");
 
             await base.OnDisconnectedAsync(ex);
         }

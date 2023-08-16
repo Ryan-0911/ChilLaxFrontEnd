@@ -37,47 +37,10 @@ namespace ChilLaxFrontEnd.Controllers
             return await _context.CustomerService.Where(Cs => Cs.MemberId == member.MemberId).ToListAsync();
 
 
-            //return _context.CustomerService.Select(cus => new CustomerServiceDTO {
-            //    CustomerServiceId=cus.CustomerServiceId,
-            //    MemberId=cus.MemberId,
-            //    Message=cus.Message,
-            //    MessageDatetime=cus.MessageDatetime,
-
-
-            //});
+            
         }
 
-        // GET: api/CustomerServicesApi/5
-        //[HttpGet("{id}")]
-        //public async Task<List<CustomerServiceDTO>> GetCustomerService(int id)
-        //{
-        //    string json = HttpContext.Session.GetString(CDictionary.SK_LOINGED_USER);
-        //    Console.WriteLine(json);
-        //    Member member = JsonSerializer.Deserialize<Member>(json);
-
-
-        //    if (_context.CustomerService == null)
-        //  {
-        //      return null;
-        //  }
-        //    var customerService = _context.CustomerService.Where(cus=> cus.MemberId== id).Select(cus=> new CustomerServiceDTO {
-                
-        //        MemberId = cus.MemberId,
-        //        Message = cus.Message,
-        //        MessageDatetime = cus.MessageDatetime,
-
-        //    }).ToList();
-
-        //    if (customerService == null || customerService.Count == 0)
-        //    {
-        //        return null;
-        //    }
-
-        //    return customerService;
-        //}
-
-        // PUT: api/CustomerServicesApi/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomerService(int id, CustomerService customerService)
         {
