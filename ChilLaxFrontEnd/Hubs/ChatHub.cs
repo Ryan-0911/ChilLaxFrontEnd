@@ -20,7 +20,7 @@ namespace CoreMVC_SignalR_Chat.Hubs
         public async Task SendAIBotReply(string threeCards, string message)
         {
             // 使用 GPT 機器人獲取回應
-            var api = new OpenAI_API.OpenAIAPI("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");
+            var api = new OpenAI_API.OpenAIAPI("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");
             // 提取 GPT 機器人的回應
             var gptResponse = string.Empty;
             await api.Completions.StreamCompletionAsync(
@@ -38,20 +38,8 @@ namespace CoreMVC_SignalR_Chat.Hubs
         }
 
 
-        /// <summary>
-        /// 離線事件
-        /// </summary>
-        /// <param name="ex"></param>
-        /// <returns></returns>
-        public override async Task OnDisconnectedAsync(Exception ex)
-        {
-            
-
-            // 更新聊天內容
-            //await Clients.All.SendAsync("UpdContent", "已離線 ID: ");
-
-            await base.OnDisconnectedAsync(ex);
-        }
+        
+        
 
         /// <summary>
         /// 傳遞訊息
