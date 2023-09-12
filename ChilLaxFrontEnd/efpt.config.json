@@ -84,7 +84,7 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "chillax.ChilLax.dbo",
+   "UiHint": "wanting.ChilLax.dbo",
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,

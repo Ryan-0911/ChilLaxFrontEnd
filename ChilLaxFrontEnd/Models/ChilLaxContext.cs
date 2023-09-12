@@ -41,7 +41,7 @@ namespace ChilLaxFrontEnd.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=20.89.169.61;Initial Catalog=ChilLax;Persist Security Info=True;User ID=lin;Password=fullstack133no3");
+                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ChilLax;Integrated Security=True");
             }
         }
 
@@ -312,7 +312,6 @@ namespace ChilLaxFrontEnd.Models
 
                 entity.Property(e => e.ProductImg)
                     .IsRequired()
-                    .HasMaxLength(50)
                     .HasColumnName("product_img");
 
                 entity.Property(e => e.ProductName)
